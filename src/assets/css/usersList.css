@@ -1,0 +1,26 @@
+.details_btn {
+    position: absolute;
+    right: 10%;
+    top: 10%;
+    border-radius: 25%;
+    height: 2rem;
+    width: 2rem;
+    border-style: ridge;
+    border-color: lightgray;
+    cursor: help;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    border-width: 0rem; /* Adjusted for visibility */
+}
+
+.details_btn[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    z-index: 1000;
+    top: 2rem; /* Adjust this value as needed */
+}

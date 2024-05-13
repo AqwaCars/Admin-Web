@@ -241,14 +241,14 @@ const AddNewEntities = () => {
   function openModal2() {
     setIsOpen2(true);
   }
+  function closeModal2() {
+    setIsOpen2(false);
+  }
   function openModal() {
     setIsOpen(true);
   }
   function closeModal() {
     setIsOpen(false);
-  }
-  function closeModal2() {
-    setIsOpen2(false);
   }
 
 
@@ -850,7 +850,7 @@ const AddNewEntities = () => {
           }} onClick={() => document.getElementById('imageInput').click()}>
             {companyDetails.avatar ? (
               <>
-                <img src={carDetails.media} alt="Selected" style={{ maxWidth: '100%', maxHeight: "20rem", }} />
+                <img src={companyDetails.avatar} alt="Selected" style={{ maxWidth: '100%', maxHeight: "20rem", }} />
                 {/* <div className="image-preview-text">Image selected</div> */}
               </>
             ) : (

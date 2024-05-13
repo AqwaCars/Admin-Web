@@ -24,7 +24,7 @@ const ReqRow = ({ request,setRefresh, handlePapers, setCar,openModal,setMedia })
     try {
      dispatch(getBookedDates(request.id))
     } catch (er) {
-      console.log("fetchBookedDates",error);
+      console.log("fetchBookedDates",er);
     }
   }
   const fetchMedia = async () => {

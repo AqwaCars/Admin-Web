@@ -5,15 +5,19 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CardHeader, CardBody, Row, Col } from "reactstrap";
 import Select from 'react-select';
+// import "../assets/img/pug-puglie.gif"
 import Swal from 'sweetalert2'
 import { updateStateBlock } from "Redux/adminSlice";
 import "../assets/css/nucleo-icons.css"
+import "../assets/css/usersList.css"
 import { Sort } from "Redux/adminSlice";
+import { ReactComponent as Detail } from '../assets/Svg/details.svg';
 import { filterUsers } from "Redux/adminSlice";
 import { selectStaticAllUsers } from "Redux/adminSlice";
+import Modal from 'react-modal';
 function Icons() {
-  const [selectedOption, setSelectedOptions] = useState({ value: 'all', label: 'All Users' });
-  const [selectedSortOption, setSelectedSortOptions] = useState({ value: "Sort Your List...", label: "Sort Your List" });
+  const [selectedOption, setSelectedOptions] = useState({ value: 'all', label: 'Select Filter ...' });
+  const [selectedSortOption, setSelectedSortOptions] = useState({ value: "Select Sort...", label: "Select Sort ..." });
   const [searchValue, setSearchValue] = useState("")
   const options = [
     { value: 'all', label: 'All Users' },
@@ -24,9 +28,9 @@ function Icons() {
   ];
   const replaceSelectedOption = (selectedSortOption) => {
     const newOptions = [
-      { value: 'A-Z', label: 'Alphabetical Order(A-Z) ↾' },
-      { value: 'createdAt', label: 'Date of Account Creation ↾' },
-      { value: 'carsRented', label: 'Number of Cars Rented ↾' }
+      { value: 'A-Z', label: 'Sort By: Alphabetical Order(A-Z) ↾' },
+      { value: 'createdAt', label: 'Sort By: Date of Account Creation ↾' },
+      { value: 'carsRented', label: 'Sort By: Number of Cars Rented ↾' }
     ];
 
     newOptions.forEach((option, index) => {
@@ -127,6 +131,42 @@ function Icons() {
       color: '#1E1E2F', // Change this to your desired selected value color
     }),
   }
+  const customStyles2 = {
+
+    overlay: {
+      backgroundImage: "url(../assets/img/pug-puglie.gif)" ,
+      backgroundRepeat: "no-repeat" ,
+      backgroundSize:"100%" ,
+      backgroundPosition: "right bottom" ,
+      // background: "#fff",
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+    },
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      borderWidth: ".01rem",
+      borderStyle: "groove",
+      borderColor: "#30416B",
+      bottom: 'auto',
+      marginRight: '-50%',
+      width: "70rem",
+      height: "55rem",
+      transform: 'translate(-50%, -50%)',
+    },
+  };
+  function openModal() {
+    setIsOpen(true);
+  }
+  function closeModal() {
+    setIsOpen(false);
+  }
+  const [modalIsOpen, setIsOpen] = useState(false);
   const handleBlock = (id) => {
     try {
       const user = allUsers.find((user) => user.id === id);
@@ -186,6 +226,16 @@ function Icons() {
     }
 
   }, [dispatch, refresh])
+  useEffect(() => {
+    document.getElementById('detailsBtn').addEventListener('mouseover', function () {
+      this.setAttribute('data-tooltip', 'Details');
+    });
+
+    document.getElementById('detailsBtn').addEventListener('mouseout', function () {
+      this.removeAttribute('data-tooltip');
+    });
+  }, [])
+
   return (
     <>
       <div className="content">
@@ -251,6 +301,7 @@ function Icons() {
                         // selectedOption.label==="Banned Only"||selectedOption.label==="Active Only"?
                         // filterChange(selectedOption.label):
                         handleChange(selectedOption);
+                        console.log(selectedOption);
                       }}
                       options={options}
                       styles={customStyles}
@@ -258,7 +309,7 @@ function Icons() {
                   </div></div>
               </CardHeader>
               <CardBody className="all-icons">
-                {selectedOption.label === "All Users" ?
+                {selectedOption.label === "All Users" || selectedOption.label === "Select Filter ..." ?
                   (
                     <>
                       <div style={{
@@ -293,7 +344,7 @@ function Icons() {
                                   imageWidth: 200,
                                   imageHeight: 200,
                                   imageAlt: "Custom image",
-                                  backdrop: `rgba(0,0,123,0.4)`,
+                                  backdrop: `rgba(0, 0, 0, 0.5)`,
                                   showCloseButton: true,
                                   showCancelButton: true,
                                   focusConfirm: false,
@@ -398,7 +449,7 @@ function Icons() {
                                   imageWidth: 200,
                                   imageHeight: 200,
                                   imageAlt: "Custom image",
-                                  backdrop: `rgba(0,0,123,0.4)`,
+                                  backdrop: `rgba(0, 0, 0, 0.5)`,
                                   showCloseButton: true,
                                   showCancelButton: true,
                                   focusConfirm: false,
@@ -450,6 +501,12 @@ function Icons() {
 
                             >
                               <div className="font-icon-detail">
+                                <div class="details_btn" id="detailsBtn">
+                                  <Detail onClick={(event) => {
+                                    event.stopPropagation();
+                                    openModal()
+                                  }} />
+                                </div>
                                 <img src={user.avatar} style={{
                                   height: "50%", width: "35%"
                                 }} />
@@ -494,7 +551,7 @@ function Icons() {
                                     imageWidth: 200,
                                     imageHeight: 200,
                                     imageAlt: "Custom image",
-                                    backdrop: `rgba(0,0,123,0.4)`,
+                                    backdrop: `rgba(0, 0, 0, 0.5)`,
                                     showCloseButton: true,
                                     showCancelButton: true,
                                     focusConfirm: false,
@@ -592,7 +649,7 @@ function Icons() {
                                     imageWidth: 200,
                                     imageHeight: 200,
                                     imageAlt: "Custom image",
-                                    backdrop: `rgba(0,0,123,0.4)`,
+                                    backdrop: `rgba(0, 0, 0, 0.5)`,
                                     showCloseButton: true,
                                     showCancelButton: true,
                                     focusConfirm: false,
@@ -686,7 +743,7 @@ function Icons() {
                                     imageWidth: 200,
                                     imageHeight: 200,
                                     imageAlt: "Custom image",
-                                    backdrop: `rgba(0,0,123,0.4)`,
+                                    backdrop: `rgba(0, 0, 0, 0.5)`,
                                     showCloseButton: true,
                                     showCancelButton: true,
                                     focusConfirm: false,
@@ -782,7 +839,7 @@ function Icons() {
                                     imageWidth: 200,
                                     imageHeight: 200,
                                     imageAlt: "Custom image",
-                                    backdrop: `rgba(0,0,123,0.4)`,
+                                    backdrop: `rgba(0, 0, 0, 0.5)`,
                                     showCloseButton: true,
                                     showCancelButton: true,
                                     focusConfirm: false,
@@ -852,6 +909,13 @@ function Icons() {
           </Col>
         </Row>
       </div >
+      <Modal
+        isOpen={modalIsOpen}
+        // onAfterOpen={afterOpenModal}
+        onRequestClose={closeModal}
+        style={customStyles2}>
+          Tada
+          </Modal>
     </>
   );
 }
