@@ -1,26 +1,191 @@
 .details_btn {
-    position: absolute;
-    right: 10%;
-    top: 10%;
-    border-radius: 25%;
-    height: 2rem;
-    width: 2rem;
-    border-style: ridge;
-    border-color: lightgray;
-    cursor: help;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    border-width: 0rem; /* Adjusted for visibility */
+  position: absolute;
+  right: 10%;
+  top: 10%;
+  border-radius: 25%;
+  height: 2rem;
+  width: 2rem;
+  border-style: ridge;
+  border-color: lightgray;
+  cursor: help;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  border-width: 0rem; /* Adjusted for visibility */
 }
 
 .details_btn[data-tooltip]:hover::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    background-color: #333;
-    color: #fff;
-    padding: 5px;
-    border-radius: 5px;
-    z-index: 1000;
-    top: 2rem; /* Adjust this value as needed */
+  content: attr(data-tooltip);
+  position: absolute;
+  background-color: #333;
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+  z-index: 1000;
+  top: 2rem; /* Adjust this value as needed */
+}
+.three_div_container {
+  display: flex;
+  flex-direction: row;
+  height: 54.9rem;
+  padding: 0 !important;
+  /* width: 100%; */
+}
+.two_div_container {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+.one_third_div {
+  padding-top: 3rem;
+  padding-left: 3rem;
+  height: 33%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.two_thirds_div {
+  width: 100%;
+  border-top-width: 0.15rem;
+  border-top-style: ridge;
+  border-color: #b78846;
+  padding-left: 3rem;
+  border-radius: 2% 4% 4% 4%;
+  overflow: hidden;
+  padding-top: 2rem; /* Add this line to make the div scrollable */
+}
+@keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .fadeIn {
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+.half_div {
+  height: auto;
+  padding-top: 3rem;
+  width: 50%;
+  padding-left: 3rem;
+  height: 54rem;
+  border-left-width: 0.15rem;
+  border-left-style: ridge;
+  border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%;
+  border-color: #b78846; /* Add this line to make the div scrollable */
+}
+.company_img {
+  width: 7rem;
+  height: 7rem;
+  border-radius: 50%;
+  border-width: 0.1rem;
+  border-style: solid;
+}
+.car_img {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  border-width: 0.1rem;
+  border-style: solid;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  margin-right: 1rem;
+}
+.review_img {
+  min-width: 5rem;
+  height: 5rem;
+  margin-right: 1rem;
+  border-radius: 50%;
+  border-width: 0.1rem;
+  border-style: solid;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.review_div {
+  width: 90%;
+  margin-bottom: 1rem;
+  /* background-color: red; */
+  /* border-bottom-width: 5px ; */
+  padding-bottom: 0.5rem;
+  border-bottom: #30416b solid 0.15rem;
+}
+.car_div {
+  width: 90%;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  /* background-color: red; */
+  /* border-bottom-width: 5px ; */
+  padding-bottom: 0.5rem;
+  border-bottom: #30416b solid 0.15rem;
+}
+.car_div:hover {
+    background-color: lightgrey;
+}
+.company_details {
+  font-size: 1.1rem;
+  text-decoration-line: underline;
+}
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+/* html, body {
+	 height: 100%;
+	 background: radial-gradient(#003, #000);
+	 overflow: hidden;
+	 color: #fff;
+	 font-family: 'Open Sans';
+	 font-size: 18px;
+} */
+.half-width-full-height,
+.half-width-half-height {
+  /* position: absolute; */
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px;
+  border: 2px solid #b78846;
+}
+.half-width-full-height:before,
+.half-width-half-height:before,
+.half-width-full-height:after,
+.half-width-half-height:after {
+  content: "•";
+  /* position: absolute; */
+  width: 14px;
+  height: 14px;
+  font-size: 14px;
+  color: #b78846;
+  border: 2px solid #b78846;
+  line-height: 12px;
+  top: 5px;
+  text-align: center;
+}
+.half-width-full-height:before,
+.half-width-half-height:before {
+  left: 5px;
+}
+.half-width-full-height:after,
+.half-width-half-height:after {
+  right: 5px;
+}
+.half-width-full-height {
+  width: 100%;
+  height: 100%;
+}
+.half-width-half-height {
+  width: 50%;
+  height: 50%;
 }

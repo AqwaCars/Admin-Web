@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CardHeader, CardBody, Row, Col } from "reactstrap";
 import Select from 'react-select';
-// import "../assets/img/pug-puglie.gif"
 import Swal from 'sweetalert2'
 import { updateStateBlock } from "Redux/adminSlice";
 import "../assets/css/nucleo-icons.css"
@@ -132,12 +131,7 @@ function Icons() {
     }),
   }
   const customStyles2 = {
-
     overlay: {
-      backgroundImage: "url(../assets/img/pug-puglie.gif)" ,
-      backgroundRepeat: "no-repeat" ,
-      backgroundSize:"100%" ,
-      backgroundPosition: "right bottom" ,
       // background: "#fff",
       position: 'fixed',
       top: 0,
@@ -147,14 +141,19 @@ function Icons() {
       backgroundColor: "rgba(0, 0, 0, 0.5)",
     },
     content: {
+      overflow: "visible",
       top: '50%',
+      padding: "0",
       left: '50%',
       right: 'auto',
-      borderWidth: ".01rem",
-      borderStyle: "groove",
-      borderColor: "#30416B",
+      borderWidth: ".2rem",
+      borderRadius: "10% 30px",
+      borderCronerShape: "scoop",
+
+      borderStyle: "solid",
+      borderColor: "#b78846",
       bottom: 'auto',
-      marginRight: '-50%',
+      // marginRight: '-50%',
       width: "70rem",
       height: "55rem",
       transform: 'translate(-50%, -50%)',
@@ -913,9 +912,368 @@ function Icons() {
         isOpen={modalIsOpen}
         // onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
-        style={customStyles2}>
-          Tada
-          </Modal>
+        // className={modalIsOpen ? "fadeIn" : ""}
+        style={{
+          overlay: {
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+          },
+          content: {
+            overflow: "visible",
+            top: '50%',
+            padding: "0",
+            left: '50%',
+            right: 'auto',
+            borderWidth: ".2rem",
+            borderRadius: "10% 30px",
+            borderStyle: "solid",
+            borderColor: "#b78846",
+            bottom: 'auto',
+            width: "70rem",
+            height: "55rem",
+            transform: 'translate(-50%, -50%)',
+            animation: modalIsOpen? 'fadeIn 0.5s ease-out' : 'none',
+          },
+        }}
+        >
+      
+        <div className="three_div_container">
+          <div className="two_div_container">
+            <div className="one_third_div">
+              <div style={{
+                fontSize: "1.5rem",
+                textDecorationLine: "underline",
+
+              }}>Company Title</div>
+              <div style={{
+                display: "flex",
+                flexDirection: "row",
+                paddingTop: "1rem"
+              }}>
+                <div className="company_img">
+                  <img />
+                </div>
+                <div style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                  justifyContent: "center",
+                  paddingLeft: "1rem",
+                  gap: "1rem"
+                }}>
+                  <div className="company_details">Number</div>
+                  <div className="company_details">email adress</div>
+                  <div className="company_details">location adress</div>
+                </div>
+              </div>
+            </div>
+            <div className="two_thirds_div">
+              <div style={{
+                fontSize: "1.7rem",
+                marginBottom: "1rem",
+                textDecorationLine: "underline"
+              }}>User Reviews</div>
+              <div style={{
+                overflow: "auto",
+                height: "100%",
+                paddingBottom: "5rem"
+                // height: "54rem",
+              }}>
+                <div className="review_div">
+                  <div><span style={{
+                    fontSize: "1.1rem"
+                  }}>UserName</span><span> / </span><span style={{
+                    fontSize: "1.1rem"
+                  }}>Rating</span></div>
+                  <div style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    marginTop: ".5rem",
+                    alignItems: "center"
+                  }}>
+                    <div className="review_img">
+                      <img />
+                    </div>
+                    <div>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Et ultrices neque ornare aenean euismod elementum nisi quis eleifend.
+                    </div>
+                  </div>
+                </div>
+                <div className="review_div">
+                  <div><span style={{
+                    fontSize: "1.1rem"
+                  }}>UserName</span><span> / </span><span style={{
+                    fontSize: "1.1rem"
+                  }}>Rating</span></div>
+                  <div style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    marginTop: ".5rem",
+                    alignItems: "center"
+                  }}>
+                    <div className="review_img">
+                      <img />
+                    </div>
+                    <div>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Et ultrices neque ornare aenean euismod elementum nisi quis eleifend.
+                    </div>
+                  </div>
+                </div>
+                <div className="review_div">
+                  <div><span style={{
+                    fontSize: "1.1rem"
+                  }}>UserName</span><span> / </span><span style={{
+                    fontSize: "1.1rem"
+                  }}>Rating</span></div>
+                  <div style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    marginTop: ".5rem",
+                    alignItems: "center"
+                  }}>
+                    <div className="review_img">
+                      <img />
+                    </div>
+                    <div>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Et ultrices neque ornare aenean euismod elementum nisi quis eleifend.
+                    </div>
+                  </div>
+                </div>
+                <div className="review_div">
+                  <div><span style={{
+                    fontSize: "1.1rem"
+                  }}>UserName</span><span> / </span><span style={{
+                    fontSize: "1.1rem"
+                  }}>Rating</span></div>
+                  <div style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    marginTop: ".5rem",
+                    alignItems: "center"
+                  }}>
+                    <div className="review_img">
+                      <img />
+                    </div>
+                    <div>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Et ultrices neque ornare aenean euismod elementum nisi quis eleifend.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="half_div">
+            <div style={{
+              fontSize: "1.7rem",
+              marginBottom: "1rem",
+              textDecorationLine: "underline"
+            }}>Owned Cars</div>
+            <div style={{
+              overflow: "auto",
+              height: "100%",
+              paddingBottom: "5rem"
+              // height: "54rem",
+            }}>
+              <div className="car_div">
+                <div><span style={{
+                  fontSize: "1rem"
+                }}>Car Brand</span>
+                  <span style={{
+                    fontSize: "1rem"
+                  }}> / </span>
+                  <span style={{
+                    fontSize: "1rem"
+                  }}>Car Model</span></div>
+                <div style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center"
+                }}>
+                  <div className="car_img">
+                    <img />
+                  </div>
+                  <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: ".5rem"
+                  }}>
+                    <span style={{
+                      fontSize: "1.1rem"
+                    }}>Car Daily Price</span>
+                    <span style={{
+                      fontSize: "1.1rem"
+                    }}>Car Type</span>
+                  </div>
+                </div>
+              </div>
+              <div className="car_div">
+                <div><span style={{
+                  fontSize: "1rem"
+                }}>Car Brand</span>
+                  <span style={{
+                    fontSize: "1rem"
+                  }}> / </span>
+                  <span style={{
+                    fontSize: "1rem"
+                  }}>Car Model</span></div>
+                <div style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center"
+                }}>
+                  <div className="car_img">
+                    <img />
+                  </div>
+                  <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: ".5rem"
+                  }}>
+                    <span style={{
+                      fontSize: "1.1rem"
+                    }}>Car Daily Price</span>
+                    <span style={{
+                      fontSize: "1.1rem"
+                    }}>Car Type</span>
+                  </div>
+                </div>
+              </div>
+              <div className="car_div">
+                <div><span style={{
+                  fontSize: "1rem"
+                }}>Car Brand</span>
+                  <span style={{
+                    fontSize: "1rem"
+                  }}> / </span>
+                  <span style={{
+                    fontSize: "1rem"
+                  }}>Car Model</span></div>
+                <div style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center"
+                }}>
+                  <div className="car_img">
+                    <img />
+                  </div>
+                  <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: ".5rem"
+                  }}>
+                    <span style={{
+                      fontSize: "1.1rem"
+                    }}>Car Daily Price</span>
+                    <span style={{
+                      fontSize: "1.1rem"
+                    }}>Car Type</span>
+                  </div>
+                </div>
+              </div>
+              <div className="car_div">
+                <div><span style={{
+                  fontSize: "1rem"
+                }}>Car Brand</span>
+                  <span style={{
+                    fontSize: "1rem"
+                  }}> / </span>
+                  <span style={{
+                    fontSize: "1rem"
+                  }}>Car Model</span></div>
+                <div style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center"
+                }}>
+                  <div className="car_img">
+                    <img />
+                  </div>
+                  <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: ".5rem"
+                  }}>
+                    <span style={{
+                      fontSize: "1.1rem"
+                    }}>Car Daily Price</span>
+                    <span style={{
+                      fontSize: "1.1rem"
+                    }}>Car Type</span>
+                  </div>
+                </div>
+              </div>
+              <div className="car_div">
+                <div><span style={{
+                  fontSize: "1rem"
+                }}>Car Brand</span>
+                  <span style={{
+                    fontSize: "1rem"
+                  }}> / </span>
+                  <span style={{
+                    fontSize: "1rem"
+                  }}>Car Model</span></div>
+                <div style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center"
+                }}>
+                  <div className="car_img">
+                    <img />
+                  </div>
+                  <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: ".5rem"
+                  }}>
+                    <span style={{
+                      fontSize: "1.1rem"
+                    }}>Car Daily Price</span>
+                    <span style={{
+                      fontSize: "1.1rem"
+                    }}>Car Type</span>
+                  </div>
+                </div>
+              </div>
+              <div className="car_div">
+                <div><span style={{
+                  fontSize: "1rem"
+                }}>Car Brand</span>
+                  <span style={{
+                    fontSize: "1rem"
+                  }}> / </span>
+                  <span style={{
+                    fontSize: "1rem"
+                  }}>Car Model</span></div>
+                <div style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center"
+                }}>
+                  <div className="car_img">
+                    <img />
+                  </div>
+                  <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: ".5rem"
+                  }}>
+                    <span style={{
+                      fontSize: "1.1rem"
+                    }}>Car Daily Price</span>
+                    <span style={{
+                      fontSize: "1.1rem"
+                    }}>Car Type</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Modal >
     </>
   );
 }

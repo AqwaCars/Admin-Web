@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import PerfectScrollbar from "perfect-scrollbar";
 import { Nav } from "reactstrap";
 import { BackgroundColorContext, backgroundColors } from "contexts/BackgroundColorContext";
+import "../../assets/css/sideBar.css"
 import { useDispatch, useSelector } from "react-redux";
 import { selectLoggedIn } from "Redux/adminSlice";
 import { setLoggedIn } from "Redux/adminSlice";
@@ -54,7 +55,7 @@ function Sidebar(props) {
           onClick={props.toggleSidebar}
         >
           <div className="logo-img">
-            <img src={logo.imgSrc} alt="react-logo" />
+            <img className="company_logo_sidebar" src={logo.imgSrc} alt="react-logo" />
           </div>
         </a>
       );
