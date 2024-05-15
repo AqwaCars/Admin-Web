@@ -279,7 +279,7 @@ function Tables() {
             {true ? <img style={{
               height: "20rem",
               width: "30rem"
-            }} src={require("../assets/img/image-placeholder.jpeg")} /> : <img
+            }} src={car.media} /> : <img
               style={{
                 height: "20rem",
                 width: "30rem"

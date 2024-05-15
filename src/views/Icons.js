@@ -353,7 +353,7 @@ function Icons() {
                                  <br>
                                  <b>type: </b>${user.type}
                                 `,
-                                  imageUrl: `${user.avatar}`,
+                                  imageUrl: `${user.selfie}`,
                                   imageWidth: 200,
                                   imageHeight: 200,
                                   imageAlt: "Custom image",
@@ -416,8 +416,8 @@ function Icons() {
                                     openModal()
                                   }} />
                                 </div>
-                                <img src={user.avatar} style={{
-                                  height: "50%", width: "35%"
+                                <img src={user.selfie} style={{
+                                  height: "50%", width: "35%",objectFit:"cover"
                                 }} />
                                 <p className="userNameCol">{user.userName}
                                   <br></br>
@@ -465,7 +465,7 @@ function Icons() {
                                  <b>type: </b>${user.type}
                                 
                                 `,
-                                  imageUrl: `${user.avatar}`,
+                                  imageUrl: `${user.selfie}`,
                                   imageWidth: 200,
                                   imageHeight: 200,
                                   imageAlt: "Custom image",
@@ -528,8 +528,8 @@ function Icons() {
                                     openModal()
                                   }} />
                                 </div>
-                                <img src={user.avatar} style={{
-                                  height: "50%", width: "35%"
+                                <img src={user.selfie} style={{
+                                  height: "50%", width: "35%",objectFit:"cover"
                                 }} />
                                 <p className="userNameCol">{user.userName}<br></br>
                                   {user.email}</p>
@@ -568,7 +568,7 @@ function Icons() {
                                    <br>
                                    <b>type: </b>${user.type}
                                   `,
-                                    imageUrl: `${user.avatar}`,
+                                    imageUrl: `${user.selfie}`,
                                     imageWidth: 200,
                                     imageHeight: 200,
                                     imageAlt: "Custom image",
@@ -630,8 +630,8 @@ function Icons() {
                                       openModal()
                                     }} />
                                   </div>
-                                  <img src={user.avatar} style={{
-                                    height: "50%", width: "35%"
+                                  <img src={user.selfie} style={{
+                                    height: "50%", width: "35%",objectFit:"cover"
                                   }} />
                                   <p className="userNameCol">{user.userName}<br></br>
                                     {user.email}</p>
@@ -673,7 +673,7 @@ function Icons() {
                                    <b>type: </b>${user.type}
 
                                   `,
-                                    imageUrl: `${user.avatar}`,
+                                    imageUrl: `${user.selfie}`,
                                     imageWidth: 200,
                                     imageHeight: 200,
                                     imageAlt: "Custom image",
@@ -735,8 +735,8 @@ function Icons() {
                                       openModal()
                                     }} />
                                   </div>
-                                  <img src={user.avatar} style={{
-                                    height: "50%", width: "35%"
+                                  <img src={user.selfie} style={{
+                                    height: "50%", width: "35%",objectFit:"cover"
                                   }} />
                                   <p className="userNameCol">{user.userName}</p>
                                 </div>
@@ -774,7 +774,7 @@ function Icons() {
                                    <br>
                                    <b>type: </b>${user.type}
                                   `,
-                                    imageUrl: `${user.avatar}`,
+                                    imageUrl: `${user.selfie}`,
                                     imageWidth: 200,
                                     imageHeight: 200,
                                     imageAlt: "Custom image",
@@ -836,8 +836,8 @@ function Icons() {
                                       openModal()
                                     }} />
                                   </div>
-                                  <img src={user.avatar} style={{
-                                    height: "50%", width: "35%"
+                                  <img src={user.selfie} style={{
+                                    height: "50%", width: "35%",objectFit:"cover"
                                   }} />
                                   <p className="userNameCol">{user.userName}<br></br>
                                     {user.email}</p>
@@ -877,7 +877,7 @@ function Icons() {
                                    <br>
                                    <b>type: </b>${user.type}
                                   `,
-                                    imageUrl: `${user.avatar}`,
+                                    imageUrl: `${user.selfie}`,
                                     imageWidth: 200,
                                     imageHeight: 200,
                                     imageAlt: "Custom image",
@@ -939,8 +939,8 @@ function Icons() {
                                       openModal()
                                     }} />
                                   </div>
-                                  <img src={user.avatar} style={{
-                                    height: "50%", width: "35%"
+                                  <img src={user.selfie} style={{
+                                    height: "50%", width: "35%",objectFit:"cover"
                                   }} />
                                   <p className="userNameCol">{user.userName}<br></br>
                                     {user.email}</p>
@@ -999,14 +999,25 @@ function Icons() {
                 fontSize: "1.5rem",
                 textDecorationLine: "underline",
                 paddingLeft: "1rem"
-              }}>{modalData?.userName}</div>
+              }}><span style={{
+                textDecorationLine:"none"
+              }}>Company designation: </span>{modalData?.userName}</div>
               <div style={{
                 display: "flex",
                 flexDirection: "row",
                 paddingTop: "1rem"
               }}>
-                <div className="company_img">
-                  <img />
+                {/* <div className="company_img"> */}
+                <div className="car_img">
+                    <img style={{
+                      width: "8rem", /* Take up the full width of the container */
+                      height: "8rem", /* Take up the full height of the container */
+                      objectFit: "cover", /* Scale the image to cover the container while maintaining its aspect ratio */
+                      borderRadius: "50%",
+                       height: "95%", 
+                       width: "95%", /* Take up the full width of the container */
+                    }} src={modalData.selfie} />
+                  {/* </div> */}
                 </div>
                 <div style={{
                   display: "flex",
@@ -1016,9 +1027,9 @@ function Icons() {
                   paddingLeft: "1rem",
                   gap: "1rem"
                 }}>
-                  <div className="company_details">{modalData?.phoneNumber}</div>
-                  <div className="company_details">{modalData?.email}</div>
-                  <div className="company_details">{ }</div>
+                  <div className="company_details">Contact: {modalData?.phoneNumber}</div>
+                  <div className="company_details">Contact: {modalData?.email}</div>
+                  <div className="company_details">Joined Us On {new Date(modalData?.createdAt).toLocaleDateString()}</div>
                 </div>
               </div>
             </div>
@@ -1130,8 +1141,8 @@ function Icons() {
               // height: "54rem",
             }}>
               {console.log(AgencyCars)}
-              {AgencyCars?.map((car) =>
-              (<div className="car_div">
+              {AgencyCars?.map((car,i) =>
+              (<div key={i} className="car_div">
                 <div style={{
                   textDecorationLine: "underline"
                 }}><span style={{
@@ -1157,7 +1168,7 @@ function Icons() {
                       borderRadius: "50%",
                        height: "95%", 
                        width: "95%", /* Take up the full width of the container */
-                    }} src="https://www.mad4wheels.com/img/free-car-images/mobile/20826/mercedes-amg-cle-53-4matic-coupe-2024-762541.jpg" />
+                    }} src={car.media} />
                   </div>
                   <div style={{
                     display: "flex",

@@ -86,13 +86,18 @@
   /* padding: 20px; */
   box-sizing: border-box;
 }
-.pressEnter{
-  margin-top: 1.5rem !important;
+.pressEnter {
+  margin-top: 1.5rem!important;
   height: 3rem;
+  padding: 0 !important;
   width: 40rem;
-  /* background-color: red !important; */
-  /* background-image: none !important; */
+  display: flex;
+  align-items: center; /* Centers children vertically */
+  justify-content: center; /* Centers children horizontally */
+  /* background-color: red!important; */
+  /* background-image: none!important; */
 }
+
 .scrollable-input-container{
   align-items: center;
   display: flex;

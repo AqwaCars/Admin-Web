@@ -101,15 +101,15 @@ export const addCar = createAsyncThunk("admin/addCar", async (carDetails) => {
         console.log(carDetails);
         const carResp = await axios.post(`http://localhost:5000/api/car/newCar`, carDetails);
         console.log(carResp.data);
-        const imgResp = await axios.post(`http://localhost:5000/api/media/add/car/${carResp.data.id}`, carDetails.media);
+        // const imgResp = await axios.post(`http://localhost:5000/api/media/add/car/${carResp.data.id}`, carDetails.media);
 
         // Combine responses if needed
-        const combinedResponse = {
-            car: carResp.carDetails,
-            image: imgResp.carDetails,
-        };
+        // const combinedResponse = {
+        //     car: carResp.carDetails,
+        //     image: imgResp.carDetails,
+        // };
 
-        return combinedResponse;
+        return carResp.data;
     } catch (error) {
         console.error(JSON.stringify(error));
         // Throw the error so it can be caught by the Redux middleware
@@ -299,16 +299,12 @@ export const getSingleMedia = createAsyncThunk("admin/getSingleMedia", async (id
     try {
         console.log("getSingleMedia", id);
         // Use await to wait for the axios.get call to complete
-        const response = await axios.get(`http://localhost:5000/api/media/getAll/31`, {
-            // Specify responseType as 'blob' to tell axios to treat the response as a blob
-            responseType: 'blob',
-        });
+        const response = await axios.get(`http://localhost:5000/api/media/getAll/${id}`);
         // Log the response data after it has been received
         console.log(response.data);
         // Create a blob URL from the blob data
-        const blobUrl = URL.createObjectURL(response.data);
         // Return the blob URL
-        return blobUrl;
+        return response.data
     } catch (er) {
         console.log(JSON.stringify(er));
         // If there's an error, return it as a rejected promise

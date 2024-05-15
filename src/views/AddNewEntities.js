@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import ReactDOM from 'react-dom';
-import Swal from 'sweetalert2';
+
 import {
   Card,
   CardBody,
@@ -11,28 +10,26 @@ import {
   ListGroupItem,
   ListGroup,
 } from "reactstrap";
+import { Audio, DNA } from 'react-loader-spinner'
 import "../assets/css/addNewEntities.css"
 import Select from 'react-select'
 import "../assets/css/customUpload.css"
 import Modal from 'react-modal';
 import { ReactComponent as Add } from '../assets/Svg/add-circle.svg';
-import companyImage from "../assets/img/companyImage.jpeg"
 import { SignUpCompany } from 'Redux/adminSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllCompanies } from 'Redux/adminSlice';
 import { ToastContainer, toast } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
-import { selectLoadingStatus } from 'Redux/adminSlice';
 import { Companies } from 'Redux/adminSlice';
 import { addCar } from 'Redux/adminSlice';
 import { getLimitedCars } from 'Redux/adminSlice';
 import { getLimitedCompanies } from 'Redux/adminSlice';
-import { selectAllCars } from 'Redux/adminSlice';
 import { LimitedCars } from 'Redux/adminSlice';
 import { LimitedCompanies } from 'Redux/adminSlice';
 import { getAllCars } from 'Redux/adminSlice';
-import cloudinaryUpload from 'helper_functions/Cloudinary';
+import { cloudinaryUpload } from 'helper_functions/Cloudinary';
 const data = {
   "Al-Kāf": {
     "key1": "value1",
@@ -191,6 +188,7 @@ const customStyles2 = {
   },
 };
 const AddNewEntities = () => {
+  const [selectedFile, setSelectedFile] = useState(null);
   const companies = useSelector(Companies)
   const limitedCompanies = useSelector(LimitedCompanies)
   const cars = useSelector(LimitedCars)
@@ -208,7 +206,6 @@ const AddNewEntities = () => {
     idCard: "",
     email: "",
     phoneNumber: "",
-    avatar: "",
     type: "company"
   })
   const [carDetails, setCarDetails] = useState({
@@ -223,9 +220,10 @@ const AddNewEntities = () => {
     Category: "",
     DoorNumber: "",
     Capacity: "",
-    media: []
   })
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [shownCarImage, setShownCarImage] = useState("")
+  const [shownCompanyImage, setShownCompanyImage] = useState("")
+  // const [selectedImage, setSelectedImage] = useState(null);
   // const [selectedImageCompany, setSelectedImageCompany] = useState(null);
   // const handleImageChange = (event) => {
   //   if (event.target.files && event.target.files[0]) {
@@ -257,12 +255,12 @@ const AddNewEntities = () => {
   // const handleClick = () => {
   //   fileInputRef.current.click();
   // };
-  const handleSelectChange = (id, value) => {
-    setCarDetails(prevDetails => ({
-      ...prevDetails, // Spread the previous state to maintain other properties
-      [id]: value // Use computed property name to dynamically set the property
-    }));
-  };
+  // const handleSelectChange = (id, value) => {
+  //   setCarDetails(prevDetails => ({
+  //     ...prevDetails, // Spread the previous state to maintain other properties
+  //     [id]: value // Use computed property name to dynamically set the property
+  //   }));
+  // };
   function notify(modalType) {
     const checkAndNotify = (details, type) => {
       let emptyCount = 0;
@@ -315,29 +313,19 @@ const AddNewEntities = () => {
       return newDetails;
     });
   };
-
+  const [cloudwait, setCloudWait] = useState(false)
   const handleCarChange = (id, value) => {
     console.log(`Updating ${id} with value: ${value}`);
     setCarDetails(prevDetails => {
-      let newDetails = { ...prevDetails };
-
-      // Check if the id is 'media'
-      if (id === 'media') {
-        // Initialize the 'media' array if it doesn't exist
-        //  if (!newDetails.media) {
-        //    newDetails.media = [];
-        //  }
-        // Push the value into the 'media' array
-        newDetails.media.push(value);
-      } else {
-        // For other ids, just set the value directly
-        newDetails[id] = value;
-      }
-
-      console.log('New state:', newDetails);
-      return newDetails;
+      // Directly update the value of the specified key
+      // If the key is meant to hold an array, this approach will still work because
+      // JavaScript allows arrays to be assigned to object keys.
+      prevDetails[id] = value;
+      console.log('New state:', prevDetails);
+      return prevDetails;
     });
   };
+
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -384,15 +372,15 @@ const AddNewEntities = () => {
   }, [modalIsOpen, carDetails]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    if (!loading &&!companies?.length) {
+    if (!loading && !companies?.length) {
       setLoading(true); // Indicate that data is being fetched
       dispatch(getAllCompanies());
     }
-    if (!loading &&!cars?.length) {
+    if (!loading && !cars?.length) {
       setLoading(true);
       dispatch(getLimitedCars());
     }
-    if (!loading &&!limitedCompanies?.length) {
+    if (!loading && !limitedCompanies?.length) {
       setLoading(true);
       dispatch(getLimitedCompanies());
     }
@@ -401,7 +389,53 @@ const AddNewEntities = () => {
   console.log(cars);
   const fileInputRef = useRef(null);
   const [imageSelected, setImageSelected] = useState(false);
+  const handleSubmit = async () => {
+    console.log(carDetails);
+    if (Object.values(carDetails).every(value => value)) {
+    try {
+      setCloudWait(true)
+      // Debugging: Log the selectedFile to verify its contents
+      console.log('Selected File:', selectedFile);
+      const imageUrl = await cloudinaryUpload(selectedFile, "car_images");
+      console.log("Image uploaded successfully:", imageUrl);
+      // Log the response or handle it as needed
 
+      carDetails.media=imageUrl
+      await dispatch(addCar(carDetails))
+      await dispatch(getAllCars())
+      setCloudWait(false)
+      closeModal()
+    } catch (err) {
+      console.error("Cloudinary Upload Error:", err);
+    }
+    } else {
+    notify('car');
+    console.log("Car details are missing.");
+    }
+  };
+  const handleSubmit2 = async () => {
+    console.log(companyDetails);
+    if (Object.values(companyDetails).every(value => value)) {
+      try {
+        setCloudWait(true)
+
+        // Debugging: Log the selectedFile to verify its contents
+        console.log('Selected File:', selectedFile);
+        const imageUrl = await cloudinaryUpload(selectedFile, "car_images");
+        console.log("Image uploaded successfully:", imageUrl);
+        console.log("should be created by now");
+        companyDetails.selfie=imageUrl
+        dispatch(SignUpCompany(companyDetails))
+        setCloudWait(false)
+        closeModal2()
+      } catch (err) {
+        console.error("Cloudinary Upload Error:", err);
+      }
+    } else {
+      notify('company');
+      console.log("Car details are missing.");
+    }
+  };
   // In your onChange handler
   // setImageSelected(true);
   // setTimeout(() => setImageSelected(false), 2000); // Reset after 2 seconds
@@ -540,21 +574,21 @@ const AddNewEntities = () => {
         isOpen={modalIsOpen}
         // onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
-        onAfterClose={() => setSelectedImage("")}
+        // onAfterClose={() => setSelectedImage("")}
         style={customStyles}
         contentLabel="Example Modal"
       >
         <div className="whiteboard-container">
           <button className="image-input-container" style={{
-            backgroundColor: carDetails.media ? "transparent" : "#f3f3f3",
+            backgroundColor: shownCarImage ? "transparent" : "#f3f3f3",
             // border: "none",
             padding: 0,
             cursor: "pointer",
           }} onClick={() => document.getElementById('imageInput').click()}>
-            {carDetails.media.length > 0 ? (
+            {shownCarImage ? (
               <>
-                {console.log(carDetails.media)}
-                <img src={carDetails.media} alt="Selected" style={{ maxWidth: '100%', maxHeight: "20rem", }} />
+                {/* {console.log(carDetails.media)} */}
+                <img src={shownCarImage} alt="Selected" style={{ maxWidth: '100%', maxHeight: "20rem", }} />
                 {/* <div className="image-preview-text">Image selected</div> */}
               </>
             ) : (
@@ -571,11 +605,11 @@ const AddNewEntities = () => {
               type="file"
               id="imageInput"
               style={{ display: 'none' }}
-              onChange={(e) => {
-                if (e.target.files && e.target.files.length > 0) {
-                  const file = e.target.files[0];
-                  const imageUri = URL.createObjectURL(file);
-                  handleCarChange("media", imageUri);
+              onChange={(event) => {
+                if (event.target.files && event.target.files.length > 0) {
+                  setSelectedFile(event.target.files[0]);; // Update the state with the selected file
+                  setShownCarImage(URL.createObjectURL(event.target.files[0])); // Create a blob URL for the selected file and pass it to handleCarChange
+                  setShownCarImage(URL.createObjectURL(event.target.files[0])); // Create a blob URL for the selected file and pass it to handleCarChange
                 }
               }}
             />
@@ -795,28 +829,35 @@ const AddNewEntities = () => {
             </div>
 
           </div>
-          <Button onClick={() => {
-            console.log(carDetails);
-            if (Object.values(carDetails).every(value => value)) {
-              cloudinaryUpload(carDetails.media,"car")
-              dispatch(addCar(carDetails))
-              dispatch(getAllCars())
-              closeModal()
-            }
-            notify('car');
-
-          }} className='pressEnter' style={{
+          <Button onClick={handleSubmit} className='pressEnter' style={{
             // color: "grey",
             // fontSize: "1rem",
             // paddingTop: "1rem"
-          }}>Press Here to Submit the form </Button>
+          }}>{
+              cloudwait ?
+                <div style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  // backgroundColor: "red"
+                }}>
+                  <DNA
+                    visible={true}
+                    height="4.5rem"
+                    width="4.5rem"
+                    ariaLabel="dna-loading"
+                    wrapperStyle={{ paddingBottom: '1.5rem' }} // Adjust this value as needed
+                  // wrapperClass="dna-wrapper"
+                  /></div> :
+                "Press Here to Submit the form"
+            }
+          </Button>
         </div>
       </Modal >
       <Modal
         isOpen={modalIsOpen2}
         // onAfterOpen={afterOpenModal}
         onRequestClose={closeModal2}
-        onAfterClose={() => setSelectedImage("")}
+        // onAfterClose={() => setSelectedImage("")}
         style={customStyles2}
         contentLabel="Example Modal"
       >
@@ -845,14 +886,14 @@ const AddNewEntities = () => {
 
           </div> */}
           <button className="image-input-container" style={{
-            backgroundColor: carDetails.media ? "transparent" : "#f3f3f3",
+            backgroundColor: shownCompanyImage ? "transparent" : "#f3f3f3",
             // border: "none",
             padding: 0,
             cursor: "pointer",
           }} onClick={() => document.getElementById('imageInput').click()}>
-            {companyDetails.avatar ? (
+            {shownCompanyImage ? (
               <>
-                <img src={companyDetails.avatar} alt="Selected" style={{ maxWidth: '100%', maxHeight: "20rem", }} />
+                <img src={shownCompanyImage} alt="Selected" style={{ maxWidth: '100%', maxHeight: "20rem", }} />
                 {/* <div className="image-preview-text">Image selected</div> */}
               </>
             ) : (
@@ -869,11 +910,10 @@ const AddNewEntities = () => {
               type="file"
               id="imageInput"
               style={{ display: 'none' }}
-              onChange={(e) => {
-                if (e.target.files && e.target.files.length > 0) {
-                  const file = e.target.files[0];
-                  const imageUri = URL.createObjectURL(file);
-                  handleCompanyChange("avatar", imageUri);
+              onChange={(event) => {
+                if (event.target.files && event.target.files.length > 0) {
+                  setSelectedFile(event.target.files[0]);; // Update the state with the selected file
+                  setShownCompanyImage(URL.createObjectURL(event.target.files[0])); // Create a blob URL for the selected file and pass it to handleCarChange
                 }
               }}
             />
@@ -987,21 +1027,28 @@ const AddNewEntities = () => {
               />
             </div>
           </div>
-          <Button className='pressEnter' onClick={() => {
-            if (Object.values(companyDetails).every(value => value)) {
-              console.log("should be created by now");
-              dispatch(SignUpCompany(companyDetails))
-              closeModal2()
-            }
-
-            notify('company');
-
-          }} style={{
+          <Button className='pressEnter' onClick={handleSubmit2} style={{
             // color: "grey",
             // fontSize: "1rem",
             // paddingTop: "1rem",
             // cursor: "pointer"
-          }}>Press Here to Submit the form </Button>
+          }}>{
+              cloudwait ?
+                <div style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  // backgroundColor: "red"
+                }}>
+                  <DNA
+                    visible={true}
+                    height="4.5rem"
+                    width="4.5rem"
+                    ariaLabel="dna-loading"
+                    wrapperStyle={{ paddingBottom: '1.5rem' }} // Adjust this value as needed
+                  // wrapperClass="dna-wrapper"
+                  /></div> :
+                "Press Here to Submit the form"
+            } </Button>
         </div>
       </Modal >
     </>
