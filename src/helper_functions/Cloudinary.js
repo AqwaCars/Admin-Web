@@ -4,9 +4,11 @@ import axios from "axios";
 // import apiSecret from './env.js'
 // import myUploadPreset from './env.js'
 
-export const cloudinaryUpload = async (imageUri) => {
+export const cloudinaryUpload = async (imageUri,uploadType) => {
   const cloudName = "dl9cp8cwq";
-  const myUploadPreset = "r0xpswmo";
+  // const myUploadPreset = "r0xpswmo";
+  const carUploadPreset = "your_car_upload_preset";
+  const userUploadPreset = "your_user_upload_preset";
 
   try {
     // console.log('Image URI:', imageUri);
@@ -17,7 +19,9 @@ export const cloudinaryUpload = async (imageUri) => {
       name: "my_image.jpg",
     });
 
-    formData.append("upload_preset", myUploadPreset); // Replace with your Cloudinary upload preset
+    const uploadPreset = uploadType === 'car'? carUploadPreset : userUploadPreset;
+
+    formData.append("upload_preset", uploadPreset);// Replace with your Cloudinary upload preset
     
     // console.log('Uploading to Cloudinary...');
     const response = await axios.post(

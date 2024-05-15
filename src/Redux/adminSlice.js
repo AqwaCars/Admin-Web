@@ -24,7 +24,8 @@ const initialState = {
     companies: [],
     limitedCompanies: [],
     Media: [],
-    carBookedPeriods: []
+    carBookedPeriods: [],
+    AgencyCars:[]
 };
 export const updateStateBlock = createAsyncThunk(
     "user/updateStateBlock",
@@ -32,6 +33,20 @@ export const updateStateBlock = createAsyncThunk(
         try {
             const response = await axios.put(
                 `http://localhost:5000/api/admin/update/${id}`
+            );
+
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+);
+export const getAgencyCars = createAsyncThunk(
+    "user/getAgencyCars",
+    async (name) => {
+        try {
+            const response = await axios.get(
+                `http://localhost:5000/api/admin/getAgencyCars/${name}`
             );
 
             return response.data;
@@ -570,11 +585,24 @@ export const adminSlicer = createSlice({
             state.loadingStatus.getBookedDates = false;
             state.error = action.error.message;
         });
+        builder.addCase(getAgencyCars.pending, (state) => {
+            state.loadingStatus.getAgencyCars = true;
+            state.error = null;
+        });
+        builder.addCase(getAgencyCars.fulfilled, (state, action) => {
+            state.loadingStatus.getAgencyCars = false;
+            state.AgencyCars = action.payload;
+        });
+        builder.addCase(getAgencyCars.rejected, (state, action) => {
+            state.loadingStatus.getAgencyCars = false;
+            state.error = action.error.message;
+        });
 
 
     }
 })
 
+export const agencyCars = (state) => state.Admin.AgencyCars;
 export const selectAdmin = (state) => state.Admin.admin;
 export const selectLoading = (state) => state.Admin.loading;
 export const selectAllUsers = (state) => state.Admin.allUsers;

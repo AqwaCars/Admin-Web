@@ -32,6 +32,7 @@ import { selectAllCars } from 'Redux/adminSlice';
 import { LimitedCars } from 'Redux/adminSlice';
 import { LimitedCompanies } from 'Redux/adminSlice';
 import { getAllCars } from 'Redux/adminSlice';
+import cloudinaryUpload from 'helper_functions/Cloudinary';
 const data = {
   "Al-Kāf": {
     "key1": "value1",
@@ -797,6 +798,7 @@ const AddNewEntities = () => {
           <Button onClick={() => {
             console.log(carDetails);
             if (Object.values(carDetails).every(value => value)) {
+              cloudinaryUpload(carDetails.media,"car")
               dispatch(addCar(carDetails))
               dispatch(getAllCars())
               closeModal()

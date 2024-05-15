@@ -54,14 +54,18 @@ function Sidebar(props) {
           target="_blank"
           onClick={props.toggleSidebar}
         >
-          <div className="logo-img">
+          {/* <div className="logo-img"> */}
             <img className="company_logo_sidebar" src={logo.imgSrc} alt="react-logo" />
-          </div>
+          {/* </div> */}
         </a>
       );
       logoText = (
         <a
-          className="simple-text logo-normal"
+          className="logo-text"
+          // className="simple-text logo-normal"
+          style={{
+            // maringTop:"2rem"
+          }}
           target="_blank"
           onClick={props.toggleSidebar}
         >

@@ -14,8 +14,11 @@ import { ReactComponent as Detail } from '../assets/Svg/details.svg';
 import { filterUsers } from "Redux/adminSlice";
 import { selectStaticAllUsers } from "Redux/adminSlice";
 import Modal from 'react-modal';
+import { agencyCars } from "Redux/adminSlice";
+import { getAgencyCars } from "Redux/adminSlice";
 function Icons() {
   const [selectedOption, setSelectedOptions] = useState({ value: 'all', label: 'Select Filter ...' });
+  const AgencyCars = useSelector(agencyCars)
   const [selectedSortOption, setSelectedSortOptions] = useState({ value: "Select Sort...", label: "Select Sort ..." });
   const [searchValue, setSearchValue] = useState("")
   const options = [
@@ -61,6 +64,12 @@ function Icons() {
   const handleBlur = () => {
     setMenuIsOpen(false);
   };
+  const [modalData, setModalData] = useState()
+  const handleDetailClick = (user) => {
+    console.log(user);
+    dispatch(getAgencyCars(user.userName))
+    setModalData(user)
+  }
   const searchCustomStyles = {
     menu: (provied, state) => ({
       ...provied,
@@ -226,14 +235,19 @@ function Icons() {
 
   }, [dispatch, refresh])
   useEffect(() => {
-    document.getElementById('detailsBtn').addEventListener('mouseover', function () {
-      this.setAttribute('data-tooltip', 'Details');
-    });
+    const detailsBtn = document.getElementById('detailsBtn');
 
-    document.getElementById('detailsBtn').addEventListener('mouseout', function () {
-      this.removeAttribute('data-tooltip');
-    });
-  }, [])
+    if (detailsBtn) {
+      detailsBtn.addEventListener('mouseover', function () {
+        this.setAttribute('data-tooltip', 'Details');
+      });
+
+      detailsBtn.addEventListener('mouseout', function () {
+        this.removeAttribute('data-tooltip');
+      });
+    }
+  }, []);
+
 
   return (
     <>
@@ -395,6 +409,13 @@ function Icons() {
                               }}
                             >
                               <div className="font-icon-detail">
+                                <div class="details_btn" id="detailsBtn">
+                                  <Detail onClick={(event) => {
+                                    event.stopPropagation();
+                                    handleDetailClick(user)
+                                    openModal()
+                                  }} />
+                                </div>
                                 <img src={user.avatar} style={{
                                   height: "50%", width: "35%"
                                 }} />
@@ -503,6 +524,7 @@ function Icons() {
                                 <div class="details_btn" id="detailsBtn">
                                   <Detail onClick={(event) => {
                                     event.stopPropagation();
+                                    handleDetailClick(user)
                                     openModal()
                                   }} />
                                 </div>
@@ -601,6 +623,13 @@ function Icons() {
                                 }}
                               >
                                 <div className="font-icon-detail">
+                                  <div class="details_btn" id="detailsBtn">
+                                    <Detail onClick={(event) => {
+                                      event.stopPropagation();
+                                      handleDetailClick(user)
+                                      openModal()
+                                    }} />
+                                  </div>
                                   <img src={user.avatar} style={{
                                     height: "50%", width: "35%"
                                   }} />
@@ -699,6 +728,13 @@ function Icons() {
                                 }}
                               >
                                 <div className="font-icon-detail">
+                                  <div class="details_btn" id="detailsBtn">
+                                    <Detail onClick={(event) => {
+                                      event.stopPropagation();
+                                      handleDetailClick(user)
+                                      openModal()
+                                    }} />
+                                  </div>
                                   <img src={user.avatar} style={{
                                     height: "50%", width: "35%"
                                   }} />
@@ -793,6 +829,13 @@ function Icons() {
                                 }}
                               >
                                 <div className="font-icon-detail">
+                                  <div class="details_btn" id="detailsBtn">
+                                    <Detail onClick={(event) => {
+                                      event.stopPropagation();
+                                      handleDetailClick(user)
+                                      openModal()
+                                    }} />
+                                  </div>
                                   <img src={user.avatar} style={{
                                     height: "50%", width: "35%"
                                   }} />
@@ -889,6 +932,13 @@ function Icons() {
                                 }}
                               >
                                 <div className="font-icon-detail">
+                                  <div class="details_btn" id="detailsBtn">
+                                    <Detail onClick={(event) => {
+                                      event.stopPropagation();
+                                      handleDetailClick(user)
+                                      openModal()
+                                    }} />
+                                  </div>
                                   <img src={user.avatar} style={{
                                     height: "50%", width: "35%"
                                   }} />
@@ -921,6 +971,7 @@ function Icons() {
             right: 0,
             bottom: 0,
             backgroundColor: "rgba(0, 0, 0, 0.5)",
+            zIndex: "1000",
           },
           content: {
             overflow: "visible",
@@ -936,19 +987,19 @@ function Icons() {
             width: "70rem",
             height: "55rem",
             transform: 'translate(-50%, -50%)',
-            animation: modalIsOpen? 'fadeIn 0.5s ease-out' : 'none',
+            animation: modalIsOpen ? 'fadeIn 0.5s ease-out' : 'none',
           },
         }}
-        >
-      
+      >
+
         <div className="three_div_container">
           <div className="two_div_container">
             <div className="one_third_div">
               <div style={{
                 fontSize: "1.5rem",
                 textDecorationLine: "underline",
-
-              }}>Company Title</div>
+                paddingLeft: "1rem"
+              }}>{modalData?.userName}</div>
               <div style={{
                 display: "flex",
                 flexDirection: "row",
@@ -965,9 +1016,9 @@ function Icons() {
                   paddingLeft: "1rem",
                   gap: "1rem"
                 }}>
-                  <div className="company_details">Number</div>
-                  <div className="company_details">email adress</div>
-                  <div className="company_details">location adress</div>
+                  <div className="company_details">{modalData?.phoneNumber}</div>
+                  <div className="company_details">{modalData?.email}</div>
+                  <div className="company_details">{ }</div>
                 </div>
               </div>
             </div>
@@ -1078,23 +1129,35 @@ function Icons() {
               paddingBottom: "5rem"
               // height: "54rem",
             }}>
-              <div className="car_div">
-                <div><span style={{
-                  fontSize: "1rem"
-                }}>Car Brand</span>
+              {console.log(AgencyCars)}
+              {AgencyCars?.map((car) =>
+              (<div className="car_div">
+                <div style={{
+                  textDecorationLine: "underline"
+                }}><span style={{
+                  fontSize: "1.4rem",
+                  paddingLeft: "1rem",
+                }}>{car.brand}</span>
                   <span style={{
-                    fontSize: "1rem"
-                  }}> / </span>
+                    fontSize: "1.4rem",
+                  }}> </span>
                   <span style={{
-                    fontSize: "1rem"
-                  }}>Car Model</span></div>
+                    fontSize: "1.4rem",
+                  }}>{car.model}</span></div>
                 <div style={{
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center"
                 }}>
                   <div className="car_img">
-                    <img />
+                    <img style={{
+                      width: "8rem", /* Take up the full width of the container */
+                      height: "8rem", /* Take up the full height of the container */
+                      objectFit: "cover", /* Scale the image to cover the container while maintaining its aspect ratio */
+                      borderRadius: "50%",
+                       height: "95%", 
+                       width: "95%", /* Take up the full width of the container */
+                    }} src="https://www.mad4wheels.com/img/free-car-images/mobile/20826/mercedes-amg-cle-53-4matic-coupe-2024-762541.jpg" />
                   </div>
                   <div style={{
                     display: "flex",
@@ -1102,174 +1165,20 @@ function Icons() {
                     gap: ".5rem"
                   }}>
                     <span style={{
-                      fontSize: "1.1rem"
-                    }}>Car Daily Price</span>
+                      fontSize: "1rem",
+                    }}>{car.price} Dt</span>
                     <span style={{
-                      fontSize: "1.1rem"
-                    }}>Car Type</span>
+                      fontSize: "1rem",
+                    }}>{car.Type} Driving</span>
+                    <span style={{
+                      fontSize: "1rem",
+                    }}>{car.Category}</span>
+                    <span style={{
+                      fontSize: "1rem",
+                    }}>Made In {car.Year}</span>
                   </div>
                 </div>
-              </div>
-              <div className="car_div">
-                <div><span style={{
-                  fontSize: "1rem"
-                }}>Car Brand</span>
-                  <span style={{
-                    fontSize: "1rem"
-                  }}> / </span>
-                  <span style={{
-                    fontSize: "1rem"
-                  }}>Car Model</span></div>
-                <div style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center"
-                }}>
-                  <div className="car_img">
-                    <img />
-                  </div>
-                  <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: ".5rem"
-                  }}>
-                    <span style={{
-                      fontSize: "1.1rem"
-                    }}>Car Daily Price</span>
-                    <span style={{
-                      fontSize: "1.1rem"
-                    }}>Car Type</span>
-                  </div>
-                </div>
-              </div>
-              <div className="car_div">
-                <div><span style={{
-                  fontSize: "1rem"
-                }}>Car Brand</span>
-                  <span style={{
-                    fontSize: "1rem"
-                  }}> / </span>
-                  <span style={{
-                    fontSize: "1rem"
-                  }}>Car Model</span></div>
-                <div style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center"
-                }}>
-                  <div className="car_img">
-                    <img />
-                  </div>
-                  <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: ".5rem"
-                  }}>
-                    <span style={{
-                      fontSize: "1.1rem"
-                    }}>Car Daily Price</span>
-                    <span style={{
-                      fontSize: "1.1rem"
-                    }}>Car Type</span>
-                  </div>
-                </div>
-              </div>
-              <div className="car_div">
-                <div><span style={{
-                  fontSize: "1rem"
-                }}>Car Brand</span>
-                  <span style={{
-                    fontSize: "1rem"
-                  }}> / </span>
-                  <span style={{
-                    fontSize: "1rem"
-                  }}>Car Model</span></div>
-                <div style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center"
-                }}>
-                  <div className="car_img">
-                    <img />
-                  </div>
-                  <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: ".5rem"
-                  }}>
-                    <span style={{
-                      fontSize: "1.1rem"
-                    }}>Car Daily Price</span>
-                    <span style={{
-                      fontSize: "1.1rem"
-                    }}>Car Type</span>
-                  </div>
-                </div>
-              </div>
-              <div className="car_div">
-                <div><span style={{
-                  fontSize: "1rem"
-                }}>Car Brand</span>
-                  <span style={{
-                    fontSize: "1rem"
-                  }}> / </span>
-                  <span style={{
-                    fontSize: "1rem"
-                  }}>Car Model</span></div>
-                <div style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center"
-                }}>
-                  <div className="car_img">
-                    <img />
-                  </div>
-                  <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: ".5rem"
-                  }}>
-                    <span style={{
-                      fontSize: "1.1rem"
-                    }}>Car Daily Price</span>
-                    <span style={{
-                      fontSize: "1.1rem"
-                    }}>Car Type</span>
-                  </div>
-                </div>
-              </div>
-              <div className="car_div">
-                <div><span style={{
-                  fontSize: "1rem"
-                }}>Car Brand</span>
-                  <span style={{
-                    fontSize: "1rem"
-                  }}> / </span>
-                  <span style={{
-                    fontSize: "1rem"
-                  }}>Car Model</span></div>
-                <div style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center"
-                }}>
-                  <div className="car_img">
-                    <img />
-                  </div>
-                  <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: ".5rem"
-                  }}>
-                    <span style={{
-                      fontSize: "1.1rem"
-                    }}>Car Daily Price</span>
-                    <span style={{
-                      fontSize: "1.1rem"
-                    }}>Car Type</span>
-                  </div>
-                </div>
-              </div>
+              </div>))}
             </div>
           </div>
         </div>

@@ -55,24 +55,25 @@
   padding-top: 2rem; /* Add this line to make the div scrollable */
 }
 @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+  from {
+    opacity: 0;
   }
-  
-  .fadeIn {
-    animation: fadeIn 0.5s ease-out;
+  to {
+    opacity: 1;
   }
-  
+}
+
+.fadeIn {
+  animation: fadeIn 0.5s ease-out;
+}
+
 .half_div {
   height: auto;
   padding-top: 3rem;
   width: 50%;
   padding-left: 3rem;
   height: 54rem;
+  overflow: hidden;
   border-left-width: 0.15rem;
   border-left-style: ridge;
   border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%;
@@ -86,14 +87,20 @@
   border-style: solid;
 }
 .car_img {
-  width: 6rem;
-  height: 6rem;
-  border-radius: 50%;
-  border-width: 0.1rem;
-  border-style: solid;
+  width: 8rem;
+  height: 8rem;
+  /* border-radius: 50%; */
+  /* border-width: 0.1rem; */
+  /* border-style: solid; */
+  /* border-radius: 50%; */
+  /* overflow: hidden; */
+  border-right-color:lightgray ;
+  border-right-width:.1rem ;
+  /* padding-right: .4:rem; */
+  border-right-style: solid;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
-  margin-right: 1rem;
+  margin-right: .8rem;
 }
 .review_img {
   min-width: 5rem;
@@ -106,24 +113,76 @@
   margin-bottom: 0.5rem;
 }
 .review_div {
-  width: 90%;
-  margin-bottom: 1rem;
-  /* background-color: red; */
-  /* border-bottom-width: 5px ; */
-  padding-bottom: 0.5rem;
-  border-bottom: #30416b solid 0.15rem;
-}
-.car_div {
+  padding:.5rem;
   width: 90%;
   cursor: pointer;
   margin-bottom: 1rem;
   /* background-color: red; */
   /* border-bottom-width: 5px ; */
   padding-bottom: 0.5rem;
-  border-bottom: #30416b solid 0.15rem;
+  border-bottom: #30416b solid 0.1rem;
+  border-left: #30416b solid 0.1rem;
+  border-right: #30416b solid 0.1rem;
+  border-radius: 1rem;
 }
+.review_div:hover {
+  /* Hover effect styling */
+  background-color: #F5F5F5;
+  transform: scale(1); /* Slightly enlarge on hover */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover for a 3D effect */
+  border-bottom: #30416b solid 0.15rem;
+  border-left: #30416b solid 0.15rem;
+  border-right: #30416b solid 0.15rem;
+  /* Optional: Add a CSS animation for a more dynamic effect */
+  animation: hoverEffect 0.5s ease-in-out forwards;
+}
+
+.car_div {
+  padding:.5rem;
+  width: 90%;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  /* background-color: red; */
+  /* border-bottom-width: 5px ; */
+  padding-bottom: 0.5rem;
+  border-bottom: #30416b solid 0.1rem;
+  border-left: #30416b solid 0.1rem;
+  border-right: #30416b solid 0.1rem;
+  border-radius: 1rem;
+}
+/* .car_div div span :hover { */
+  /* Hover effect styling */
+/* text-decoration: underline; */
+/* } */
 .car_div:hover {
-    background-color: lightgrey;
+  /* Hover effect styling */
+  border-bottom: #30416b solid 0.15rem;
+  border-left: #30416b solid 0.15rem;
+  border-right: #30416b solid 0.15rem;
+  transform: scale(1); /* Slightly enlarge on hover */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover for a 3D effect */
+  background-color: #F5F5F5;
+  /* Optional: Add a CSS animation for a more dynamic effect */
+  animation: hoverEffect 0.5s ease-in-out forwards;
+}
+
+/* Optional CSS animation */
+@keyframes hoverEffect {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 1rem;
+  }
+  50% {
+    transform: scale(0.95);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    border-radius: 1rem;
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 1rem;
+  }
 }
 .company_details {
   font-size: 1.1rem;

@@ -11,7 +11,7 @@ import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
 import routes from "routes.js";
 
-import logo from "assets/img/aqwa_logo.png";
+import logo from "assets/img/logo-white.png";
 import { BackgroundColorContext } from "contexts/BackgroundColorContext";
 import { useDispatch, useSelector } from "react-redux";
 import { selectLoggedIn } from "Redux/adminSlice";
