@@ -1,6 +1,7 @@
 // ##############################
-// // // Chart variables
-// #############################
+// Chart variables
+// #############################import 'chartjs-plugin-gradient';
+// import 'chartjs-plugin-gradient';
 
 // chartExample1 and chartExample2 options
 let chart1_2_options = {
@@ -511,9 +512,5 @@ const chartExample4 = {
   },
 };
 
-module.exports = {
-  chartExample1, // in src/views/Dashboard.js
-  chartExample2, // in src/views/Dashboard.js
-  chartExample3, // in src/views/Dashboard.js
-  chartExample4, // in src/views/Dashboard.js
-};
+export { chartExample1, chartExample2, chartExample3, chartExample4 };
+

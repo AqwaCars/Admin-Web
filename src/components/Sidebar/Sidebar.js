@@ -7,8 +7,8 @@ import { Nav } from "reactstrap";
 import { BackgroundColorContext, backgroundColors } from "contexts/BackgroundColorContext";
 import "../../assets/css/sideBar.css"
 import { useDispatch, useSelector } from "react-redux";
-import { selectLoggedIn } from "Redux/adminSlice";
-import { setLoggedIn } from "Redux/adminSlice";
+import { selectLoggedIn } from "../../Redux/adminSlice";
+import { setLoggedIn } from "../../Redux/adminSlice";
 
 function Sidebar(props) {
   const logged = useSelector(selectLoggedIn)
@@ -114,7 +114,7 @@ function Sidebar(props) {
               </div>
             ) : null}
             <Nav>
-              {routes.map((prop, key) => {
+              {routes?.map((prop, key) => {
                 if (prop.redirect) return null;
                 return (
                   <li

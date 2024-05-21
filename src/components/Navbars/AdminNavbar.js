@@ -38,9 +38,9 @@ import {
   NavbarToggler,
   ModalHeader,
 } from "reactstrap";
-import { selectLoggedIn } from "Redux/adminSlice";
+import { selectLoggedIn } from "../../Redux/adminSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "Redux/adminSlice";
+import { logout } from "../../Redux/adminSlice";
 import { useNavigate } from "react-router-dom";
 
 function AdminNavbar(props) {

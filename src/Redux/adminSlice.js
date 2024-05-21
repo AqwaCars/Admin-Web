@@ -25,7 +25,7 @@ const initialState = {
     limitedCompanies: [],
     Media: [],
     carBookedPeriods: [],
-    AgencyCars:[]
+    AgencyCars: []
 };
 export const updateStateBlock = createAsyncThunk(
     "user/updateStateBlock",
@@ -63,7 +63,7 @@ export const approveRequest = createAsyncThunk(
                 `http://127.0.0.1:5000/api/agency/addAgency/${request.id}`,
                 { UserId: request.UserId }
             );
-            thunkAPI.dispatch(getAllRequests())
+            // thunkAPI.dispatch(getAllRequests())
             return response.data;
         } catch (error) {
             console.log(error);
@@ -124,7 +124,6 @@ export const getAllRequests = createAsyncThunk(
             const response = await axios.get(
                 `http://127.0.0.1:5000/api/request/getAllUnverified`
             );
-
             return response.data;
         } catch (error) {
             console.log(error);
@@ -255,7 +254,7 @@ export const getData = createAsyncThunk("user/getADminData", async () => {
         console.error(err);
     }
 });
-export const Login = createAsyncThunk("user/Login", async ({ email, password }, thunkAPI) => {
+export const Login = createAsyncThunk("admin/Login", async ({ email, password }, thunkAPI) => {
     try {
         const data = { email, password }
         const response = await axios.post(
@@ -295,45 +294,65 @@ export const getUserById = createAsyncThunk("user/getById", async (id) => {
     }
 })
 
-export const getSingleMedia = createAsyncThunk("admin/getSingleMedia", async (id) => {
-    try {
-        console.log("getSingleMedia", id);
-        // Use await to wait for the axios.get call to complete
-        const response = await axios.get(`http://localhost:5000/api/media/getAll/${id}`);
-        // Log the response data after it has been received
-        console.log(response.data);
-        // Create a blob URL from the blob data
-        // Return the blob URL
-        return response.data
-    } catch (er) {
-        console.log(JSON.stringify(er));
-        // If there's an error, return it as a rejected promise
-        return Promise.reject(er);
-    }
-});
+// export const getSingleMedia = createAsyncThunk("admin/getSingleMedia", async (id) => {
+//     try {
+//         console.log("getSingleMedia", id);
+//         // Use await to wait for the axios.get call to complete
+//         const response = await axios.get(`http://localhost:5000/api/media/getAll/${id}`);
+//         // Log the response data after it has been received
+//         console.log(response.data);
+//         // Create a blob URL from the blob data
+//         // Return the blob URL
+//         return response.data
+//     } catch (er) {
+//         console.log(JSON.stringify(er));
+//         // If there's an error, return it as a rejected promise
+//         return Promise.reject(er);
+//     }
+// });
 
 export const getBookedDates = createAsyncThunk("admin/getBookedDates", async (id) => {
     try {
         console.log("getBookedDates", id);
-        const response = await axios.get(`http://localhost:5000/api/bookedPeriods/getOneCar/${id}`)
+        const response = await axios.get(`http://localhost:5000/api/bookedPeriods/getDate/${id}`)
         return response.data
     } catch (er) {
         console.log(JSON.stringify(er));
     }
 })
 
-export const addBookedDate = createAsyncThunk("admin/getBookedDates", async (data) => {
+export const addBookedDate = createAsyncThunk("admin/addBookedDates", async (data) => {
     try {
-        console.log("getBookedDates", data.CarId);
-        console.log("getBookedDates", data.BookedPeriod);
-        console.log("getBookedDates", data);
-        await axios.post(`http://localhost:5000/api/bookedPeriods/addOneCar`,
-            data)
+        // Transform the dates array to contain ISO string representations
+        const transformedData = {
+            ...data,
+            dates: data.dates?.map(date => date.toISOString()),
+        };
+
+        await axios.post(`http://localhost:5000/api/bookedPeriods/addDate`, transformedData);
+    } catch (er) {
+        console.log(JSON.stringify(er));
+    }
+});
+export const cancelRent =createAsyncThunk("admin/cancelRent",async({userId,carId})=>{
+    try {
+        console.log(userId,carId);
+        axios.post(`http://localhost:5000/api/bookedPeriods/removeRent`,{userId,carId})
     } catch (er) {
         console.log(JSON.stringify(er));
     }
 })
-
+export const updateCar=createAsyncThunk("admin/updateCar",async({carId,data})=>{
+    try {
+        console.log(carId,data);
+        const response =axios.update(`http://localhost:5000/api/car/cars/${carId}`,{
+            data
+        })
+        console.log(response.data);
+    } catch (er) {
+        console.log(JSON.stringify(er))
+    }
+})
 export const adminSlicer = createSlice({
     name: "admin",
     initialState,
@@ -555,18 +574,6 @@ export const adminSlicer = createSlice({
         });
         builder.addCase(getLimitedCars.rejected, (state, action) => {
             state.loadingStatus.getLimitedCars = false;
-            state.error = action.error.message;
-        });
-        builder.addCase(getSingleMedia.pending, (state) => {
-            state.loadingStatus.getSingleMedia = true;
-            state.error = null;
-        });
-        builder.addCase(getSingleMedia.fulfilled, (state, action) => {
-            state.loadingStatus.getSingleMedia = false;
-            state.Media = action.payload;
-        });
-        builder.addCase(getSingleMedia.rejected, (state, action) => {
-            state.loadingStatus.getSingleMedia = false;
             state.error = action.error.message;
         });
         builder.addCase(getBookedDates.pending, (state) => {

@@ -26,28 +26,24 @@ import {
 } from "reactstrap";
 
 // core components
-import {
-  chartExample1,
-  chartExample2,
-  chartExample3,
-  chartExample4,
-} from "variables/charts.js";
+import { chartExample1, chartExample2, chartExample3, chartExample4 } from '../variables/charts';
+
 import { useDispatch, useSelector } from "react-redux";
-import { selectAllUsers } from "Redux/adminSlice";
-import { getAllUsers } from "Redux/adminSlice";
-import { getApprovedServices } from "Redux/adminSlice";
-import { selectApproved } from "Redux/adminSlice";
-import { getPendingServices } from "Redux/adminSlice";
-import { getRejectedServices } from "Redux/adminSlice";
-import { getAllCars } from "Redux/adminSlice";
-import { allCars } from "Redux/adminSlice";
-import { selectAllCars } from "Redux/adminSlice";
-import { selectPending } from "Redux/adminSlice";
-import { selectRejected } from "Redux/adminSlice";
-import { selectForeignUser } from "Redux/adminSlice";
-import { getUserById } from "Redux/adminSlice";
-import { selectLoggedIn } from "Redux/adminSlice";
-import { getData } from "Redux/adminSlice";
+import { selectAllUsers } from "../Redux/adminSlice";
+import { getAllUsers } from "../Redux/adminSlice";
+import { getApprovedServices } from "../Redux/adminSlice";
+import { selectApproved } from "../Redux/adminSlice";
+import { getPendingServices } from "../Redux/adminSlice";
+import { getRejectedServices } from "../Redux/adminSlice";
+import { getAllCars } from "../Redux/adminSlice";
+import { allCars } from "../Redux/adminSlice";
+import { selectAllCars } from "../Redux/adminSlice";
+import { selectPending } from "../Redux/adminSlice";
+import { selectRejected } from "../Redux/adminSlice";
+import { selectForeignUser } from "../Redux/adminSlice";
+import { getUserById } from "../Redux/adminSlice";
+import { selectLoggedIn } from "../Redux/adminSlice";
+import { getData } from "../Redux/adminSlice";
 
 function Dashboard() {
   const logged = useSelector(selectLoggedIn)

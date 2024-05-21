@@ -1,5 +1,5 @@
-import { getData } from "Redux/adminSlice";
-import { selectAdmin } from "Redux/adminSlice";
+import { getData } from "../Redux/adminSlice";
+import { selectAdmin } from "../Redux/adminSlice";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 

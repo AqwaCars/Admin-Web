@@ -22,7 +22,8 @@ import { Button, Dropdown, DropdownToggle, Badge } from "reactstrap";
 import { ThemeContext, themes } from "contexts/ThemeContext";
 import { backgroundColors } from "contexts/BackgroundColorContext";
 import { useSelector } from "react-redux";
-import { selectLoggedIn } from "Redux/adminSlice";
+import { selectLoggedIn } from "../../Redux/adminSlice";
+// import { selectLoggedIn } from "Redux/adminSlice";
 
 function FixedPlugin(props) {
   const logged = useSelector(selectLoggedIn)

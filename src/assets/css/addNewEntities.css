@@ -97,7 +97,17 @@
   /* background-color: red!important; */
   /* background-image: none!important; */
 }
-
+header h1 {
+  font-size: 1.5rem ;
+  padding-left: .9rem !important;
+  padding:.1rem;
+  margin-bottom: .5rem;
+  /* font-weight: 600; */
+  background-image:  radial-gradient(#553c9a, #ee4b2b) !important;
+  color: transparent !important;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+}
 .scrollable-input-container{
   align-items: center;
   display: flex;
@@ -107,6 +117,8 @@
   background-color: white;
   padding-bottom: 4rem;
   box-sizing: border-box;
+  border-bottom:.1rem solid #30416B;
+  padding:1rem;
   overflow-y: auto; 
 }
 ::-webkit-scrollbar {
@@ -142,7 +154,14 @@
   font-size: 16px;
   width: 100%;
 }
-
+.Cancellation_ctr{
+  width: 100%;
+  display: flex;
+  /* background-color: red; */
+  flex-direction: column;
+  border-bottom:.1rem solid #30416B;
+  padding:1rem;
+}
 .select-box {
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -150,6 +169,16 @@
   font-size: 16px;
   width: 100%;
   margin-bottom: 10px;
+}
+.select-box_user_rent_select {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 16px;
+  width: 50%;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-left: 1rem;
 }
 .input-box {
   border: 1px solid #ccc;

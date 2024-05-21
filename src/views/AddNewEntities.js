@@ -16,118 +16,118 @@ import Select from 'react-select'
 import "../assets/css/customUpload.css"
 import Modal from 'react-modal';
 import { ReactComponent as Add } from '../assets/Svg/add-circle.svg';
-import { SignUpCompany } from 'Redux/adminSlice';
+import { SignUpCompany } from '../Redux/adminSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllCompanies } from 'Redux/adminSlice';
+import { getAllCompanies } from '../Redux/adminSlice';
 import { ToastContainer, toast } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
-import { Companies } from 'Redux/adminSlice';
-import { addCar } from 'Redux/adminSlice';
-import { getLimitedCars } from 'Redux/adminSlice';
-import { getLimitedCompanies } from 'Redux/adminSlice';
-import { LimitedCars } from 'Redux/adminSlice';
-import { LimitedCompanies } from 'Redux/adminSlice';
-import { getAllCars } from 'Redux/adminSlice';
+import { Companies } from '../Redux/adminSlice';
+import { addCar } from '../Redux/adminSlice';
+import { getLimitedCars } from '../Redux/adminSlice';
+import { getLimitedCompanies } from '../Redux/adminSlice';
+import { LimitedCars } from '../Redux/adminSlice';
+import { LimitedCompanies } from '../Redux/adminSlice';
+import { getAllCars } from '../Redux/adminSlice';
 import { cloudinaryUpload } from 'helper_functions/Cloudinary';
-const data = {
-  "Al-Kāf": {
-    "key1": "value1",
-    "key2": "value2"
-  },
-  "Al-Mahdiyah": {
-    "key1": "value1",
-    "key2": "value2"
-  },
-  "Al-Munastīr": {
-    "key1": "value1",
-    "key2": "value2"
-  },
-  "Al-Qaṣrayn": {
-    "key1": "value1",
-    "key2": "value2"
-  },
-  "Al-Qayrawān": {
-    "key1": "value1",
-    "key2": "value2"
-  },
-  "Aryānah": {
-    "key1": "value1",
-    "key2": "value2"
-  },
-  "Bājah": {
-    "key1": "value1",
-    "key2": "value2"
-  },
-  "Banzart": {
-    "key1": "value1",
-    "key2": "value2"
-  },
-  "Bin 'Arūs": {
-    "key1": "value1",
-    "key2": "value2"
-  },
-  "Jundūbah": {
-    "key1": "value1",
-    "key2": "value2"
-  },
-  "Madanīn": {
-    "key1": "value1",
-    "key2": "value2"
-  },
-  "Manūbah": {
-    "key1": "value1",
-    "key2": "value2"
-  },
-  "Nābul": {
-    "key1": "value1",
-    "key2": "value2"
-  },
-  "Qābis": {
-    "key1": "value1",
-    "key2": "value2"
-  },
-  "Qafṣah": {
-    "key1": "value1",
-    "key2": "value2"
-  },
-  "Qibilī": {
-    "key1": "value1",
-    "key2": "value2"
-  },
-  "Ṣafāqis": {
-    "key1": "value1",
-    "key2": "value2"
-  },
-  "Sīdī Bū Zayd": {
-    "key1": "value1",
-    "key2": "value2"
-  },
-  "Silyānah": {
-    "key1": "value1",
-    "key2": "value2"
-  },
-  "Sūsah": {
-    "key1": "value1",
-    "key2": "value2"
-  },
-  "Taṭāwīn": {
-    "key1": "value1",
-    "key2": "value2"
-  },
-  "Tawzar": {
-    "key1": "value1",
-    "key2": "value2"
-  },
-  "Tūnis": {
-    "key1": "value1",
-    "key2": "value2"
-  },
-  "Zaghwān": {
-    "key1": "value1",
-    "key2": "value2"
-  }
-}
+// const data = {
+//   "Al-Kāf": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   },
+//   "Al-Mahdiyah": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   },
+//   "Al-Munastīr": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   },
+//   "Al-Qaṣrayn": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   },
+//   "Al-Qayrawān": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   },
+//   "Aryānah": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   },
+//   "Bājah": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   },
+//   "Banzart": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   },
+//   "Bin 'Arūs": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   },
+//   "Jundūbah": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   },
+//   "Madanīn": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   },
+//   "Manūbah": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   },
+//   "Nābul": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   },
+//   "Qābis": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   },
+//   "Qafṣah": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   },
+//   "Qibilī": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   },
+//   "Ṣafāqis": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   },
+//   "Sīdī Bū Zayd": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   },
+//   "Silyānah": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   },
+//   "Sūsah": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   },
+//   "Taṭāwīn": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   },
+//   "Tawzar": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   },
+//   "Tūnis": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   },
+//   "Zaghwān": {
+//     "key1": "value1",
+//     "key2": "value2"
+//   }
+// }
 
 
 const years = [];
@@ -138,8 +138,8 @@ for (let year = 2000; year <= currentYear; year++) {
 }
 const fuels = ["Gasoline", "Diesel", "Electric"]
 // Assuming you're using a library like react-select or a similar component that expects options in a specific format
-const yearOptions = years.map(year => ({ label: year.toString(), value: year.toString() }));
-const fuelOptions = fuels.map(fuel => ({ label: fuel.toString(), value: fuel.toString() }));
+const yearOptions = years?.map(year => ({ label: year.toString(), value: year.toString() }));
+const fuelOptions = fuels?.map(fuel => ({ label: fuel.toString(), value: fuel.toString() }));
 
 const customStyles = {
   overlay: {
@@ -189,10 +189,12 @@ const customStyles2 = {
 };
 const AddNewEntities = () => {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [rneFile, setRneFile] = useState(null);
+  const [idFile, setIdFile] = useState(null);
   const companies = useSelector(Companies)
   const limitedCompanies = useSelector(LimitedCompanies)
   const cars = useSelector(LimitedCars)
-  const options = companies.map(company => ({
+  const options = companies?.map(company => ({
     label: company.userName, // Display the userName as the label
     value: company.userName, // Use the id as the value
   }));
@@ -202,8 +204,6 @@ const AddNewEntities = () => {
   const [modalIsOpen2, setIsOpen2] = useState(false);
   const [companyDetails, setCompanyDetails] = useState({
     userName: "",
-    RNE: "",
-    idCard: "",
     email: "",
     phoneNumber: "",
     type: "company"
@@ -352,6 +352,9 @@ const AddNewEntities = () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [modalIsOpen2]);
+  useEffect(()=>{
+    console.log("reload");
+  },[cloudwait])
   // console.log(`${process.env.EXPO_PUBLIC_SERVER_IP}`)
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -397,6 +400,7 @@ const AddNewEntities = () => {
       // Debugging: Log the selectedFile to verify its contents
       console.log('Selected File:', selectedFile);
       const imageUrl = await cloudinaryUpload(selectedFile, "car_images");
+
       console.log("Image uploaded successfully:", imageUrl);
       // Log the response or handle it as needed
 
@@ -421,11 +425,18 @@ const AddNewEntities = () => {
 
         // Debugging: Log the selectedFile to verify its contents
         console.log('Selected File:', selectedFile);
-        const imageUrl = await cloudinaryUpload(selectedFile, "car_images");
+        const imageUrl = await cloudinaryUpload(selectedFile, "user_images");
+        const imageUrl2 = await cloudinaryUpload(rneFile, "user_images");
+        const imageUrl3 = await cloudinaryUpload(idFile, "user_images");
         console.log("Image uploaded successfully:", imageUrl);
+        console.log("Image uploaded successfully:", imageUrl2);
+        console.log("Image uploaded successfully:", imageUrl3);
         console.log("should be created by now");
         companyDetails.selfie=imageUrl
+        companyDetails.RNE=imageUrl2
+        companyDetails.idCard=imageUrl3
         dispatch(SignUpCompany(companyDetails))
+        dispatch(getAllCompanies())
         setCloudWait(false)
         closeModal2()
       } catch (err) {
@@ -502,18 +513,19 @@ const AddNewEntities = () => {
                         marginBottom: "1rem",
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'space-between',
+                        justifyContent: 'flex-start',
                         transition: '0.3s',
                         cursor: 'pointer',
                         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
                       }}>
                         {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
-                        {/* <img src={null} alt={`Image`} style={{ width: '2rem', height: '1rem', marginRight: '10px' }} /> */}
+                        <img src={item.media} alt={`Image`} style={{ objectFit:"cover",width: '4rem', height: '3rem', marginRight: '1rem' }} />
+                        {/* </div> */}
                         <div>
                           <p style={{ fontSize: '18px', color: '#30416B' }}>{item.model}{item.brand}</p>
                           <p style={{ fontSize: '14px', color: '#30416B' }}>{item.Owner}</p>
                         </div>
-                        {/* </div> */}
+
                       </ListGroupItem>
                     ))}
                   </ListGroup>
@@ -653,6 +665,7 @@ const AddNewEntities = () => {
               }} className="input-container">
                 <input
                   className="input-box"
+                  type='number'
                   placeholder='Type here...'
                   onChange={(e) => handleCarChange("price", e.target.value)}
                   menuportaltarget={document.body}
@@ -686,7 +699,7 @@ const AddNewEntities = () => {
                   <input
                     className="input-box"
                     placeholder='Type here...'
-                    options={Object.keys(data).map(key => ({ label: key, value: key }))}
+                    // options={Object.keys(data)?.map(key => ({ label: key, value: key }))}
                     onChange={(e) => handleCarChange("brand", e.target.value)}
                     menuportaltarget={document.body}
                     styles={{
@@ -796,7 +809,7 @@ const AddNewEntities = () => {
                   <input
                     className="input-box"
                     placeholder='Type here...'
-                    options={Object.keys(data).map(key => ({ label: key, value: key }))}
+                    // options={Object.keys(data)?.map(key => ({ label: key, value: key }))}
                     onChange={(e) => handleCarChange("model", e.target.value)}
                     menuportaltarget={document.body}
                     styles={{
@@ -930,7 +943,7 @@ const AddNewEntities = () => {
               <input
                 className="select-box"
                 placeholder='Input The Company Name Here...'
-                options={Object.keys(data).map(key => ({ label: key, value: key }))}
+                // options={Object.keys(data)?.map(key => ({ label: key, value: key }))}
                 onChange={(e) => handleCompanyChange("userName", e.target.value)}
                 menuportaltarget={document.body}
                 styles={{
@@ -952,10 +965,7 @@ const AddNewEntities = () => {
                   onChange={(e) => {
                     // Check if a file is selected
                     if (e.target.files && e.target.files.length > 0) {
-                      // Create a URL for the selected file
-                      const fileURI = URL.createObjectURL(e.target.files[0]);
-                      // Update the state with the file URI
-                      handleCompanyChange("RNE", fileURI);
+                      setRneFile(e.target.files[0])
                     }
                   }}
                   menuportaltarget={document.body}
@@ -978,10 +988,7 @@ const AddNewEntities = () => {
                   onChange={(e) => {
                     // Check if a file is selected
                     if (e.target.files && e.target.files.length > 0) {
-                      // Create a URL for the selected file
-                      const fileURI = URL.createObjectURL(e.target.files[0]);
-                      // Update the state with the file URI
-                      handleCompanyChange("idCard", fileURI);
+                      setIdFile(e.target.files[0])
                     }
                   }}
                   menuportaltarget={document.body}
@@ -1002,7 +1009,7 @@ const AddNewEntities = () => {
                 className="select-box"
                 type="email"
                 placeholder='Input The Email Here...'
-                options={Object.keys(data).map(key => ({ label: key, value: key }))}
+                // options={Object.keys(data)?.map(key => ({ label: key, value: key }))}
                 onChange={(e) => handleCompanyChange("email", e.target.value)}
                 menuportaltarget={document.body}
                 styles={{

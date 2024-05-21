@@ -1,3 +1,40 @@
+// In black-dashboard-react/custom/variables.scss
+
+$theme-colors-rgb: (
+  "primary": #0d6efd,
+  "secondary": #6c757d,
+  // Add other theme colors as needed
+);
+$theme-colors-text: (
+  "primary": #212529, // Example value, adjust as needed
+  "secondary": #6c757d, // Example value, adjust as needed
+  // Add other theme colors as needed
+);
+$theme-colors-bg-subtle: (
+  "primary": #e9ecef, // Light gray, example value
+  "secondary": #dee2e6, // Slightly darker gray, example value
+  // Add other subtle background colors as needed
+);
+$theme-colors-border-subtle: (
+  "primary": #e9ecef, // Light gray, example value
+  "secondary": #dee2e6, // Slightly darker gray, example value
+  // Add other subtle background colors as needed
+);
+$theme-colors-text-dark: (
+  "primary": #e9ecef, // Light gray, example value
+  "secondary": #dee2e6, // Slightly darker gray, example value
+  // Add other subtle background colors as needed
+);
+$theme-colors-bg-subtle-dark: (
+  "primary": #e9ecef, // Light gray, example value
+  "secondary": #dee2e6, // Slightly darker gray, example value
+  // Add other subtle background colors as needed
+);
+$theme-colors-border-subtle-dark: (
+  "primary": #e9ecef, // Light gray, example value
+  "secondary": #dee2e6, // Slightly darker gray, example value
+  // Add other subtle background colors as needed
+);
 
 // Global settings
 
@@ -167,20 +204,40 @@ $tumblr-states:         lighten($tumblr, 6%) !default;
 $behance:               #1769ff !default;
 $behance-states:        lighten($behance, 6%) !default;
 
-$theme-colors: () !default;
-$theme-colors: map-merge((
-  "default":      $default,
-  "primary":      $primary,
-  "secondary":    $secondary,
-  "success":      $success,
-  "info":         $info,
-  "warning":      $warning,
-  "danger":       $danger,
-  "white":        $white,
-  "neutral":      $white,
-  "dark":         $dark,
-  "darker":       $darker
-), $theme-colors);
+@function theme-color($color-name) {
+  @return map-get($theme-colors, $color-name);
+  // Temporarily add debugging output
+  @debug "Retrieving color: #{$color-name} -> #{$theme-colors[$color-name]}";
+}
+
+
+$theme-colors: (
+  "default":      #344675,
+  "primary":      #ba54f5,
+  "secondary":    #f4f5f7,
+  "success":      #00cca3,
+  "info":         #1d8cf8,
+  "warning":      #ff8d72,
+  "danger":       #fd5d93,
+  "white":        #ffffff,
+  "neutral":      #ffffff,
+  "dark":         #212529,
+  "darker":       #212529
+)!default;
+
+// $theme-colors: map-merge((
+//   "default":      $default,
+//   "primary":      $primary,
+//   "secondary":    $secondary,
+//   "success":      $success,
+//   "info":         $info,
+//   "warning":      $warning,
+//   "danger":       $danger,
+//   "white":        $white,
+//   "neutral":      $white,
+//   "dark":         $dark,
+//   "darker":       $darker
+// ), $theme-colors);
 
 $brand-colors: () !default;
 $brand-colors: map-merge((
@@ -980,6 +1037,10 @@ $datepicker-range-highlighted-bg: $gray-200 !default;
 $datepicker-dropdown-border: lighten($gray-400, 40%);
 $datepicker-dropdown-bg: $white !default;
 $datepicker-highlighted-bg: $datepicker-active-background !default;
+
+
+// In black-dashboard-react/custom/variables.scss
+
 
 
 // Footer

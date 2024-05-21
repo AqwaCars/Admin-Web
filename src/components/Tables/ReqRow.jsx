@@ -1,5 +1,5 @@
 // import { getAllRequests } from "@/Redux/dachboardAdmin";
-import { setReqForSwal } from "Redux/adminSlice";
+import { setReqForSwal } from "../../Redux/adminSlice";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
@@ -7,13 +7,13 @@ import { Button } from "reactstrap";
 import Swal from "sweetalert2";
 import "../../assets/css/nucleo-icons.css";
 import requestImg from "../../assets/img/request.jpg";
-import { approveRequest } from "Redux/adminSlice";
-import { declineRequest } from "Redux/adminSlice";
-import { Media } from "Redux/adminSlice";
-import { getSingleMedia } from "Redux/adminSlice";
-import { getBookedDates } from "Redux/adminSlice";
-import { CarBookedPeriods } from "Redux/adminSlice";
-const ReqRow = ({ request,setRefresh, handlePapers, setCar,openModal,setMedia }) => {
+import { approveRequest } from "../../Redux/adminSlice";
+import { declineRequest } from "../../Redux/adminSlice";
+import { Media } from "../../Redux/adminSlice";
+// import { getSingleMedia } from "Redux/adminSlice";
+import { getBookedDates } from "../../Redux/adminSlice";
+import { CarBookedPeriods } from "../../Redux/adminSlice";
+const ReqRow = ({setDate, request,setRefresh, handlePapers, setCar,openModal,setMedia }) => {
   const dispatch = useDispatch();
   const refresh=(input)=>{
     setRefresh(input)
@@ -27,21 +27,29 @@ const ReqRow = ({ request,setRefresh, handlePapers, setCar,openModal,setMedia })
       console.log("fetchBookedDates",er);
     }
   }
-  const fetchMedia = async () => {
-    try {
-      const actionResult = await dispatch(getSingleMedia(request.id));
-      // Assuming you're using Redux Toolkit and the blob URL is returned in the payload
-      setMedia(actionResult.payload);
-    } catch (error) {
-      console.error('Failed to fetch media:', error);
-    }
-  };
+  // const fetchMedia = async () => {
+  //   try {
+  //     const actionResult = await dispatch(getSingleMedia(request.id));
+  //     // Assuming you're using Redux Toolkit and the blob URL is returned in the payload
+  //     setMedia(actionResult.payload);
+  //   } catch (error) {
+  //     console.error('Failed to fetch media:', error);
+  //   }
+  // };
 
   return (
     <tr res hover onClick={()=>{
       setCar(request)
-      fetchMedia();
+      dispatch(getBookedDates(request.id))
+      // fetchMedia();
       openModal();
+      setDate(
+        {
+          startDate: new Date(),
+          endDate: new Date(),
+          key: 'selection',
+        }
+      )
       fetchBookedDates();
       console.log(carBookedPeriods);
     }} >
