@@ -14,16 +14,16 @@ import routes from "routes.js";
 import logo from "assets/img/logo-white.png";
 import { BackgroundColorContext } from "contexts/BackgroundColorContext";
 import { useDispatch, useSelector } from "react-redux";
-import { selectLoggedIn } from "Redux/adminSlice";
-import { setLoggedIn } from "Redux/adminSlice";
-import { selectAdmin } from "Redux/adminSlice";
-import { getData } from "Redux/adminSlice";
-import { selectLoadingStatus } from "Redux/adminSlice";
-import { getAllUsers } from "Redux/adminSlice";
-import { getAllCars } from "Redux/adminSlice";
-import { getApprovedServices } from "Redux/adminSlice";
-import { getPendingServices } from "Redux/adminSlice";
-import { getRejectedServices } from "Redux/adminSlice";
+import { selectLoggedIn } from "../../Redux/adminSlice";
+import { setLoggedIn } from "../../Redux/adminSlice";
+import { selectAdmin } from "../../Redux/adminSlice";
+import { getData } from "../../Redux/adminSlice";
+import { selectLoadingStatus } from "../../Redux/adminSlice";
+import { getAllUsers } from "../../Redux/adminSlice";
+import { getAllCars } from "../../Redux/adminSlice";
+import { getApprovedServices } from "../../Redux/adminSlice";
+import { getPendingServices } from "../../Redux/adminSlice";
+import { getRejectedServices } from "../../Redux/adminSlice";
 
 var ps;
 
@@ -126,7 +126,7 @@ function Admin(props) {
     setsidebarOpened(!sidebarOpened);
   };
   const getRoutes = (routes) => {
-    return routes.map((prop, key) => {
+    return routes?.map((prop, key) => {
       if (prop.layout === "/admin") {
         return (
           <Route path={prop.path} element={prop.component} key={key} exact />
@@ -155,9 +155,9 @@ function Admin(props) {
           console.log(res.payload);
           dispatch(getAllUsers());
           dispatch(getAllCars());
-          dispatch(getApprovedServices());
-          dispatch(getPendingServices());
-          dispatch(getRejectedServices());
+          // dispatch(getApprovedServices());
+          // dispatch(getPendingServices());
+          // dispatch(getRejectedServices());
         } catch (error) {
           console.error("Failed to load data:", error);
           // Handle error appropriately

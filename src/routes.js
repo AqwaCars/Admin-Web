@@ -1,14 +1,15 @@
 
 import Dashboard from "views/Dashboard.js";
-import Icons from "views/Icons.js";
 import Map from "views/Map.js";
 import Notifications from "views/Notifications.js";
 import Rtl from "views/Rtl.js";
-import TableList from "views/TableList.js";
 import Typography from "views/Typography.js";
 import UserProfile from "views/UserProfile.js";
 import LoginPage from "views/Login";
 import AddNewEntities from "views/AddNewEntities";
+import Requests from "views/Requests";
+import Cars from "views/Cars";
+import User_Managements from "views/User_Managements";
 
 var routes = [
   {
@@ -20,11 +21,11 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/icons",
+    path: "/User_Managements",
     name: "User Managements",
     rtlName: "الرموز",
     icon: "tim-icons icon-badge",
-    component: <Icons />,
+    component: <User_Managements />,
     layout: "/admin",
   },
   // {
@@ -52,11 +53,19 @@ var routes = [
   //   layout: "/admin",
   // },
   {
-    path: "/tables",
+    path: "/Cars",
     name: "Cars",
     rtlName: "قائمة الجدول",
     icon: "tim-icons icon-delivery-fast",
-    component: <TableList />,
+    component: <Cars />,
+    layout: "/admin",
+  },
+  {
+    path: "/Requests",
+    name: "Rental Requests",
+    rtlName: "قائمة الجدول",
+    icon: "tim-icons icon-book-bookmark",
+    component: <Requests />,
     layout: "/admin",
   },
   {

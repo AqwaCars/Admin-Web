@@ -1,7 +1,7 @@
 import { createContext } from "react";
 
 export const themes = {
-  dark: "",
+  dark: "dark-content",
   light: "white-content",
 };
 

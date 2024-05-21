@@ -3,15 +3,15 @@ import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import "../assets/css/login.css";
 // import Head from 'next/head';
 import axios from 'axios';
-import { Login } from 'Redux/adminSlice';
+import { Login } from '../Redux/adminSlice';
 import { Card, CardHeader, CardBody, Row, Col, Input, Label, FormGroup, Form, Button, Badge } from "reactstrap";
 import Select from 'react-select';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import img00 from "../assets/img/back00.jpg"
-import { getData } from 'Redux/adminSlice';
-import { selectLoggedIn } from 'Redux/adminSlice';
-import { selectLoading } from 'Redux/adminSlice';
+import { getData } from '../Redux/adminSlice';
+import { selectLoggedIn } from '../Redux/adminSlice';
+import { selectLoading } from '../Redux/adminSlice';
 export default function LoginPage() {
   // const [username, setUsername] = useState('');
   // const [password, setPassword] = useState('');

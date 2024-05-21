@@ -97,7 +97,7 @@ function RTL(props) {
     setsidebarOpened(!sidebarOpened);
   };
   const getRoutes = (routes) => {
-    return routes.map((prop, key) => {
+    return routes?.map((prop, key) => {
       if (prop.layout === "/rtl") {
         return (
           <Route path={prop.path} element={prop.component} key={key} exact />
