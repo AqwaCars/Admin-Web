@@ -261,8 +261,8 @@ export const Login = createAsyncThunk("admin/Login", async ({ email, password },
             `http://localhost:5000/api/admin/emailLogin`,
             data
         )
-        localStorage.setItem("Token", response.data)
-        thunkAPI.dispatch(getData());
+        await localStorage.setItem("Token", response.data)
+        await thunkAPI.dispatch(getData());
         return response.data;
     } catch (err) {
         console.error(err);
@@ -345,9 +345,9 @@ export const cancelRent =createAsyncThunk("admin/cancelRent",async({userId,carId
 export const updateCar=createAsyncThunk("admin/updateCar",async({carId,data})=>{
     try {
         console.log(carId,data);
-        const response =axios.update(`http://localhost:5000/api/car/cars/${carId}`,{
+        const response =axios.put(`http://localhost:5000/api/car/updateCar/${carId}`,
             data
-        })
+        )
         console.log(response.data);
     } catch (er) {
         console.log(JSON.stringify(er))

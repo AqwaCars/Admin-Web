@@ -30,10 +30,10 @@ import {
 } from "reactstrap";
 import { getAllCars } from "../Redux/adminSlice";
 import Select from "react-select";
-import { Media } from "../Redux/adminSlice";
 import { addBookedDate } from "../Redux/adminSlice";
 import { CarBookedPeriods } from "../Redux/adminSlice";
 import { DNA } from "react-loader-spinner";
+import { DigitalClock } from "@mui/x-date-pickers";
 
 const customStyles = {
   overlay: {
@@ -48,7 +48,7 @@ const customStyles = {
     top: '50%',
     left: '50%',
     right: 'auto',
-    borderWidth: ".01rem",
+    borderWidth: ".15rem",
     // borderStyle: "groove",
     borderColor: "#30416B",
     bottom: 'auto',
@@ -72,39 +72,11 @@ const yearOptions = years?.map(year => ({ label: year.toString(), value: year.to
 const fuelOptions = fuels?.map(fuel => ({ label: fuel.toString(), value: fuel.toString() }));
 function Cars() {
   const dispatch = useDispatch()
-  const [carDetails, setCarDetails] = useState({
-    model: "",
-    price: "",
-    brand: "",
-    Type: "",
-    typeOfFuel: "",
-    Year: "",
-    peopleCount: "",
-    Category: "",
-    DoorNumber: "",
-    Capacity: "",
-    media: []
-  })
+  const [returnTime, setReturnTime] = useState(null)
+  const [rentalTime, setRentalTime] = useState(null)
   const [updateCarLoad, setUpdateCarLoad] = useState(false)
-  const handleCarDetailsUpdate = async () => {
-    // Assuming setUpdateCarLoad is a state setter that controls loading state
-    setUpdateCarLoad(true);
-  
 
-    try {
-      await dispatch(updateCar({
-        carId: car.id, // Make sure carDetails is defined and has an id property
-        data: car // Ensure carDetails contains the updated data
-      }));
-    } catch (error) {
-      // Consider more robust error handling based on your app's needs
-      console.error("Failed to update car details:", error);
-    }
-  
-    // Assuming setUpdateCarLoad(false) indicates the end of the update process
-    setUpdateCarLoad(false);
-  };
-  
+
   // const options = companies.?map(company => ({
   //   label: company.userName, // Display the userName as the label
   //   value: company.id, // Use the id as the value
@@ -132,27 +104,43 @@ function Cars() {
   };
 
   const [cloudwait, setCloudWait] = useState(false)
+  const handleCarDetailsUpdate = async () => {
+    // Assuming setUpdateCarLoad is a state setter that controls loading state
+    // setUpdateCarLoad(true);
 
+
+    try {
+      await dispatch(updateCar({
+        carId: car.id, // Make sure  is defined and has an id property
+        data: car // Ensure  contains the updated data
+      }));
+    } catch (error) {
+      // Consider more robust error handling based on your app's needs
+      console.error("Failed to update car details:", error);
+    }
+
+    // Assuming setUpdateCarLoad(false) indicates the end of the update process
+    // setUpdateCarLoad(false);
+  };
   const handleButtonClick = async () => {
     try {
       const datesArray = [];
       console.log(carRenter);
-      if (Object.values(carRenter).length > 0) {
+      if (date?.startDate && date?.endDate && Object.values(carRenter).length > 0 && rentalTime && returnTime) {
         setLoad(true)
-        if (date?.startDate && date?.endDate) {
-          // Generate an array of dates for the selected range
-          for (let d = new Date(date.startDate); d <= new Date(date.endDate); d.setDate(d.getDate() + 1)) {
-            datesArray.push(new Date(d));
-          }
-        } else if (date.startDate) {
-          // If only a single date is selected, push it to the array
-          datesArray.push(new Date(date.startDate));
+
+        // Generate an array of dates for the selected range
+        for (let d = new Date(date.startDate); d <= new Date(date.endDate); d.setDate(d.getDate() + 1)) {
+          datesArray.push(new Date(d));
         }
         setCloudWait(true)
         // Dispatch an action to save the dates to the database
-        await dispatch(addBookedDate({ carId: car.id, dates: datesArray, userId: carRenter.id }));
+        await dispatch(addBookedDate({ carId: car.id, rentalTime, returnTime, dates: datesArray, userId: carRenter.id }));
         setCloudWait(false)
         setLoad(false)
+        setCarRenter({})
+        setRentalTime(null)
+        setReturnTime(null)
       }
       else {
         console.log("WRONG");
@@ -163,11 +151,6 @@ function Cars() {
     }
   };
 
-  // useEffect(() => {
-  //   // This effect runs after selectedDates has been updated
-  // }, [selectedDates, dispatch]); // Depend on selectedDates and dispatch to re-run the effect when they change
-
-  // Rest of your component...
 
 
   const handleCarChange = (id, value) => {
@@ -187,17 +170,8 @@ function Cars() {
 
   const [refresh, setRefresh] = useState(false)
   const [car, setCar] = useState({})
-  // const setCarData =  (value) => {
-  //   try {
-  //     console.log(value);
-  //      setCar(value)
-  //      setCarDetails(car)
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+
   console.log("car is in tableList", car);
-  const [media, setMedia] = useState(null)
   function openModal() {
     setIsOpen(true);
   }
@@ -221,40 +195,12 @@ function Cars() {
     if (!cars?.length) {
       dispatch(getLimitedCars())
     }
-  }, [setUpdateCarLoad,cars])
+  }, [load, cars])
   useEffect(() => {
-    dispatch(getAllCars())
     console.log(carDates);
-  }, [load, updateCarLoad])
-  const confirmAction = () => {
-    toast.custom((t) => (
-      <>
-        <p>Are you sure you want to proceed?</p>
-        <button onClick={() => t.close(true)} className="btn btn-primary">Yes</button>
-        <button onClick={() => t.close(false)} className="btn btn-secondary">No</button>
-      </>
-    ), {
-      position: "top-center",
-      autoClose: false,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    }).then(isConfirmed => {
-      if (isConfirmed) {
-        // Handle the confirmed action here
-        console.log("Confirmed!");
-      } else {
-        // Handle the cancelled action here
-        console.log("Cancelled.");
-      }
-    });
-  };
-
-  // useEffect(() => {
-
-  // }, [media])
+    dispatch(getAllCars())
+    console.log(cars);
+  }, [load])
   const selectedYearOption = yearOptions.find(option => option.value === car.Year);
   const selectedTypeOption = [
     { value: 'Automatic', label: 'Automatic' },
@@ -283,17 +229,13 @@ function Cars() {
     { label: "5 Seats", value: 5 },
     { label: "15 Seats", value: 15 },
   ].find(option => option.value === car.peopleCount);
-  // const companies = useSelector(Companies)
-  // console.log(media)
-  // const blobUrl = URL.createObjectURL(media);
-  // Assuming carDates.data and BookedPeriod are already defined and populated
-  // Assuming carDates.data is an array of objects where some might have a 'BookedPeriod' property
+
 
   const disabledDates = carDates?.data?.reduce((acc, date) => {
     // Check if 'BookedPeriod' exists in the date object
-    if (date.hasOwnProperty("BookedPeriod")) {
+    if (date.hasOwnProperty("BookedPeriods")) {
       // If it does, add its value to the accumulator array
-      acc.push(date["BookedPeriod"]);
+      acc.push(date["BookedPeriods"]);
     }
     // Return the updated accumulator for the next iteration
     return acc;
@@ -340,7 +282,7 @@ function Cars() {
                   <tbody>
                     {cars?.map((request, i) => {
                       return (
-                        <ReqRow setDate={setDate} key={i} setRefresh={setRefresh} request={request} handlePapers={handlePapers} openModal={openModal} openLocationInGoogleMaps={openLocationInGoogleMaps} setCar={setCar} setMedia={setMedia} />
+                        <ReqRow setDate={setDate} key={i} setRefresh={setRefresh} request={request} handlePapers={handlePapers} openModal={openModal} openLocationInGoogleMaps={openLocationInGoogleMaps} setCar={setCar} />
                       );
                     })}
                   </tbody>
@@ -354,7 +296,12 @@ function Cars() {
       <Modal
         isOpen={modalIsOpen}
         style={customStyles}
-        onRequestClose={closeModal}>
+        onRequestClose={closeModal}
+        onAfterClose={()=>{
+          setCarRenter({})
+          setRentalTime(null)
+          setReturnTime(null)
+        }}>
         <header>
           <h1>Change Availability for {car.brand + " " + car.model}</h1>
         </header>
@@ -368,20 +315,19 @@ function Cars() {
             flexDirection: "row",
             borderBottom: ".1rem solid #30416B",
             padding: "1rem",
-            // justifyContent: "space-evenly",
-            gap: "1rem"
+            width: "100%",
+            height: "30%",
+            justifyContent: "space-around",
+            // gap: "10rem"
           }}>
-            {true ? <img style={{
-              height: "20rem",
+            <img style={{
+              height: "25rem",
               objectFit: "cover",
-              width: "30rem"
-            }} src={car.media} /> : <img
-              style={{
-                height: "20rem",
-                width: "30rem"
-              }}
-              src={media}
-            />}
+              marginTop: "1rem",
+              // alignSelf:"flex-start",
+              borderRadius: "8%",
+              width: "20rem"
+            }} src={car.media} />
             <div className="calender_Ctr">
               <Select
                 className="select-box"
@@ -409,20 +355,76 @@ function Cars() {
                   minDate={new Date()}
                 />
 
-                <Button onClick={() => handleButtonClick()}>{
-                  // `${format(date.startDate, "MMM,dd,yyyy")} to ${format(date.endDate, "MMM,dd,yyyy")}`
-                  !cloudwait ? "Change The Car's Availability Timeline" : <DNA
-                    visible={true}
-                    height="2rem"
-                    width="2rem"
-                    ariaLabel="dna-loading"
-                  // wrapperStyle={{ paddingBottom: '1.5rem' }} // Adjust this value as needed
-                  // wrapperClass="dna-wrapper"
-                  />
-                }</Button>
+                <Button onClick={async () =>
+                  Swal.fire({
+                    title: "Are you sure?",
+                    text: "This will make the car unavailable in the selected Date!",
+                    icon: "warning",
+                    showDenyButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes!"
+                  }).then((result) => {
+                    if (result.isConfirmed && Object.values(carRenter).length > 0 && rentalTime && returnTime && date.startDate && date.endDate) {
+                      // Check if the start date and end date are at least one day apart
+                      const startDate = new Date(date.startDate);
+                      const endDate = new Date(date.endDate);
+                      const diffDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+                  
+                      if (diffDays >= 1) {
+                        handleButtonClick();
+                        Swal.fire('Changes Saved!', '', 'success');
+                      } else {
+                        Swal.fire('The rental period must be at least two days.', '', 'warning');
+                      }
+                    } else if (result.isDenied) {
+                      Swal.fire('Change Discarded.', '', 'info');
+                    } else if (result.isConfirmed &&!Object.values(carRenter).length > 0) {
+                      Swal.fire('Please select a user.', '', 'warning');
+                    } else if (result.isConfirmed && (!rentalTime ||!returnTime)) {
+                      Swal.fire('Please specify a Time.', '', 'warning');
+                    }
+                                    
+                  })
+                }>{
+                    // `${format(date.startDate, "MMM,dd,yyyy")} to ${format(date.endDate, "MMM,dd,yyyy")}`
+                    !cloudwait ? "Change The Car's Availability Timeline" : <DNA
+                      visible={true}
+                      height="2rem"
+                      width="2rem"
+                      ariaLabel="dna-loading"
+                    // wrapperStyle={{ paddingBottom: '1.5rem' }} // Adjust this value as needed
+                    // wrapperClass="dna-wrapper"
+                    />
+                  }</Button>
               </div>
 
             </div>
+            <div className="digital-clock-full-height">
+              <DigitalClock
+                classes={{
+                  item: 'custom-digital-clock-item', // Custom class for overriding styles
+                }} onChange={(v) => {
+                  const value = v.$d;
+                  const dateObject = new Date(value);
+                  const hours = dateObject.getHours();
+                  const minutes = dateObject.getMinutes();
+                  const seconds = dateObject.getSeconds();
+                  const timeOnly = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                  console.log(timeOnly);
+                  setRentalTime(timeOnly);
+
+                  // Correctly add 2 hours to the time
+                  const newDate = new Date(value);
+                  newDate.setHours(newDate.getHours() + 3);
+                  const newTimeOnly = newDate.toISOString().slice(11, 19);
+                  console.log(newTimeOnly);
+                  setReturnTime(newTimeOnly);
+                }} className="digital-clock-full-height" />
+
+            </div>
+
           </div>
           <div className="Cancellation_ctr">
             <header>
@@ -552,7 +554,6 @@ function Cars() {
               />
 
             </div>
-            {console.log(carDetails)}
             <div className="two-select-container">
               <div className='select-container'>
                 <div style={{
@@ -564,7 +565,6 @@ function Cars() {
                     type="text"
                     placeholder='Type here...'
                     value={car.brand}
-                    // options={Object.keys(data)?.map(key => ({ label: key, value: key }))}
                     onChange={(e) => handleCarChange("brand", e.target.value)}
                     menuportaltarget={document.body}
                     styles={{
@@ -680,7 +680,6 @@ function Cars() {
                     className="input-box"
                     value={car.model}
                     placeholder='Type here...'
-                    // options={Object.keys(data)?.map(key => ({ label: key, value: key }))}
                     onChange={(e) => handleCarChange("model", e.target.value)}
                     menuportaltarget={document.body}
                     styles={{
@@ -712,9 +711,35 @@ function Cars() {
                 />
               </div>
             </div>
-            <Button onClick={() => handleCarDetailsUpdate()} style={{
+            <Button onClick={async () =>
+              Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showDenyButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Update it!"
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  setUpdateCarLoad(true)
+                  handleCarDetailsUpdate()
+                  setUpdateCarLoad(false)
+                  Swal.fire('Car Data updated!', '', 'success')
+                } else if (result.isDenied) {
+                  Swal.fire('Car Data is Not updated.', '', 'info')
+                }
+              })
+            } style={{
               marginTop: "1rem"
-            }}>Update Car Details</Button>
+            }}>{updateCarLoad ? <DNA
+              visible={true}
+              height="2rem"
+              width="2rem"
+              ariaLabel="dna-loading"
+            // wrapperStyle={{ paddingBottom: '1.5rem' }} // Adjust this value as needed
+            // wrapperClass="dna-wrapper"
+            /> : "Update Car Details"}</Button>
           </div>
         </div>
       </Modal>
