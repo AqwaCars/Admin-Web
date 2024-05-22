@@ -13,9 +13,12 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import ThemeContextWrapper from "./components/ThemeWrapper/ThemeWrapper";
 import BackgroundColorWrapper from "./components/BackgroundColorWrapper/BackgroundColorWrapper";
 import { Provider } from "react-redux";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 const root = ReactDOM.createRoot(document.getElementById("root"));
 Modal.setAppElement('#root');
 root.render(
+  <LocalizationProvider dateAdapter={AdapterDayjs}>
   <ThemeContextWrapper>
     <BackgroundColorWrapper>
       <BrowserRouter>
@@ -32,4 +35,5 @@ root.render(
       </BrowserRouter>
     </BackgroundColorWrapper>
   </ThemeContextWrapper>
+  </LocalizationProvider>
 );

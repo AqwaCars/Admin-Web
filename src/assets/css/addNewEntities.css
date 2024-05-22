@@ -9,6 +9,13 @@
   width: 0.005rem;
   background-color: #30416b;
 }
+.digital-clock-full-height.MuiDigitalClock-root {
+  max-height: 26rem!important; /* Force the height */
+}
+.custom-digital-clock-item {
+  border-radius: 1rem!important; /* Example: fully rounded corners */
+}
+
 #Title {
   font-size: 3rem;
   color: #30416b;

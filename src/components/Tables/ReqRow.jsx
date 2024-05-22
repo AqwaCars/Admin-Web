@@ -1,47 +1,17 @@
 // import { getAllRequests } from "@/Redux/dachboardAdmin";
-import { setReqForSwal } from "../../Redux/adminSlice";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import classNames from "classnames";
-import { Button } from "reactstrap";
-import Swal from "sweetalert2";
 import "../../assets/css/nucleo-icons.css";
-import requestImg from "../../assets/img/request.jpg";
-import { approveRequest } from "../../Redux/adminSlice";
-import { declineRequest } from "../../Redux/adminSlice";
-import { Media } from "../../Redux/adminSlice";
-// import { getSingleMedia } from "Redux/adminSlice";
 import { getBookedDates } from "../../Redux/adminSlice";
 import { CarBookedPeriods } from "../../Redux/adminSlice";
-const ReqRow = ({setDate, request,setRefresh, handlePapers, setCar,openModal,setMedia }) => {
+const ReqRow = ({setDate, request, setCar,openModal }) => {
   const dispatch = useDispatch();
-  const refresh=(input)=>{
-    setRefresh(input)
-  }
-  const images = useSelector(Media)
   const carBookedPeriods = useSelector(CarBookedPeriods)
-  const fetchBookedDates= async()=>{
-    try {
-     dispatch(getBookedDates(request.id))
-    } catch (er) {
-      console.log("fetchBookedDates",er);
-    }
-  }
-  // const fetchMedia = async () => {
-  //   try {
-  //     const actionResult = await dispatch(getSingleMedia(request.id));
-  //     // Assuming you're using Redux Toolkit and the blob URL is returned in the payload
-  //     setMedia(actionResult.payload);
-  //   } catch (error) {
-  //     console.error('Failed to fetch media:', error);
-  //   }
-  // };
-
+  
   return (
-    <tr res hover onClick={()=>{
+    <tr res hover onClick={async()=>{
       setCar(request)
-      dispatch(getBookedDates(request.id))
-      // fetchMedia();
+      await dispatch(getBookedDates(request.id))
       openModal();
       setDate(
         {
@@ -50,16 +20,14 @@ const ReqRow = ({setDate, request,setRefresh, handlePapers, setCar,openModal,set
           key: 'selection',
         }
       )
-      fetchBookedDates();
-      console.log(carBookedPeriods);
+      // fetchBookedDates();
+      console.log(await carBookedPeriods);
     }} >
-      {/* {console.log(request, "<=Request List")} */}
       <td>{request.id}</td>
       <td>{request.model}</td>
       <td>{request.brand}</td>
       <td>{request.price}</td>
       <td>{request.typeOfFuel}</td>
-      {/* <td>{request.acceptation}</td> */}
       <td>{request.Owner}</td>
       <td>{request.Category}</td>
       <td>{request.Type}</td>

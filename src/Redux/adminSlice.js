@@ -33,6 +33,7 @@ export const updateStateBlock = createAsyncThunk(
         try {
             const response = await axios.put(
                 `http://localhost:5000/api/admin/update/${id}`
+                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/admin/update/${id}`
             );
 
             return response.data;
@@ -47,6 +48,7 @@ export const getAgencyCars = createAsyncThunk(
         try {
             const response = await axios.get(
                 `http://localhost:5000/api/admin/getAgencyCars/${name}`
+                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/admin/getAgencyCars/${name}`
             );
 
             return response.data;
@@ -61,6 +63,7 @@ export const approveRequest = createAsyncThunk(
         try {
             const response = await axios.post(
                 `http://127.0.0.1:5000/api/agency/addAgency/${request.id}`,
+                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/agency/addAgency/${request.id}`,
                 { UserId: request.UserId }
             );
             // thunkAPI.dispatch(getAllRequests())
@@ -76,6 +79,7 @@ export const declineRequest = createAsyncThunk(
         try {
             const response = await axios.delete(
                 `http://127.0.0.1:5000/api/request/decline/${request.id}`
+                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/request/decline/${request.id}`
             );
             thunkAPI.dispatch(getAllRequests())
             return response.data;
@@ -88,6 +92,7 @@ export const getAllUsers = createAsyncThunk("user/getAllUsers", async () => {
     try {
         const response = await axios.get(
             `http://localhost:5000/api/admin/allUsers`
+            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/admin/allUsers`
         );
 
         return response.data;
@@ -99,7 +104,10 @@ export const getAllUsers = createAsyncThunk("user/getAllUsers", async () => {
 export const addCar = createAsyncThunk("admin/addCar", async (carDetails) => {
     try {
         console.log(carDetails);
-        const carResp = await axios.post(`http://localhost:5000/api/car/newCar`, carDetails);
+        const carResp = await axios.post(
+            `http://localhost:5000/api/car/newCar`, carDetails
+            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/car/newCar`, carDetails
+            );
         console.log(carResp.data);
         // const imgResp = await axios.post(`http://localhost:5000/api/media/add/car/${carResp.data.id}`, carDetails.media);
 
@@ -123,6 +131,7 @@ export const getAllRequests = createAsyncThunk(
         try {
             const response = await axios.get(
                 `http://127.0.0.1:5000/api/request/getAllUnverified`
+                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/request/getAllUnverified`
             );
             return response.data;
         } catch (error) {
@@ -137,6 +146,7 @@ export const SignUpCompany = createAsyncThunk(
             console.log(companyDetails, "companyDetails from SignUpCompany");
             const response = await axios.post(
                 `http://127.0.0.1:5000/api/users/SignUpCompany`,
+                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/users/SignUpCompany`,
                 companyDetails
             )
             return response.companyDetails
@@ -151,6 +161,7 @@ export const getApprovedServices = createAsyncThunk(
         try {
             const response = await axios.get(
                 `http://127.0.0.1:5000/api/booking/rentalHistory`
+                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/booking/rentalHistory`
             )
             return response.data
         } catch (er) {
@@ -164,6 +175,7 @@ export const getRejectedServices = createAsyncThunk(
         try {
             const response = await axios.get(
                 `http://127.0.0.1:5000/api/booking/rejectedHistory`
+                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/booking/rejectedHistory`
             )
             return response.data
         } catch (er) {
@@ -177,6 +189,7 @@ export const getPendingServices = createAsyncThunk(
         try {
             const response = await axios.get(
                 `http://127.0.0.1:5000/api/booking/pedningHistory`
+                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/booking/pedningHistory`
             )
             return response.data
         } catch (er) {
@@ -188,6 +201,7 @@ export const getAllCompanies = createAsyncThunk("user/getAllCompanies", async ()
     try {
         const response = await axios.get(
             `http://localhost:5000/api/admin/allCompanies`
+            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/admin/allCompanies`
         );
         return response.data;
     } catch (error) {
@@ -198,6 +212,7 @@ export const getLimitedCompanies = createAsyncThunk("user/getLimitedCompanies", 
     try {
         const response = await axios.get(
             `http://localhost:5000/api/admin/getLimitedCompanies`
+            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/admin/getLimitedCompanies`
         );
         return response.data;
     } catch (error) {
@@ -210,6 +225,7 @@ export const getAllCars = createAsyncThunk(
         try {
             const response = await axios.get(
                 `http://127.0.0.1:5000/api/car/allCars`
+                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/car/allCars`
             )
             return response.data
         } catch (er) {
@@ -223,6 +239,7 @@ export const getLimitedCars = createAsyncThunk(
         try {
             const response = await axios.get(
                 `http://127.0.0.1:5000/api/admin/getLimitedCars`
+                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/admin/getLimitedCars`
             )
             return response.data
         } catch (er) {
@@ -234,6 +251,7 @@ export const fetchReviews = createAsyncThunk("admin/fetchReviews", async () => {
     try {
         const response = await axios.get(
             `http://localhost:5000/api/review/BringData`
+            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/review/BringData`
         )
         return response.data;
     } catch (err) {
@@ -246,6 +264,7 @@ export const getData = createAsyncThunk("user/getADminData", async () => {
         // const token = JSON.stringify(localStorage.getItem("Token"))
         const response = await axios.post(
             `http://localhost:5000/api/admin/useToken`,
+            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/admin/useToken`,
             { token: token }
         )
         // setAdminData(response.data)
@@ -259,10 +278,11 @@ export const Login = createAsyncThunk("admin/Login", async ({ email, password },
         const data = { email, password }
         const response = await axios.post(
             `http://localhost:5000/api/admin/emailLogin`,
+            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/admin/emailLogin`,
             data
         )
-        localStorage.setItem("Token", response.data)
-        thunkAPI.dispatch(getData());
+        await localStorage.setItem("Token", response.data)
+        await thunkAPI.dispatch(getData());
         return response.data;
     } catch (err) {
         console.error(err);
@@ -274,9 +294,11 @@ export const Sort = createAsyncThunk("user/Sort", async (dataType) => {
         !dataType.includes("desc") ?
             task = await axios.get(
                 `http://localhost:5000/api/users/sort/${dataType}`
+                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/users/sort/${dataType}`
             ) :
             task = await axios.get(
                 `http://localhost:5000/api/users/invSort/${dataType}`
+                // `http://l${process.env.NEXT_PUBLIC_API_URL}/api/users/invSort/${dataType}`
             )
         return task.data
     } catch (er) {
@@ -287,6 +309,7 @@ export const getUserById = createAsyncThunk("user/getById", async (id) => {
     try {
         const task = await axios.get(
             `http://localhost:5000/api/users/getById/${id}`
+            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/users/getById/${id}`
         )
         return task.data
     } catch (er) {
@@ -294,27 +317,15 @@ export const getUserById = createAsyncThunk("user/getById", async (id) => {
     }
 })
 
-// export const getSingleMedia = createAsyncThunk("admin/getSingleMedia", async (id) => {
-//     try {
-//         console.log("getSingleMedia", id);
-//         // Use await to wait for the axios.get call to complete
-//         const response = await axios.get(`http://localhost:5000/api/media/getAll/${id}`);
-//         // Log the response data after it has been received
-//         console.log(response.data);
-//         // Create a blob URL from the blob data
-//         // Return the blob URL
-//         return response.data
-//     } catch (er) {
-//         console.log(JSON.stringify(er));
-//         // If there's an error, return it as a rejected promise
-//         return Promise.reject(er);
-//     }
-// });
 
 export const getBookedDates = createAsyncThunk("admin/getBookedDates", async (id) => {
     try {
         console.log("getBookedDates", id);
-        const response = await axios.get(`http://localhost:5000/api/bookedPeriods/getDate/${id}`)
+        const response = await axios.get(
+            `http://localhost:5000/api/bookedPeriods/getDate/${id}`
+            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/bookedPeriods/getDate/${id}`
+            )
+
         return response.data
     } catch (er) {
         console.log(JSON.stringify(er));
@@ -329,7 +340,10 @@ export const addBookedDate = createAsyncThunk("admin/addBookedDates", async (dat
             dates: data.dates?.map(date => date.toISOString()),
         };
 
-        await axios.post(`http://localhost:5000/api/bookedPeriods/addDate`, transformedData);
+        await axios.post(
+            `http://localhost:5000/api/bookedPeriods/addDate`, transformedData
+            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/bookedPeriods/addDate`, transformedData
+        );
     } catch (er) {
         console.log(JSON.stringify(er));
     }
@@ -337,7 +351,10 @@ export const addBookedDate = createAsyncThunk("admin/addBookedDates", async (dat
 export const cancelRent =createAsyncThunk("admin/cancelRent",async({userId,carId})=>{
     try {
         console.log(userId,carId);
-        axios.post(`http://localhost:5000/api/bookedPeriods/removeRent`,{userId,carId})
+        axios.post(
+            `http://localhost:5000/api/bookedPeriods/removeRent`,{userId,carId}
+            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/bookedPeriods/removeRent`,{userId,carId}
+        )
     } catch (er) {
         console.log(JSON.stringify(er));
     }
@@ -345,9 +362,11 @@ export const cancelRent =createAsyncThunk("admin/cancelRent",async({userId,carId
 export const updateCar=createAsyncThunk("admin/updateCar",async({carId,data})=>{
     try {
         console.log(carId,data);
-        const response =axios.update(`http://localhost:5000/api/car/cars/${carId}`,{
+        const response =axios.put(
+            `http://localhost:5000/api/car/updateCar/${carId}`,
+            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/car/updateCar/${carId}`,
             data
-        })
+        )
         console.log(response.data);
     } catch (er) {
         console.log(JSON.stringify(er))
