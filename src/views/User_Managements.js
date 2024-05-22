@@ -333,7 +333,7 @@ function User_Managements() {
                       </div>
                       <Row>
                         {allUsers?.map((user, i) =>
-                          user.type === "client" ? (
+                          user.type === "user" ? (
                             <Col
                               key={i}
                               className="font-icon-list col-xs-6 col-xs-6"
@@ -343,7 +343,7 @@ function User_Managements() {
                               onClick={() => {
                                 console.log(user);
                                 Swal.fire({
-                                  title: `<strong>${user.type === "client" ? "Client" : "company"} Profile Details</strong>`,
+                                  title: `<strong>${user.type === "user" ? "user" : "company"} Profile Details</strong>`,
                                   html: `
                                  <b>UserName: </b>${user.userName}
                                  <br>
@@ -384,7 +384,7 @@ function User_Managements() {
                                       html: user.stateBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBan <strong>${user.userName}</strong> ?`,
                                       icon: "warning",
                                       showCancelButton: true,
-                                      confirmButtonText: "Yes, ban it!",
+                                      confirmButtonText: "Yes!",
                                       cancelButtonText: "No, cancel!"
                                     }).then((result) => {
                                       if (result.isConfirmed) {
@@ -410,14 +410,14 @@ function User_Managements() {
                             >
                               <div className="font-icon-detail">
                                 <div class="details_btn" id="detailsBtn">
-                                  <Detail onClick={(event) => {
+                                  {/* <Detail onClick={(event) => {
                                     event.stopPropagation();
                                     handleDetailClick(user)
                                     openModal()
-                                  }} />
+                                  }} /> */}
                                 </div>
                                 <img src={user.selfie} style={{
-                                  height: "50%", width: "35%",objectFit:"cover"
+                                  height: "50%", width: "35%", objectFit: "cover"
                                 }} />
                                 <p className="userNameCol">{user.userName}
                                   <br></br>
@@ -454,7 +454,7 @@ function User_Managements() {
                               onClick={() => {
                                 console.log(user);
                                 Swal.fire({
-                                  title: `<strong>${user.type === "client" ? "Client" : "company"} Profile Details</strong>`,
+                                  title: `<strong>${user.type === "user" ? "user" : "company"} Profile Details</strong>`,
                                   html: `
                                  <b>UserName: </b>${user.userName}
                                  <br>
@@ -495,7 +495,7 @@ function User_Managements() {
                                       // text: user.stateBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
                                       icon: "warning",
                                       showCancelButton: true,
-                                      confirmButtonText: "Yes, ban it!",
+                                      confirmButtonText: "Yes!",
                                       cancelButtonText: "No, cancel!"
                                     }).then((result) => {
                                       if (result.isConfirmed) {
@@ -529,7 +529,7 @@ function User_Managements() {
                                   }} />
                                 </div>
                                 <img src={user.selfie} style={{
-                                  height: "50%", width: "35%",objectFit:"cover"
+                                  height: "50%", width: "35%", objectFit: "cover"
                                 }} />
                                 <p className="userNameCol">{user.userName}<br></br>
                                   {user.email}</p>
@@ -548,7 +548,7 @@ function User_Managements() {
                         </div>
                         <Row>
                           {allUsers?.map((user, i) =>
-                            user.type === "client" ? (
+                            user.type === "user" ? (
                               < Col
                                 key={i}
                                 className="font-icon-list col-xs-6 col-xs-6"
@@ -558,7 +558,7 @@ function User_Managements() {
                                 onClick={() => {
                                   console.log(user);
                                   Swal.fire({
-                                    title: `<strong>${user.type === "client" ? "Client" : "company"} Profile Details</strong>`,
+                                    title: `<strong>${user.type === "user" ? "user" : "company"} Profile Details</strong>`,
                                     html: `
                                    <b>UserName: </b>${user.userName}
                                    <br>
@@ -598,7 +598,7 @@ function User_Managements() {
                                         // text: user.stateBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
                                         icon: "warning",
                                         showCancelButton: true,
-                                        confirmButtonText: "Yes, ban it!",
+                                        confirmButtonText: "Yes!",
                                         cancelButtonText: "No, cancel!"
                                       }).then((result) => {
                                         if (result.isConfirmed) {
@@ -624,14 +624,14 @@ function User_Managements() {
                               >
                                 <div className="font-icon-detail">
                                   <div class="details_btn" id="detailsBtn">
-                                    <Detail onClick={(event) => {
+                                    {/* <Detail onClick={(event) => {
                                       event.stopPropagation();
                                       handleDetailClick(user)
                                       openModal()
-                                    }} />
+                                    }} /> */}
                                   </div>
                                   <img src={user.selfie} style={{
-                                    height: "50%", width: "35%",objectFit:"cover"
+                                    height: "50%", width: "35%", objectFit: "cover"
                                   }} />
                                   <p className="userNameCol">{user.userName}<br></br>
                                     {user.email}</p>
@@ -662,7 +662,7 @@ function User_Managements() {
                                 onClick={() => {
                                   console.log(user);
                                   Swal.fire({
-                                    title: `<strong>${user.type === "client" ? "Client" : "company"} Profile Details</strong>`,
+                                    title: `<strong>${user.type === "user" ? "User" : "company"} Profile Details</strong>`,
                                     html: `
                                    <b>UserName: </b>${user.userName}
                                    <br>
@@ -703,7 +703,7 @@ function User_Managements() {
                                         // text: user.stateBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
                                         icon: "warning",
                                         showCancelButton: true,
-                                        confirmButtonText: "Yes, ban it!",
+                                        confirmButtonText: "Yes!",
                                         cancelButtonText: "No, cancel!"
                                       }).then((result) => {
                                         if (result.isConfirmed) {
@@ -736,9 +736,10 @@ function User_Managements() {
                                     }} />
                                   </div>
                                   <img src={user.selfie} style={{
-                                    height: "50%", width: "35%",objectFit:"cover"
+                                    height: "50%", width: "35%", objectFit: "cover"
                                   }} />
-                                  <p className="userNameCol">{user.userName}</p>
+                                  <p className="userNameCol">{user.userName}<br></br>
+                                    {user.email}</p>
                                 </div>
                               </Col>
                             ) : null
@@ -764,7 +765,7 @@ function User_Managements() {
                                 onClick={() => {
                                   console.log(user);
                                   Swal.fire({
-                                    title: `<strong>${user.type === "client" ? "Client" : "company"} Profile Details</strong>`,
+                                    title: `<strong>${user.type === "user" ? "User" : "company"} Profile Details</strong>`,
                                     html: `
                                    <b>UserName: </b>${user.userName}
                                    <br>
@@ -804,7 +805,7 @@ function User_Managements() {
                                         // text: user.stateBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
                                         icon: "warning",
                                         showCancelButton: true,
-                                        confirmButtonText: "Yes, ban it!",
+                                        confirmButtonText: "Yes!",
                                         cancelButtonText: "No, cancel!"
                                       }).then((result) => {
                                         if (result.isConfirmed) {
@@ -837,7 +838,7 @@ function User_Managements() {
                                     }} />
                                   </div>
                                   <img src={user.selfie} style={{
-                                    height: "50%", width: "35%",objectFit:"cover"
+                                    height: "50%", width: "35%", objectFit: "contain"
                                   }} />
                                   <p className="userNameCol">{user.userName}<br></br>
                                     {user.email}</p>
@@ -867,7 +868,7 @@ function User_Managements() {
                                 onClick={() => {
                                   console.log(user);
                                   Swal.fire({
-                                    title: `<strong>${user.type === "client" ? "Client" : "company"} Profile Details</strong>`,
+                                    title: `<strong>${user.type === "user" ? "User" : "company"} Profile Details</strong>`,
                                     html: `
                                    <b>UserName: </b>${user.userName}
                                    <br>
@@ -907,7 +908,7 @@ function User_Managements() {
                                         // text: user.stateBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
                                         icon: "warning",
                                         showCancelButton: true,
-                                        confirmButtonText: "Yes, ban it!",
+                                        confirmButtonText: "Yes!",
                                         cancelButtonText: "No, cancel!"
                                       }).then((result) => {
                                         if (result.isConfirmed) {
@@ -933,14 +934,14 @@ function User_Managements() {
                               >
                                 <div className="font-icon-detail">
                                   <div class="details_btn" id="detailsBtn">
-                                    <Detail onClick={(event) => {
+                                    {user.type === "user" ? null : <Detail onClick={(event) => {
                                       event.stopPropagation();
                                       handleDetailClick(user)
                                       openModal()
-                                    }} />
+                                    }} />}
                                   </div>
                                   <img src={user.selfie} style={{
-                                    height: "50%", width: "35%",objectFit:"cover"
+                                    height: "50%", width: "35%", objectFit: "contain"
                                   }} />
                                   <p className="userNameCol">{user.userName}<br></br>
                                     {user.email}</p>
@@ -1000,7 +1001,7 @@ function User_Managements() {
                 textDecorationLine: "underline",
                 paddingLeft: "1rem"
               }}><span style={{
-                textDecorationLine:"none"
+                textDecorationLine: "none"
               }}>Company designation: </span>{modalData?.userName}</div>
               <div style={{
                 display: "flex",
@@ -1009,14 +1010,14 @@ function User_Managements() {
               }}>
                 {/* <div className="company_img"> */}
                 <div className="car_img">
-                    <img style={{
-                      width: "8rem", /* Take up the full width of the container */
-                      height: "8rem", /* Take up the full height of the container */
-                      objectFit: "cover", /* Scale the image to cover the container while maintaining its aspect ratio */
-                      borderRadius: "50%",
-                       height: "95%", 
-                       width: "95%", /* Take up the full width of the container */
-                    }} src={modalData?.selfie} />
+                  <img style={{
+                    width: "8rem", /* Take up the full width of the container */
+                    height: "8rem", /* Take up the full height of the container */
+                    objectFit: "contain", /* Scale the image to cover the container while maintaining its aspect ratio */
+                    borderRadius: "50%",
+                    height: "90%",
+                    width: "80%", /* Take up the full width of the container */
+                  }} src={modalData?.selfie} />
                   {/* </div> */}
                 </div>
                 <div style={{
@@ -1141,7 +1142,7 @@ function User_Managements() {
               // height: "54rem",
             }}>
               {console.log(AgencyCars)}
-              {AgencyCars?.map((car,i) =>
+              {AgencyCars?.map((car, i) =>
               (<div key={i} className="car_div">
                 <div style={{
                   textDecorationLine: "underline"
@@ -1162,12 +1163,12 @@ function User_Managements() {
                 }}>
                   <div className="car_img">
                     <img style={{
-                      width: "7rem", /* Take up the full width of the container */
-                      height: "7rem", /* Take up the full height of the container */
-                      objectFit: "cover", /* Scale the image to cover the container while maintaining its aspect ratio */
-                      borderRadius: "50%",
-                      //  height: "95%", 
-                      //  width: "95%", /* Take up the full width of the container */
+                      width: "auto",
+                      height: "auto",
+                      maxWidth: "100%",
+                      maxHeight: "100%",
+                      objectFit: "contain",
+                      borderRadius: "10%",
                     }} src={car.media} />
                   </div>
                   <div style={{

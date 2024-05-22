@@ -322,7 +322,7 @@ function Cars() {
           }}>
             <img style={{
               height: "25rem",
-              objectFit: "cover",
+              objectFit: "contain",
               marginTop: "1rem",
               // alignSelf:"flex-start",
               borderRadius: "8%",
