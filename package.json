@@ -68,6 +68,7 @@
     "reactstrap": "8.10.1"
   },
   "devDependencies": {
+    "gulp": "^5.0.0",
     "typescript": "5.0.4"
   },
   "overrides": {
