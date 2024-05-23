@@ -30,44 +30,36 @@ var ps;
 function Admin(props) {
   const loadingStatus = useSelector(selectLoadingStatus)
   const adminData = useSelector(selectAdmin);
-  const logged = useSelector(selectLoggedIn);
+  const token = localStorage.getItem("Token");
   const loading = useSelector((state) => state.Admin.loading);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
-  const [admin, setAdmin] = useState({})
-  const token = localStorage.getItem("Token");
+  // const [admin, setAdmin] = useState({})
+  // const token = localStorage.getItem("Token");
   const mainPanelRef = React.useRef(null);
   const [sidebarOpened, setsidebarOpened] = React.useState(
     document.documentElement.className.indexOf("nav-open") !== -1
   );
-  const checkLog = async () => {
-    try {
-      const token = localStorage.getItem("Token");
-      if (token && !logged && Object.values(loadingStatus).every(status => status === false)) {
-        console.log("i fking set logged in true???");
-        dispatch(setLoggedIn(true))
-        navigate("/admin/dashboard")
-      } else if (!token && logged && Object.values(loadingStatus).every(status => status === false)) {
-        console.log("i fking deleted token");
-        localStorage.removeItem("Token");
-      } else if (!token && logged && Object.values(loadingStatus).every(status => status === false)) {
-        console.log("i fking set logged in false");
-        setLoggedIn(false)
-      }
-    } catch (error) {
-      console.log(await logged)
-    }
-  }
+  // const checkLog = async () => {
+  //   try {
+  //     const token = localStorage.getItem("Token");
+  //     if (token && !logged && Object.values(loadingStatus).every(status => status === false)) {
+  //       // console.log("i fking set logged in true???");
+  //       dispatch(setLoggedIn(true))
+  //       // navigate("/admin/dashboard")
+  //     } else if (!token && logged && Object.values(loadingStatus).every(status => status === false)) {
+  //       // console.log("i fking deleted token");
+  //       localStorage.removeItem("Token");
+  //     } else if (!token && logged && Object.values(loadingStatus).every(status => status === false)) {
+  //       // console.log("i fking set logged in false");
+  //       setLoggedIn(false)
+  //     }
+  //   } catch (error) {
+  //     console.log(await logged)
+  //   }
+  // }
   useEffect(() => {
-    setAdmin(adminData)
-    checkLog()
-    if (location.pathname === "/admin/login" && logged && token && Object.values(loadingStatus).every(status => status === false)) {
-      console.log("noooooooooo");
-      navigate("/admin/dashboard")
-    }
-  }, [logged])
-  React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
       document.documentElement.className += " perfect-scrollbar-on";
       document.documentElement.classList.remove("perfect-scrollbar-off");
@@ -87,7 +79,7 @@ function Admin(props) {
       }
     };
   }, []);
-  React.useEffect(() => {
+  useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
       let tables = document.querySelectorAll(".table-responsive");
       for (let i = 0; i < tables.length; i++) {
@@ -100,27 +92,20 @@ function Admin(props) {
       mainPanelRef.current.scrollTop = 0;
     }
   }, [location]);
-  React.useEffect(() => {
-    // const timer = setTimeout(() => {
+  useEffect(() => {
+    const token = localStorage.getItem("Token");
     if (location.pathname !== "/admin/login" && !token && Object.values(loadingStatus).every(status => status === false)) {
-      console.log("logged state???:", logged);
-      console.log("gotchaaaaaa");
       navigate("/admin/login");
     }
 
-    // }, 500);
-    // const timer2 = setTimeout(() => {
+    if (location.pathname === "/admin/login"&&Admin.clearance==="Level3" && token && Object.values(loadingStatus).every(status => status === false)) {
+      navigate("/admin/Dashboard");
+    }
+    if (location.pathname === "/admin/login" && Admin.clearance === "Level1" || Admin.clearance === "Level2" && token && Object.values(loadingStatus).every(status => status === false)) {
+      navigate("/admin/Cars");
+    }
 
-    // }, 500);
-    // Cleanup function to clear the timeout if the component unmounts
-    // return () => clearTimeout(timer, timer2);
-  }, [logged, loadingStatus]);     // this function opens and closes the sidebar on small devices
-  // useEffect(() => {
-  //   if (location.pathname === "/admin/login") {
-  //     console.log("found u hiding in login b");
-  //   }
-  // }, [])
-  console.log(adminData);
+  }, [token]);     // this function opens and closes the sidebar on small devices
   const toggleSidebar = () => {
     document.documentElement.classList.toggle("nav-open");
     setsidebarOpened(!sidebarOpened);
@@ -148,11 +133,12 @@ function Admin(props) {
 
   useEffect(() => {
     const tk = localStorage.getItem("Token");
-    if (!Object.keys(adminData?adminData:{})?.length&&token) {
+    const token = localStorage.getItem("Token");
+    if (!Object.keys(adminData ? adminData : {})?.length && token) {
       const loadData = async () => {
         try {
           const res = await dispatch(getData(tk));
-          console.log(res.payload);
+          // console.log(res.payload);
           dispatch(getAllUsers());
           dispatch(getAllCars());
           // dispatch(getApprovedServices());
@@ -168,54 +154,55 @@ function Admin(props) {
     }
   }, [adminData, dispatch, refresh, loading]); // Include loading in the dependency array
 
-  console.log(logged)
-  console.log(adminData);
-  console.log(loading);
-  if (loading) {
-    return null
-  } else {
-    return (
-      <BackgroundColorContext.Consumer>
-        {({ color, changeColor }) => (
-          <React.Fragment>
-            <div className="wrapper">
-              <div style={{
-                backgroundColor: "red"
-              }}>
-                <Sidebar
-                  routes={routes}
-                  logo={{
-                    outterLink: "https://www.creative-tim.com/",
-                    text: `${adminData?.Name}`,
-                    imgSrc: logo,
+  // console.log(logged)
+  // console.log(adminData);
+  // console.log(loading);
+  const getNextPath = () => {
+    return token ? "/admin/Cars" : "/admin/login";
+  };
+  console.log('Navigating:', getNextPath());
 
-                  }}
-                  toggleSidebar={toggleSidebar}
-                />
-              </div>
-              <div className="main-panel" ref={mainPanelRef} data={color}>
-                <AdminNavbar
-                  brandText={getBrandText(location.pathname)}
-                  toggleSidebar={toggleSidebar}
-                  sidebarOpened={sidebarOpened}
-                />
-                <Routes>
-                  {getRoutes(routes)}
-                  <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
-                  {!logged && <Route path="*" element={<Navigate to="/admin/dashboard" replace />} />}
-                </Routes>
-                {
-                  // we don't want the Footer to be rendered on map page
-                  location.pathname === "/admin/maps" ? null : <Footer fluid />
-                }
-              </div>
-            </div>
-            <FixedPlugin bgColor={color} handleBgClick={changeColor} />
-          </React.Fragment>
-        )}
-      </BackgroundColorContext.Consumer>
-    );
+  if (loading) {
+    return null; // Or return a loading indicator/component
   }
+  // Simplify the return statement by extracting the conditional logic
+  return (
+    <BackgroundColorContext.Consumer>
+      {({ color, changeColor }) => (
+        <React.Fragment>
+          <div className="wrapper">
+            <div style={{ backgroundColor: "red" }}>
+              <Sidebar
+                routes={routes}
+                logo={{
+                  outterLink: "https://www.creative-tim.com/",
+                  text: `${adminData?.Name}`,
+                  imgSrc: logo,
+                }}
+                toggleSidebar={toggleSidebar}
+              />
+            </div>
+            <div className="main-panel" ref={mainPanelRef} data={color}>
+              <AdminNavbar
+                brandText={getBrandText(location.pathname)}
+                toggleSidebar={toggleSidebar}
+                sidebarOpened={sidebarOpened}
+              />
+              <Routes>
+                {getRoutes(routes)}
+                {/* <Route path="*" element={<Navigate to="/admin/Cars" replace />} /> */}
+              </Routes>
+              {
+                // We don't want the Footer to be rendered on the map page
+                location.pathname === "/admin/maps" ? null : <Footer fluid />
+              }
+            </div>
+          </div>
+          <FixedPlugin bgColor={color} handleBgClick={changeColor} />
+        </React.Fragment>
+      )}
+    </BackgroundColorContext.Consumer>
+  );
 
 }
 

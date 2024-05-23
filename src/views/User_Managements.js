@@ -1,5 +1,5 @@
 
-import { getAllUsers } from "../Redux/adminSlice";
+import { getAllUsers, selectAdmin } from "../Redux/adminSlice";
 import { selectAllUsers } from "../Redux/adminSlice";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,7 +16,9 @@ import { selectStaticAllUsers } from "../Redux/adminSlice";
 import Modal from 'react-modal';
 import { agencyCars } from "../Redux/adminSlice";
 import { getAgencyCars } from "../Redux/adminSlice";
+import { useNavigate } from "react-router-dom";
 function User_Managements() {
+  const Admin = useSelector(selectAdmin)
   const [selectedOption, setSelectedOptions] = useState({ value: 'all', label: 'Select Filter ...' });
   const AgencyCars = useSelector(agencyCars)
   const [selectedSortOption, setSelectedSortOptions] = useState({ value: "Select Sort...", label: "Select Sort ..." });
@@ -247,7 +249,16 @@ function User_Managements() {
       });
     }
   }, []);
+  const navigate = useNavigate();
+  useEffect(() => {
+    const handleNavigation = () => {
+      if (Admin.clearance === "Level1") {
+        navigate(-1); // Navigate back to the previous page
+      }
+    };
 
+    handleNavigation();
+  }, [Admin, navigate]);
 
   return (
     <>

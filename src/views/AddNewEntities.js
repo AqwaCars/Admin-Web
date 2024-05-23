@@ -16,7 +16,7 @@ import Select from 'react-select'
 import "../assets/css/customUpload.css"
 import Modal from 'react-modal';
 import { ReactComponent as Add } from '../assets/Svg/add-circle.svg';
-import { SignUpCompany } from '../Redux/adminSlice';
+import { SignUpCompany, selectAdmin } from '../Redux/adminSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllCompanies } from '../Redux/adminSlice';
 import { ToastContainer, toast } from 'react-toastify';
@@ -30,104 +30,8 @@ import { LimitedCars } from '../Redux/adminSlice';
 import { LimitedCompanies } from '../Redux/adminSlice';
 import { getAllCars } from '../Redux/adminSlice';
 import { cloudinaryUpload } from 'helper_functions/Cloudinary';
-// const data = {
-//   "Al-Kāf": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Al-Mahdiyah": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Al-Munastīr": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Al-Qaṣrayn": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Al-Qayrawān": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Aryānah": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Bājah": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Banzart": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Bin 'Arūs": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Jundūbah": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Madanīn": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Manūbah": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Nābul": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Qābis": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Qafṣah": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Qibilī": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Ṣafāqis": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Sīdī Bū Zayd": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Silyānah": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Sūsah": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Taṭāwīn": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Tawzar": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Tūnis": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Zaghwān": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   }
-// }
+import { useNavigate } from 'react-router-dom';
+
 
 
 const years = [];
@@ -188,6 +92,7 @@ const customStyles2 = {
   },
 };
 const AddNewEntities = () => {
+  const Admin = useSelector(selectAdmin)
   const [selectedFile, setSelectedFile] = useState(null);
   const [rneFile, setRneFile] = useState(null);
   const [idFile, setIdFile] = useState(null);
@@ -449,7 +354,18 @@ const AddNewEntities = () => {
   };
   // In your onChange handler
   // setImageSelected(true);
-  // setTimeout(() => setImageSelected(false), 2000); // Reset after 2 seconds
+  // setTimeout(() => setImageSelected(false), 2000);
+  // Reset after 2 seconds
+  const navigate = useNavigate();
+  useEffect(() => {
+    const handleNavigation = () => {
+      if (Admin.clearance === "Level1") {
+        navigate(-1); // Navigate back to the previous page
+      }
+    };
+
+    handleNavigation();
+  }, [Admin, navigate]);
 
   return (
     <>

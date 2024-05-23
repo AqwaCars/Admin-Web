@@ -1,4 +1,5 @@
-import { getAllRequests } from "../Redux/adminSlice";
+import { useNavigate } from "react-router-dom";
+import { getAllRequests, selectAdmin } from "../Redux/adminSlice";
 import { selectLoadingStatus } from "../Redux/adminSlice";
 import { selectAllRequests } from "../Redux/adminSlice";
 import { selectLoading } from "../Redux/adminSlice";
@@ -41,6 +42,18 @@ function Requests() {
   //   dispatch(getAllRequests())
   // }, [])
   const allRequests = useSelector(selectAllRequests)
+  const navigate = useNavigate();
+  const Admin = useSelector(selectAdmin)
+  useEffect(() => {
+    const handleNavigation = () => {
+      if (Admin.clearance === "Level1") {
+        navigate(-1); // Navigate back to the previous page
+      }
+    };
+
+    handleNavigation();
+  }, [Admin, navigate]);
+
   return (
     <>
       <div className="content">
@@ -86,7 +99,7 @@ function Requests() {
           <Col md="12">
             <Card>
               {/* <CardHeader> */}
-                {/* <CardTitle tag="h4">Reports from Clients</CardTitle>
+              {/* <CardTitle tag="h4">Reports from Clients</CardTitle>
               </CardHeader>
               <CardBody>
                 <Table className="tablesorter" responsive>
