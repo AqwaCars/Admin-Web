@@ -1,20 +1,4 @@
-/*!
 
-=========================================================
-* Black Dashboard React v1.2.2
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/black-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/black-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 
 // reactstrap components
@@ -26,7 +10,6 @@ import { selectLoggedIn } from "../../Redux/adminSlice";
 // import { selectLoggedIn } from "Redux/adminSlice";
 
 function FixedPlugin(props) {
-  const logged = useSelector(selectLoggedIn)
 
   const [dropDownIsOpen, setdropDownIsOpen] = React.useState(false);
   const handleClick = () => {
@@ -34,9 +17,9 @@ function FixedPlugin(props) {
   };
   return (
     <div className="fixed-plugin" style={{
-      pointerEvents: !logged ? 'none' : 'auto',
-      backdropFilter: !logged ? 'blur(10px)' : 'none',
-      filter: !logged ? 'blur(5px)' : "none"
+      pointerEvents: !localStorage.getItem("Token")||localStorage.getItem("Token")==="undefined"  ? 'none' : 'auto',
+      backdropFilter: !localStorage.getItem("Token")||localStorage.getItem("Token")==="undefined"  ? 'blur(10px)' : 'none',
+      filter: !localStorage.getItem("Token")||localStorage.getItem("Token")==="undefined" ? 'blur(5px)' : "none"
     }}>
       <Dropdown isOpen={dropDownIsOpen} toggle={handleClick}>
         <DropdownToggle tag="div">
@@ -84,11 +67,11 @@ function FixedPlugin(props) {
                     className="light-badge mr-2"
                     onClick={() => changeTheme(themes.light)}
                   />{" "}
-                  <Badge
+                  {/* <Badge
                     className="dark-badge ml-2"
                     onClick={() => changeTheme(themes.dark)}
                   />{" "}
-                  <span className="color-label">DARK MODE</span>{" "}
+                  <span className="color-label">DARK MODE</span>{" "} */}
                 </>
               )}
             </ThemeContext.Consumer>

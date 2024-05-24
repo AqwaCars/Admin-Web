@@ -3,7 +3,7 @@ import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import "../assets/css/login.css";
 // import Head from 'next/head';
 import axios from 'axios';
-import { Login } from '../Redux/adminSlice';
+import { Login, selectAdmin } from '../Redux/adminSlice';
 import { Card, CardHeader, CardBody, Row, Col, Input, Label, FormGroup, Form, Button, Badge } from "reactstrap";
 import Select from 'react-select';
 import { useNavigate } from 'react-router-dom';
@@ -15,13 +15,15 @@ import { selectLoading } from '../Redux/adminSlice';
 export default function LoginPage() {
   // const [username, setUsername] = useState('');
   // const [password, setPassword] = useState('');
-  const logged=useSelector(selectLoggedIn)
-  const loading=useSelector(selectLoading)
+  const logged = useSelector(selectLoggedIn)
+  const loading = useSelector(selectLoading)
+  const Admin = useSelector(selectAdmin)
+  const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [formChecked, setFormChecked] = useState(false);
   const [formVisible, setFormVisible] = useState(true);
   const dispatch = useDispatch()
-  const navigation = useNavigate();
+  // const navigation = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [form, setForm] = useState({
     email: "",
@@ -53,29 +55,49 @@ export default function LoginPage() {
   //   }
   // };
   const handleLogin = async () => {
-    try {
-     dispatch(Login({ email: form.email, password: form.password }));
-      // Now you can use the action object
-      // console.log(action);
-      // console.log(action.meta.requestStatus==="fulfilled");
-   
-      // dispatch(getData())
-      // setError(null);
-      // logged?
-      // navigation('/admin/dashboard'):null
-      // dispatch(fetchUser(response.data));
-    } catch (err) {
-      console.log(err);
-      if (err.response.status == "404") {
-        setError("user does not exist");
-      } else if (err.response.status == "401") {
-        setError("incorrect password");
-      } else {
-        console.error(err.message);
+    await dispatch(Login({ email: form.email, password: form.password }));
+  };
+  // };
+  const [isAdminLoaded, setIsAdminLoaded] = useState(false);
+  const [clearance, setClearance] = useState(null);
+  const adminData = useSelector(selectAdmin);
+  const tk = useSelector((state) => state.Admin.token);
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem('Token');
+  //   console.log(tk);
+  //   if (!tk) {
+  //     console.log("No token found.");
+  //     return;
+  //   }
+
+  //   // Dispatch the getData action
+  //   dispatch(getData(tk)).then(() => {
+  //     setIsAdminLoaded(true);
+  //   });
+  // }, [dispatch]);
+
+  useEffect(() => {
+    // Update the clearance state whenever adminData changes
+    if (adminData) {
+      setClearance(adminData.clearance);
+      setIsAdminLoaded(true);
+    }
+  }, [adminData]); // Depend on adminData to re-run this effect
+
+  useEffect(() => {
+    if (isAdminLoaded && clearance !== null) {
+      if (clearance === "Level3") {
+        navigate("/admin/dashboard");
+      } else if (clearance === "Level2" || clearance === "Level1") {
+        navigate("/admin/Cars");
       }
     }
-   };
-   
+    // }, [isAdminLoaded, clearance, navigate]);
+  }, [isAdminLoaded, clearance, navigate]);
+  // / Re-run effect if `token` changes
+
+
   useEffect(() => {
     const wrapper = document.querySelector('.wrapper_log_cust');
     wrapper.classList.add('form-success');
@@ -114,7 +136,7 @@ export default function LoginPage() {
               <div className="wrapper_log_cust">
                 <div className="container_log_cust">
                   <h1 style={{
-                    color:"#fff"
+                    color: "#fff"
                   }}>Welcome back Admin</h1>
 
                   <form style={{
@@ -128,7 +150,11 @@ export default function LoginPage() {
                       formValidation();
                       setForm({ ...form, password: e.target.value })
                     }} />
-                    <button type="submit" id="login-button" disabled={!formChecked} onClick={handleLogin}>Login</button>
+                    <button type="submit" id="login-button" disabled={!formChecked} onClick={(e) => (
+                      e.preventDefault(),
+                      console.log("haha"),
+                      handleLogin()
+                    )}>Login</button>
                   </form>
                 </div>
 

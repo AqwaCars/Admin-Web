@@ -82,9 +82,9 @@ function AdminNavbar(props) {
     <>
       <Navbar
         style={{
-          pointerEvents: !logged ? 'none' : 'auto',
-          backdropFilter: !logged ? 'blur(10px)' : 'none',
-          filter: !logged ? 'blur(5px)' : "none"
+          pointerEvents: !localStorage.getItem("Token")||localStorage.getItem("Token")==="undefined"  ? 'none' : 'auto',
+          backdropFilter: !localStorage.getItem("Token")||localStorage.getItem("Token")==="undefined"  ? 'blur(10px)' : 'none',
+          filter: !localStorage.getItem("Token")||localStorage.getItem("Token")==="undefined"  ? 'blur(5px)' : "none"
         }}
         className={classNames("navbar-absolute", color)} expand="lg">
         <Container fluid>

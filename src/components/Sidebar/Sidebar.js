@@ -7,10 +7,11 @@ import { Nav } from "reactstrap";
 import { BackgroundColorContext, backgroundColors } from "contexts/BackgroundColorContext";
 import "../../assets/css/sideBar.css"
 import { useDispatch, useSelector } from "react-redux";
-import { selectLoggedIn } from "../../Redux/adminSlice";
+import { selectAdmin, selectLoggedIn } from "../../Redux/adminSlice";
 import { setLoggedIn } from "../../Redux/adminSlice";
 
 function Sidebar(props) {
+  const Admin = useSelector(selectAdmin)
   const logged = useSelector(selectLoggedIn)
   const location = useLocation();
   const dispatch = useDispatch();
@@ -55,7 +56,7 @@ function Sidebar(props) {
           onClick={props.toggleSidebar}
         >
           {/* <div className="logo-img"> */}
-            <img className="company_logo_sidebar" src={logo.imgSrc} alt="react-logo" />
+          <img className="company_logo_sidebar" src={logo.imgSrc} alt="react-logo" />
           {/* </div> */}
         </a>
       );
@@ -99,11 +100,14 @@ function Sidebar(props) {
     <BackgroundColorContext.Consumer>
       {({ color }) => (
         <div className="sidebar" style={{
-          width:"15.4rem",
+          width: "15.4rem",
           // height:"55rem",
-          pointerEvents: !logged ? 'none' : 'auto',
-          backdropFilter: !logged ? 'blur(10px)' : 'none',
-          filter: !logged ? 'blur(5px)' : "none"
+          pointerEvents: !localStorage.getItem("Token") || localStorage.getItem("Token") === "undefined"
+            ? 'none' : 'auto',
+          backdropFilter: !localStorage.getItem("Token") || localStorage.getItem("Token") === "undefined"
+            ? 'blur(10px)' : 'none',
+          filter: !localStorage.getItem("Token") || localStorage.getItem("Token") === "undefined"
+            ? 'blur(5px)' : "none"
         }} data={color}>
 
           <div className="sidebar-wrapper" ref={sidebarRef}>
@@ -123,17 +127,34 @@ function Sidebar(props) {
                     }
                     key={key}
                   >
-                    <NavLink
-                      to={prop.layout + prop.path}
-                      style={{
-                        display: prop.name === 'login' && logged ? "none" : 'block',
-                      }}
-                      className="nav-link"
-                      onClick={props.toggleSidebar}
-                    >
-                      <i className={prop.icon} />
-                      <p>{rtlActive ? prop.rtlName : prop.name}</p>
-                    </NavLink>
+                    {/* {console.log(Admin.clearance)} */}
+                    {
+                      // Check if the user has Level2 clearance and meets additional conditions
+                      (Admin?.clearance === "Level1" &&
+                        (prop.name === "Dashboard" ||
+                          prop.name === "User Managements" ||
+                          prop.name === "Rental Requests" ||
+                          prop.name === "Add Cars/Agencies")) ?
+                        null :
+                        // Check if the user has Level1 clearance and meets additional conditions
+                        (Admin?.clearance === "Level2" &&
+                          (prop.name === "Dashboard" )) ?
+                          null :
+                          // Default case for all other users or conditions
+                          <NavLink
+                            to={prop.layout + prop.path}
+                            style={{
+                              display: prop.name === 'login' && localStorage.getItem("Token")
+                                ? "none" : 'block',
+                            }}
+                            className="nav-link"
+                            onClick={props.toggleSidebar}
+                          >
+                            <i className={prop.icon} />
+                            <p>{rtlActive ? prop.rtlName : prop.name}</p>
+                          </NavLink>
+                    }
+
                   </li>
                 );
               })}

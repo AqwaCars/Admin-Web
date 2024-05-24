@@ -13,19 +13,19 @@ import User_Managements from "views/User_Managements";
 
 var routes = [
   {
-    path: "/dashboard",
-    name: "Dashboard",
-    rtlName: "لوحة القيادة",
-    icon: "tim-icons icon-chart-bar-32",
-    component: <Dashboard />,
-    layout: "/admin",
-  },
-  {
     path: "/User_Managements",
     name: "User Managements",
     rtlName: "الرموز",
     icon: "tim-icons icon-badge",
     component: <User_Managements />,
+    layout: "/admin",
+  },
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    rtlName: "لوحة القيادة",
+    icon: "tim-icons icon-chart-bar-32",
+    component: <Dashboard />,
     layout: "/admin",
   },
   // {

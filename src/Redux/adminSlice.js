@@ -14,6 +14,7 @@ const initialState = {
     oneUser: {},
     refreshed: false,
     loggedIn: false,
+    token: null,
     error: null,
     loading: false,
     approvedRental: [],
@@ -107,7 +108,7 @@ export const addCar = createAsyncThunk("admin/addCar", async (carDetails) => {
         const carResp = await axios.post(
             `http://localhost:5000/api/car/newCar`, carDetails
             // `http://${process.env.NEXT_PUBLIC_API_URL}/api/car/newCar`, carDetails
-            );
+        );
         console.log(carResp.data);
         // const imgResp = await axios.post(`http://localhost:5000/api/media/add/car/${carResp.data.id}`, carDetails.media);
 
@@ -224,9 +225,10 @@ export const getAllCars = createAsyncThunk(
     async () => {
         try {
             const response = await axios.get(
-                `http://127.0.0.1:5000/api/car/allCars`
+                `http://localhost:5000/api/car/allCars`
                 // `http://${process.env.NEXT_PUBLIC_API_URL}/api/car/allCars`
             )
+            console.log(response.data);
             return response.data
         } catch (er) {
             console.error(er);
@@ -258,15 +260,18 @@ export const fetchReviews = createAsyncThunk("admin/fetchReviews", async () => {
         console.error(err);
     }
 });
-export const getData = createAsyncThunk("user/getADminData", async () => {
+export const getData = createAsyncThunk("user/getADminData", async (tk) => {
+
     try {
-        const token = localStorage.getItem("Token")
+        // const token = localStorage.getItem("Token")
+        console.log(tk);
         // const token = JSON.stringify(localStorage.getItem("Token"))
         const response = await axios.post(
             `http://localhost:5000/api/admin/useToken`,
             // `http://${process.env.NEXT_PUBLIC_API_URL}/api/admin/useToken`,
-            { token: token }
+            { token: tk }
         )
+        console.log(response.data);
         // setAdminData(response.data)
         return response.data;
     } catch (err) {
@@ -275,17 +280,16 @@ export const getData = createAsyncThunk("user/getADminData", async () => {
 });
 export const Login = createAsyncThunk("admin/Login", async ({ email, password }, thunkAPI) => {
     try {
-        const data = { email, password }
+        const data = { email, password };
         const response = await axios.post(
-            `http://localhost:5000/api/admin/emailLogin`,
+            `http://localhost:5000/api/admin/emailLogin`
             // `http://${process.env.NEXT_PUBLIC_API_URL}/api/admin/emailLogin`,
-            data
-        )
-        await localStorage.setItem("Token", response.data)
-        await thunkAPI.dispatch(getData());
+            , data);
+        console.log(response.data);
+        await thunkAPI.dispatch(getData(response.data));
         return response.data;
     } catch (err) {
-        console.error(err);
+        return thunkAPI.rejectWithValue(err.response.data);
     }
 });
 export const Sort = createAsyncThunk("user/Sort", async (dataType) => {
@@ -324,7 +328,7 @@ export const getBookedDates = createAsyncThunk("admin/getBookedDates", async (id
         const response = await axios.get(
             `http://localhost:5000/api/bookedPeriods/getDate/${id}`
             // `http://${process.env.NEXT_PUBLIC_API_URL}/api/bookedPeriods/getDate/${id}`
-            )
+        )
 
         return response.data
     } catch (er) {
@@ -348,21 +352,21 @@ export const addBookedDate = createAsyncThunk("admin/addBookedDates", async (dat
         console.log(JSON.stringify(er));
     }
 });
-export const cancelRent =createAsyncThunk("admin/cancelRent",async({userId,carId})=>{
+export const cancelRent = createAsyncThunk("admin/cancelRent", async ({ userId, carId }) => {
     try {
-        console.log(userId,carId);
+        console.log(userId, carId);
         axios.post(
-            `http://localhost:5000/api/bookedPeriods/removeRent`,{userId,carId}
+            `http://localhost:5000/api/bookedPeriods/removeRent`, { userId, carId }
             // `http://${process.env.NEXT_PUBLIC_API_URL}/api/bookedPeriods/removeRent`,{userId,carId}
         )
     } catch (er) {
         console.log(JSON.stringify(er));
     }
 })
-export const updateCar=createAsyncThunk("admin/updateCar",async({carId,data})=>{
+export const updateCar = createAsyncThunk("admin/updateCar", async ({ carId, data }) => {
     try {
-        console.log(carId,data);
-        const response =axios.put(
+        console.log(carId, data);
+        const response = axios.put(
             `http://localhost:5000/api/car/updateCar/${carId}`,
             // `http://${process.env.NEXT_PUBLIC_API_URL}/api/car/updateCar/${carId}`,
             data
@@ -383,11 +387,10 @@ export const adminSlicer = createSlice({
             state.refreshed = !state.refreshed;
         },
         setAdminData: (state, action) => {
-            // const { admin } = action.payload;
             state.admin = action.payload
         },
         logout: (state) => {
-            state.admin = "";
+            state.admin = {};
             state.loggedIn = false;
             localStorage.removeItem("Token")
         },
@@ -416,14 +419,16 @@ export const adminSlicer = createSlice({
             state.loadingStatus.Login = true;
             state.error = null;
         });
-        builder.addCase(Login.fulfilled, (state) => {
+        builder.addCase(Login.fulfilled, (state, action) => {
             state.loadingStatus.Login = false;
-            state.loggedIn = false;
+            state.token = action.payload;
+            localStorage.setItem("Token", action.payload); // Save the token to local storage
+
+            // state.isLoading = false;
         });
         builder.addCase(Login.rejected, (state, action) => {
             state.loadingStatus.Login = false;
             state.error = action.error.message;
-            // state.loggedIn = false;
         });
         builder.addCase(getUserById.pending, (state) => {
             state.loadingStatus.getUserById = true;

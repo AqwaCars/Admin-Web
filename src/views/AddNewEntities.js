@@ -16,7 +16,7 @@ import Select from 'react-select'
 import "../assets/css/customUpload.css"
 import Modal from 'react-modal';
 import { ReactComponent as Add } from '../assets/Svg/add-circle.svg';
-import { SignUpCompany } from '../Redux/adminSlice';
+import { SignUpCompany, selectAdmin } from '../Redux/adminSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllCompanies } from '../Redux/adminSlice';
 import { ToastContainer, toast } from 'react-toastify';
@@ -30,104 +30,8 @@ import { LimitedCars } from '../Redux/adminSlice';
 import { LimitedCompanies } from '../Redux/adminSlice';
 import { getAllCars } from '../Redux/adminSlice';
 import { cloudinaryUpload } from 'helper_functions/Cloudinary';
-// const data = {
-//   "Al-Kāf": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Al-Mahdiyah": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Al-Munastīr": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Al-Qaṣrayn": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Al-Qayrawān": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Aryānah": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Bājah": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Banzart": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Bin 'Arūs": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Jundūbah": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Madanīn": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Manūbah": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Nābul": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Qābis": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Qafṣah": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Qibilī": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Ṣafāqis": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Sīdī Bū Zayd": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Silyānah": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Sūsah": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Taṭāwīn": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Tawzar": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Tūnis": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   },
-//   "Zaghwān": {
-//     "key1": "value1",
-//     "key2": "value2"
-//   }
-// }
+import { useNavigate } from 'react-router-dom';
+
 
 
 const years = [];
@@ -188,6 +92,7 @@ const customStyles2 = {
   },
 };
 const AddNewEntities = () => {
+  const Admin = useSelector(selectAdmin)
   const [selectedFile, setSelectedFile] = useState(null);
   const [rneFile, setRneFile] = useState(null);
   const [idFile, setIdFile] = useState(null);
@@ -352,9 +257,9 @@ const AddNewEntities = () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [modalIsOpen2]);
-  useEffect(()=>{
+  useEffect(() => {
     console.log("reload");
-  },[cloudwait])
+  }, [cloudwait])
   // console.log(`${process.env.EXPO_PUBLIC_SERVER_IP}`)
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -395,26 +300,26 @@ const AddNewEntities = () => {
   const handleSubmit = async () => {
     console.log(carDetails);
     if (Object.values(carDetails).every(value => value)) {
-    try {
-      setCloudWait(true)
-      // Debugging: Log the selectedFile to verify its contents
-      console.log('Selected File:', selectedFile);
-      const imageUrl = await cloudinaryUpload(selectedFile, "car_images");
+      try {
+        setCloudWait(true)
+        // Debugging: Log the selectedFile to verify its contents
+        console.log('Selected File:', selectedFile);
+        const imageUrl = await cloudinaryUpload(selectedFile, "car_images");
 
-      console.log("Image uploaded successfully:", imageUrl);
-      // Log the response or handle it as needed
+        console.log("Image uploaded successfully:", imageUrl);
+        // Log the response or handle it as needed
 
-      carDetails.media=imageUrl
-      await dispatch(addCar(carDetails))
-      await dispatch(getAllCars())
-      setCloudWait(false)
-      closeModal()
-    } catch (err) {
-      console.error("Cloudinary Upload Error:", err);
-    }
+        carDetails.media = imageUrl
+        await dispatch(addCar(carDetails))
+        await dispatch(getAllCars())
+        setCloudWait(false)
+        closeModal()
+      } catch (err) {
+        console.error("Cloudinary Upload Error:", err);
+      }
     } else {
-    notify('car');
-    console.log("Car details are missing.");
+      notify('car');
+      console.log("Car details are missing.");
     }
   };
   const handleSubmit2 = async () => {
@@ -432,9 +337,9 @@ const AddNewEntities = () => {
         console.log("Image uploaded successfully:", imageUrl2);
         console.log("Image uploaded successfully:", imageUrl3);
         console.log("should be created by now");
-        companyDetails.selfie=imageUrl
-        companyDetails.RNE=imageUrl2
-        companyDetails.idCard=imageUrl3
+        companyDetails.selfie = imageUrl
+        companyDetails.RNE = imageUrl2
+        companyDetails.idCard = imageUrl3
         dispatch(SignUpCompany(companyDetails))
         dispatch(getAllCompanies())
         setCloudWait(false)
@@ -449,7 +354,18 @@ const AddNewEntities = () => {
   };
   // In your onChange handler
   // setImageSelected(true);
-  // setTimeout(() => setImageSelected(false), 2000); // Reset after 2 seconds
+  // setTimeout(() => setImageSelected(false), 2000);
+  // Reset after 2 seconds
+  const navigate = useNavigate();
+  useEffect(() => {
+    const handleNavigation = () => {
+      if (Admin.clearance === "Level1") {
+        navigate(-1); // Navigate back to the previous page
+      }
+    };
+
+    handleNavigation();
+  }, [Admin, navigate]);
 
   return (
     <>
@@ -519,7 +435,7 @@ const AddNewEntities = () => {
                         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
                       }}>
                         {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
-                        <img src={item.media} alt={`Image`} style={{ objectFit:"cover",width: '4rem', height: '3rem', marginRight: '1rem' }} />
+                        <img src={item.media} alt={`Image`} style={{ objectFit: "cover", width: '4rem', height: '3rem', marginRight: '1rem' }} />
                         {/* </div> */}
                         <div>
                           <p style={{ fontSize: '18px', color: '#30416B' }}>{item.model}{item.brand}</p>
@@ -534,7 +450,23 @@ const AddNewEntities = () => {
                 <div className='half'>
                   <div id='Title'>Newly Joined Companies</div>
                   <Button onClick={() => {
-                    openModal2()
+                    if (Admin.clearance === "Level3") {
+                      openModal2()
+                    }else{
+                      toast("NOT ALLOWED", {
+                        position: "top-right",
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                        icon: true,
+                        bodyClassName: "custom-toast-body",
+                      });
+                      
+                    }
                   }} style={{
                     display: "flex",
                     gap: "0.5rem",
@@ -1034,12 +966,13 @@ const AddNewEntities = () => {
               />
             </div>
           </div>
-          <Button className='pressEnter' onClick={handleSubmit2} style={{
-            // color: "grey",
-            // fontSize: "1rem",
-            // paddingTop: "1rem",
-            // cursor: "pointer"
-          }}>{
+          <Button className='pressEnter' onClick={
+            Admin.clearance === "Level3" ? handleSubmit2 : null} style={{
+              // color: "grey",
+              // fontSize: "1rem",
+              // paddingTop: "1rem",
+              // cursor: "pointer"
+            }}>{
               cloudwait ?
                 <div style={{
                   display: "flex",

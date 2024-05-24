@@ -418,9 +418,9 @@ const chartExample4 = {
         ],
       };
     }
-
+    console.log(typeof(array));
     // Extract the creation dates from the user data
-    const creationDates = array?.map(user => new Date(user.createdAt));
+    const creationDates = array?.map(user => new Date(user?.createdAt));
 
     // Check if creationDates array is not empty
     if (creationDates?.length === 0) {
