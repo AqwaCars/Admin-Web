@@ -1,8 +1,7 @@
 {
-  "name": "black-dashboard-react",
+  "name": "aqwa_cars-dashboard",
   "version": "1.2.2",
   "private": true,
-  "homepage": "https://demos.creative-tim.com/black-dashboard-react/#/admin/dashboard",
   "dependencies": {
     "@cloudinary/react": "^1.13.0",
     "@cloudinary/url-gen": "^1.19.0",

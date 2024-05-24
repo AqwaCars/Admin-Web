@@ -257,9 +257,9 @@ const AddNewEntities = () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [modalIsOpen2]);
-  useEffect(()=>{
+  useEffect(() => {
     console.log("reload");
-  },[cloudwait])
+  }, [cloudwait])
   // console.log(`${process.env.EXPO_PUBLIC_SERVER_IP}`)
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -300,26 +300,26 @@ const AddNewEntities = () => {
   const handleSubmit = async () => {
     console.log(carDetails);
     if (Object.values(carDetails).every(value => value)) {
-    try {
-      setCloudWait(true)
-      // Debugging: Log the selectedFile to verify its contents
-      console.log('Selected File:', selectedFile);
-      const imageUrl = await cloudinaryUpload(selectedFile, "car_images");
+      try {
+        setCloudWait(true)
+        // Debugging: Log the selectedFile to verify its contents
+        console.log('Selected File:', selectedFile);
+        const imageUrl = await cloudinaryUpload(selectedFile, "car_images");
 
-      console.log("Image uploaded successfully:", imageUrl);
-      // Log the response or handle it as needed
+        console.log("Image uploaded successfully:", imageUrl);
+        // Log the response or handle it as needed
 
-      carDetails.media=imageUrl
-      await dispatch(addCar(carDetails))
-      await dispatch(getAllCars())
-      setCloudWait(false)
-      closeModal()
-    } catch (err) {
-      console.error("Cloudinary Upload Error:", err);
-    }
+        carDetails.media = imageUrl
+        await dispatch(addCar(carDetails))
+        await dispatch(getAllCars())
+        setCloudWait(false)
+        closeModal()
+      } catch (err) {
+        console.error("Cloudinary Upload Error:", err);
+      }
     } else {
-    notify('car');
-    console.log("Car details are missing.");
+      notify('car');
+      console.log("Car details are missing.");
     }
   };
   const handleSubmit2 = async () => {
@@ -337,9 +337,9 @@ const AddNewEntities = () => {
         console.log("Image uploaded successfully:", imageUrl2);
         console.log("Image uploaded successfully:", imageUrl3);
         console.log("should be created by now");
-        companyDetails.selfie=imageUrl
-        companyDetails.RNE=imageUrl2
-        companyDetails.idCard=imageUrl3
+        companyDetails.selfie = imageUrl
+        companyDetails.RNE = imageUrl2
+        companyDetails.idCard = imageUrl3
         dispatch(SignUpCompany(companyDetails))
         dispatch(getAllCompanies())
         setCloudWait(false)
@@ -435,7 +435,7 @@ const AddNewEntities = () => {
                         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
                       }}>
                         {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
-                        <img src={item.media} alt={`Image`} style={{ objectFit:"cover",width: '4rem', height: '3rem', marginRight: '1rem' }} />
+                        <img src={item.media} alt={`Image`} style={{ objectFit: "cover", width: '4rem', height: '3rem', marginRight: '1rem' }} />
                         {/* </div> */}
                         <div>
                           <p style={{ fontSize: '18px', color: '#30416B' }}>{item.model}{item.brand}</p>
@@ -450,7 +450,23 @@ const AddNewEntities = () => {
                 <div className='half'>
                   <div id='Title'>Newly Joined Companies</div>
                   <Button onClick={() => {
-                    openModal2()
+                    if (Admin.clearance === "Level3") {
+                      openModal2()
+                    }else{
+                      toast("NOT ALLOWED", {
+                        position: "top-right",
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                        icon: true,
+                        bodyClassName: "custom-toast-body",
+                      });
+                      
+                    }
                   }} style={{
                     display: "flex",
                     gap: "0.5rem",
@@ -950,12 +966,13 @@ const AddNewEntities = () => {
               />
             </div>
           </div>
-          <Button className='pressEnter' onClick={handleSubmit2} style={{
-            // color: "grey",
-            // fontSize: "1rem",
-            // paddingTop: "1rem",
-            // cursor: "pointer"
-          }}>{
+          <Button className='pressEnter' onClick={
+            Admin.clearance === "Level3" ? handleSubmit2 : null} style={{
+              // color: "grey",
+              // fontSize: "1rem",
+              // paddingTop: "1rem",
+              // cursor: "pointer"
+            }}>{
               cloudwait ?
                 <div style={{
                   display: "flex",

@@ -208,13 +208,13 @@ function User_Managements() {
   const filterChange = async (state) => {
     if (state === "Banned Only") {
       const filtered = staticAllUsers.filter((e) => {
-        return e.stateBlocked === "true"
+        return e.isBlocked === "true"
       })
       filtered[0] && dispatch(filterUsers(filtered));
 
     } else if (state === "Active Only") {
       const filtered = staticAllUsers.filter((e) => {
-        return e.stateBlocked === "fqlse"
+        return e.isBlocked === "fqlse"
       })
       filtered[0] && dispatch(filterUsers(filtered));
     }
@@ -373,7 +373,7 @@ function User_Managements() {
                                   showCancelButton: true,
                                   focusConfirm: false,
                                   confirmButtonText: `
-                                 <i class="fa fa-ban"></i> ${user.stateBlocked ? "unBan this User?" : "ban this User?"}
+                                 <i class="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
                                 `,
                                   confirmButtonAriaLabel: "Thumbs up, great!",
                                   customClass: {
@@ -382,8 +382,8 @@ function User_Managements() {
                                       color: "#30416b"
                                     },
                                     container: 'my-modal',
-                                    confirmButton: user.stateBlocked ? 'unban-button' : 'ban-button',
-                                    cancelButton: !user.stateBlocked ? 'unban-button' : 'ban-button'
+                                    confirmButton: user.isBlocked ? 'unban-button' : 'ban-button',
+                                    cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
                                   },
                                   cancelButtonText: `
                                  <i class="fa fa-close"></i>
@@ -392,7 +392,7 @@ function User_Managements() {
                                   if (result.isConfirmed) {
                                     Swal.fire({
                                       title: "Are you sure?",
-                                      html: user.stateBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBan <strong>${user.userName}</strong> ?`,
+                                      html: user.isBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBan <strong>${user.userName}</strong> ?`,
                                       icon: "warning",
                                       showCancelButton: true,
                                       confirmButtonText: "Yes!",
@@ -401,8 +401,8 @@ function User_Managements() {
                                       if (result.isConfirmed) {
                                         handleBlock(user.id)
                                         Swal.fire({
-                                          title: user.stateBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Banned!`,
-                                          text: user.stateBlocked ? "Thank you for your Job Admin." : "Thank you for your Job Admin.",
+                                          title: user.isBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Banned!`,
+                                          text: user.isBlocked ? "Thank you for your Job Admin." : "Thank you for your Job Admin.",
                                           icon: "success"
                                         });
                                       } else if (
@@ -485,14 +485,14 @@ function User_Managements() {
                                   showCancelButton: true,
                                   focusConfirm: false,
                                   confirmButtonText: `
-                                 <i class="fa fa-ban"></i> ${user.stateBlocked ? "unBan this User?" : "ban this User?"}
+                                 <i class="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
                                 `,
                                   confirmButtonAriaLabel: "Thumbs up, great!",
                                   customClass: {
                                     text: "swal-secondary-text",
                                     container: 'my-modal',
-                                    confirmButton: user.stateBlocked ? 'unban-button' : 'ban-button',
-                                    cancelButton: !user.stateBlocked ? 'unban-button' : 'ban-button'
+                                    confirmButton: user.isBlocked ? 'unban-button' : 'ban-button',
+                                    cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
                                   },
                                   cancelButtonText: `
                                  <i class="fa fa-close"></i>
@@ -502,8 +502,8 @@ function User_Managements() {
                                   if (result.isConfirmed) {
                                     Swal.fire({
                                       title: "Are you sure?",
-                                      html: user.stateBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBan <strong>${user.userName}</strong> ?`,
-                                      // text: user.stateBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
+                                      html: user.isBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBan <strong>${user.userName}</strong> ?`,
+                                      // text: user.isBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
                                       icon: "warning",
                                       showCancelButton: true,
                                       confirmButtonText: "Yes!",
@@ -512,8 +512,8 @@ function User_Managements() {
                                       if (result.isConfirmed) {
                                         handleBlock(user.id)
                                         Swal.fire({
-                                          title: user.stateBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Banned!`,
-                                          text: user.stateBlocked ? "Thank you for your Job Admin." : "Thank you for your Job Admin.",
+                                          title: user.isBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Banned!`,
+                                          text: user.isBlocked ? "Thank you for your Job Admin." : "Thank you for your Job Admin.",
                                           icon: "success"
                                         });
                                       } else if (
@@ -588,14 +588,14 @@ function User_Managements() {
                                     showCancelButton: true,
                                     focusConfirm: false,
                                     confirmButtonText: `
-                                   <i class="fa fa-ban"></i> ${user.stateBlocked ? "unBan this User?" : "ban this User?"}
+                                   <i class="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
                                   `,
                                     confirmButtonAriaLabel: "Thumbs up, great!",
                                     customClass: {
                                       text: "swal-secondary-text",
                                       container: 'my-modal',
-                                      confirmButton: user.stateBlocked ? 'unban-button' : 'ban-button',
-                                      cancelButton: !user.stateBlocked ? 'unban-button' : 'ban-button'
+                                      confirmButton: user.isBlocked ? 'unban-button' : 'ban-button',
+                                      cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
                                     },
                                     cancelButtonText: `
                                    <i class="fa fa-close"></i>
@@ -605,8 +605,8 @@ function User_Managements() {
                                     if (result.isConfirmed) {
                                       Swal.fire({
                                         title: "Are you sure?",
-                                        html: user.stateBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBan <strong>${user.userName}</strong> ?`,
-                                        // text: user.stateBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
+                                        html: user.isBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBan <strong>${user.userName}</strong> ?`,
+                                        // text: user.isBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
                                         icon: "warning",
                                         showCancelButton: true,
                                         confirmButtonText: "Yes!",
@@ -615,8 +615,8 @@ function User_Managements() {
                                         if (result.isConfirmed) {
                                           handleBlock(user.id)
                                           Swal.fire({
-                                            title: user.stateBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Banned!`,
-                                            text: user.stateBlocked ? "The user Can Now Login Freely" : "Thank you for your Job Admin.",
+                                            title: user.isBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Banned!`,
+                                            text: user.isBlocked ? "The user Can Now Login Freely" : "Thank you for your Job Admin.",
                                             icon: "success"
                                           });
                                         } else if (
@@ -693,14 +693,14 @@ function User_Managements() {
                                     showCancelButton: true,
                                     focusConfirm: false,
                                     confirmButtonText: `
-                                   <i class="fa fa-ban"></i> ${user.stateBlocked ? "unBan this User?" : "ban this User?"}
+                                   <i class="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
                                   `,
                                     confirmButtonAriaLabel: "Thumbs up, great!",
                                     customClass: {
                                       text: "swal-secondary-text",
                                       container: 'my-modal',
-                                      confirmButton: user.stateBlocked ? 'unban-button' : 'ban-button',
-                                      cancelButton: !user.stateBlocked ? 'unban-button' : 'ban-button'
+                                      confirmButton: user.isBlocked ? 'unban-button' : 'ban-button',
+                                      cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
                                     },
                                     cancelButtonText: `
                                    <i class="fa fa-close"></i>
@@ -710,8 +710,8 @@ function User_Managements() {
                                     if (result.isConfirmed) {
                                       Swal.fire({
                                         title: "Are you sure?",
-                                        html: user.stateBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBan <strong>${user.userName}</strong> ?`,
-                                        // text: user.stateBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
+                                        html: user.isBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBan <strong>${user.userName}</strong> ?`,
+                                        // text: user.isBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
                                         icon: "warning",
                                         showCancelButton: true,
                                         confirmButtonText: "Yes!",
@@ -720,8 +720,8 @@ function User_Managements() {
                                         if (result.isConfirmed) {
                                           handleBlock(user.id)
                                           Swal.fire({
-                                            title: user.stateBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Banned!`,
-                                            text: user.stateBlocked ? "Thank you for your Job Admin." : "Thank you for your Job Admin.",
+                                            title: user.isBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Banned!`,
+                                            text: user.isBlocked ? "Thank you for your Job Admin." : "Thank you for your Job Admin.",
                                             icon: "success"
                                           });
                                         } else if (
@@ -766,7 +766,7 @@ function User_Managements() {
                         </div>
                         <Row>
                           {allUsers?.map((user, i) =>
-                            user.stateBlocked ? (
+                            user.isBlocked ? (
                               < Col
                                 key={i}
                                 className="font-icon-list col-xs-6 col-xs-6"
@@ -795,14 +795,14 @@ function User_Managements() {
                                     showCancelButton: true,
                                     focusConfirm: false,
                                     confirmButtonText: `
-                                   <i class="fa fa-ban"></i> ${user.stateBlocked ? "unBan this User?" : "ban this User?"}
+                                   <i class="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
                                   `,
                                     confirmButtonAriaLabel: "Thumbs up, great!",
                                     customClass: {
                                       text: "swal-secondary-text",
                                       container: 'my-modal',
-                                      confirmButton: user.stateBlocked ? 'unban-button' : 'ban-button',
-                                      cancelButton: !user.stateBlocked ? 'unban-button' : 'ban-button'
+                                      confirmButton: user.isBlocked ? 'unban-button' : 'ban-button',
+                                      cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
                                     },
                                     cancelButtonText: `
                                    <i class="fa fa-close"></i>
@@ -812,8 +812,8 @@ function User_Managements() {
                                     if (result.isConfirmed) {
                                       Swal.fire({
                                         title: "Are you sure?",
-                                        html: user.stateBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBan <strong>${user.userName}</strong> ?`,
-                                        // text: user.stateBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
+                                        html: user.isBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBan <strong>${user.userName}</strong> ?`,
+                                        // text: user.isBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
                                         icon: "warning",
                                         showCancelButton: true,
                                         confirmButtonText: "Yes!",
@@ -822,8 +822,8 @@ function User_Managements() {
                                         if (result.isConfirmed) {
                                           handleBlock(user.id)
                                           Swal.fire({
-                                            title: user.stateBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Banned!`,
-                                            text: user.stateBlocked ? "Thank you for your Job Admin." : "Thank you for your Job Admin.",
+                                            title: user.isBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Banned!`,
+                                            text: user.isBlocked ? "Thank you for your Job Admin." : "Thank you for your Job Admin.",
                                             icon: "success"
                                           });
                                         } else if (
@@ -869,7 +869,7 @@ function User_Managements() {
                         </div>
                         <Row>
                           {allUsers?.map((user, i) =>
-                            !user.stateBlocked ? (
+                            !user.isBlocked ? (
                               < Col
                                 key={i}
                                 className="font-icon-list col-xs-6 col-xs-6"
@@ -898,14 +898,14 @@ function User_Managements() {
                                     showCancelButton: true,
                                     focusConfirm: false,
                                     confirmButtonText: `
-                                   <i class="fa fa-ban"></i> ${user.stateBlocked ? "unBan this User?" : "ban this User?"}
+                                   <i class="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
                                   `,
                                     confirmButtonAriaLabel: "Thumbs up, great!",
                                     customClass: {
                                       text: "swal-secondary-text",
                                       container: 'my-modal',
-                                      confirmButton: user.stateBlocked ? 'unban-button' : 'ban-button',
-                                      cancelButton: !user.stateBlocked ? 'unban-button' : 'ban-button'
+                                      confirmButton: user.isBlocked ? 'unban-button' : 'ban-button',
+                                      cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
                                     },
                                     cancelButtonText: `
                                    <i class="fa fa-close"></i>
@@ -915,8 +915,8 @@ function User_Managements() {
                                     if (result.isConfirmed) {
                                       Swal.fire({
                                         title: "Are you sure?",
-                                        html: user.stateBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBan <strong>${user.userName}</strong> ?`,
-                                        // text: user.stateBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
+                                        html: user.isBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBan <strong>${user.userName}</strong> ?`,
+                                        // text: user.isBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBan <strong>${user.userName}</strong> ?`,
                                         icon: "warning",
                                         showCancelButton: true,
                                         confirmButtonText: "Yes!",
@@ -925,8 +925,8 @@ function User_Managements() {
                                         if (result.isConfirmed) {
                                           handleBlock(user.id)
                                           Swal.fire({
-                                            title: user.stateBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Banned!`,
-                                            text: user.stateBlocked ? "Thank you for your Job Admin." : "Thank you for your Job Admin.",
+                                            title: user.isBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Banned!`,
+                                            text: user.isBlocked ? "Thank you for your Job Admin." : "Thank you for your Job Admin.",
                                             icon: "success"
                                           });
                                         } else if (

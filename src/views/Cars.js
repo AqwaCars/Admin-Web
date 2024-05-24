@@ -1,4 +1,4 @@
-import { cancelRent, getAllRequests, updateCar } from "../Redux/adminSlice";
+import { cancelRent, getAllRequests, selectAdmin, updateCar } from "../Redux/adminSlice";
 import { selectLoadingStatus } from "../Redux/adminSlice";
 import { selectAllRequests } from "../Redux/adminSlice";
 import { selectLoading } from "../Redux/adminSlice";
@@ -71,6 +71,7 @@ const fuels = ["Gasoline", "Diesel", "Electric"]
 const yearOptions = years?.map(year => ({ label: year.toString(), value: year.toString() }));
 const fuelOptions = fuels?.map(fuel => ({ label: fuel.toString(), value: fuel.toString() }));
 function Cars() {
+  
   const dispatch = useDispatch()
   const [returnTime, setReturnTime] = useState(null)
   const [rentalTime, setRentalTime] = useState(null)
@@ -167,7 +168,10 @@ function Cars() {
   const [modalIsOpen, setIsOpen] = useState(false);
   const cars = useSelector(selectAllCars)
   const carDates = useSelector(CarBookedPeriods)
-
+  const searchOptions = cars?.map(car => ({
+    label: car.brand,
+    value: car.id
+  }));
   const [refresh, setRefresh] = useState(false)
   const [car, setCar] = useState({})
 
@@ -241,9 +245,52 @@ function Cars() {
     return acc;
   }, []); // Initialize the accumulator as an empty array
 
+  const [menuIsOpen, setMenuIsOpen] = useState(false);
 
-
-
+  const searchCustomStyles = {
+    menu: (provied, state) => ({
+      ...provied,
+      background: "#fff"
+    }),
+    control: (provided, state) => ({
+      ...provided,
+      background: '#fff',
+      borderColor: state.isFocused ? '#007BFF' : '#ced4da',
+      boxShadow: state.isFocused ? '0 0 0 1px #007BFF' : 'none',
+      '&:hover': {
+        borderColor: '#007BFF',
+      },
+      width: "25rem"
+    }),
+    lineHeight: "2px",
+    height: "2px",
+    minHeight: '20px',
+    option: (provided, state) => ({
+      ...provided,
+      background: state.isFocused ? '#1E1E2F' : state.isSelected ? '#1E1E2F' : '#fff',
+      color: state.isFocused ? '#fff' : state.isSelected ? '#fff' : '#1E1E2F',
+      width: "25rem",
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: '#fff', // Change this to your desired selected value color
+    }),
+    input: (provided) => ({
+      ...provided,
+      color: '#1E1E2F', // change this to the color you want
+    }),
+    menuList: (provided) => ({
+      ...provided,
+      "::-webkit-scrollbar": {
+        width: "0px",
+        height: "0px",
+      },
+    }),
+  }
+  const handleBlur = () => {
+    setMenuIsOpen(false);
+  };
+  const Admin = useSelector(selectAdmin)
   // Now disabledDates contains the dates that are booked and should be disabled
   return (
     <>
@@ -255,6 +302,21 @@ function Cars() {
                 <CardTitle ><Button style={{
                   // fontSize: "1.2rem"
                 }}>List Of All Affiliated Cars</Button></CardTitle>
+                 <Select
+                  options={searchOptions}
+                  filterOption={(option, input) => input.length >= 2 && option.label.toLowerCase().includes(input.toLowerCase())}
+                  value={null}
+                  components={{
+                    DropdownIndicator: () => null,
+                    IndicatorSeparator: () => null
+                  }}
+                  styles={searchCustomStyles}
+                  placeholder="find a specific User..."
+                  // onInputChange={handleInputChange}
+                  // onChange={handleChange}
+                  // onBlur={handleBlur}
+                  // menuIsOpen={menuIsOpen}
+                />
               </CardHeader>
               <CardBody style={{ overflowX: 'auto', width: '100%' }}>
                 <Table striped responsive style={{
@@ -280,7 +342,7 @@ function Cars() {
                     </tr>
                   </thead>
                   <tbody>
-                    {cars?.map((request, i) => {
+                    {Admin.clearance==="Level1"?cars.filter((car)=>car.Owner===Admin.Name):cars?.map((request, i) => {
                       return (
                         <ReqRow setDate={setDate} key={i} setRefresh={setRefresh} request={request} handlePapers={handlePapers} openModal={openModal} openLocationInGoogleMaps={openLocationInGoogleMaps} setCar={setCar} />
                       );

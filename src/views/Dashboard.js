@@ -104,6 +104,9 @@ function Dashboard() {
       if (Admin.clearance === "Level1") {
         navigate(-1); // Navigate back to the previous page
       }
+      if (Admin.clearance === "Level1"||Admin.clearance === "Level2") {
+        navigate("/admin/Cars"); // Navigate back to the previous page
+      }
     };
 
     handleNavigation();
@@ -545,7 +548,7 @@ function Dashboard() {
                           <td>{u.userName}</td>
                           <td>{u.email}</td>
                           <td>{u.phoneNumber}</td>
-                          <td className="text-center">{u.stateBlocked ? "Blocked" : "Active"}</td>
+                          <td className="text-center">{u.isBlocked ? "Blocked" : "Active"}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -579,7 +582,7 @@ function Dashboard() {
                           <td>{u.userName}</td>
                           <td>{u.email}</td>
                           <td>{u.phoneNumber}</td>
-                          <td className="text-center">{u.stateBlocked ? "Blocked" : "Active"}</td>
+                          <td className="text-center">{u.isBlocked ? "Blocked" : "Active"}</td>
                         </tr>
                       ))}
                     </tbody>
