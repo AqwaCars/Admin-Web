@@ -3,7 +3,7 @@ import { getAllUsers, selectAdmin } from "../Redux/adminSlice";
 import { selectAllUsers } from "../Redux/adminSlice";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Card, CardHeader, CardBody, Row, Col } from "reactstrap";
+// import { Card, CardHeader, CardBody, Row, Col } from "reactstrap";
 import Select from 'react-select';
 import Swal from 'sweetalert2'
 import { updateStateBlock } from "../Redux/adminSlice";
@@ -17,6 +17,8 @@ import Modal from 'react-modal';
 import { agencyCars } from "../Redux/adminSlice";
 import { getAgencyCars } from "../Redux/adminSlice";
 import { useNavigate } from "react-router-dom";
+import { Row, Col, Card, CardHeader, CardBody } from 'reactstrap';
+
 function User_Managements() {
   const Admin = useSelector(selectAdmin)
   const [selectedOption, setSelectedOptions] = useState({ value: 'all', label: 'Select Filter ...' });
@@ -373,7 +375,7 @@ function User_Managements() {
                                   showCancelButton: true,
                                   focusConfirm: false,
                                   confirmButtonText: `
-                                 <i class="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
+                                 <i className="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
                                 `,
                                   confirmButtonAriaLabel: "Thumbs up, great!",
                                   customClass: {
@@ -386,7 +388,7 @@ function User_Managements() {
                                     cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
                                   },
                                   cancelButtonText: `
-                                 <i class="fa fa-close"></i>
+                                 <i className="fa fa-close"></i>
                                 `,
                                 }).then((result) => {
                                   if (result.isConfirmed) {
@@ -420,7 +422,7 @@ function User_Managements() {
                               }}
                             >
                               <div className="font-icon-detail">
-                                <div class="details_btn" id="detailsBtn">
+                                <div className="details_btn" id="detailsBtn">
                                   {/* <Detail onClick={(event) => {
                                     event.stopPropagation();
                                     handleDetailClick(user)
@@ -485,7 +487,7 @@ function User_Managements() {
                                   showCancelButton: true,
                                   focusConfirm: false,
                                   confirmButtonText: `
-                                 <i class="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
+                                 <i className="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
                                 `,
                                   confirmButtonAriaLabel: "Thumbs up, great!",
                                   customClass: {
@@ -495,7 +497,7 @@ function User_Managements() {
                                     cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
                                   },
                                   cancelButtonText: `
-                                 <i class="fa fa-close"></i>
+                                 <i className="fa fa-close"></i>
                                 `,
                                   // cancelButtonAriaLabel: "Thumbs down"
                                 }).then((result) => {
@@ -532,7 +534,7 @@ function User_Managements() {
 
                             >
                               <div className="font-icon-detail">
-                                <div class="details_btn" id="detailsBtn">
+                                <div className="details_btn" id="detailsBtn">
                                   <Detail onClick={(event) => {
                                     event.stopPropagation();
                                     handleDetailClick(user)
@@ -588,7 +590,7 @@ function User_Managements() {
                                     showCancelButton: true,
                                     focusConfirm: false,
                                     confirmButtonText: `
-                                   <i class="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
+                                   <i className="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
                                   `,
                                     confirmButtonAriaLabel: "Thumbs up, great!",
                                     customClass: {
@@ -598,7 +600,7 @@ function User_Managements() {
                                       cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
                                     },
                                     cancelButtonText: `
-                                   <i class="fa fa-close"></i>
+                                   <i className="fa fa-close"></i>
                                   `,
                                     // cancelButtonAriaLabel: "Thumbs down"
                                   }).then((result) => {
@@ -634,7 +636,7 @@ function User_Managements() {
                                 }}
                               >
                                 <div className="font-icon-detail">
-                                  <div class="details_btn" id="detailsBtn">
+                                  <div className="details_btn" id="detailsBtn">
                                     {/* <Detail onClick={(event) => {
                                       event.stopPropagation();
                                       handleDetailClick(user)
@@ -693,7 +695,7 @@ function User_Managements() {
                                     showCancelButton: true,
                                     focusConfirm: false,
                                     confirmButtonText: `
-                                   <i class="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
+                                   <i className="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
                                   `,
                                     confirmButtonAriaLabel: "Thumbs up, great!",
                                     customClass: {
@@ -703,7 +705,7 @@ function User_Managements() {
                                       cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
                                     },
                                     cancelButtonText: `
-                                   <i class="fa fa-close"></i>
+                                   <i className="fa fa-close"></i>
                                   `,
                                     // cancelButtonAriaLabel: "Thumbs down"
                                   }).then((result) => {
@@ -739,7 +741,7 @@ function User_Managements() {
                                 }}
                               >
                                 <div className="font-icon-detail">
-                                  <div class="details_btn" id="detailsBtn">
+                                  <div className="details_btn" id="detailsBtn">
                                     <Detail onClick={(event) => {
                                       event.stopPropagation();
                                       handleDetailClick(user)
@@ -795,7 +797,7 @@ function User_Managements() {
                                     showCancelButton: true,
                                     focusConfirm: false,
                                     confirmButtonText: `
-                                   <i class="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
+                                   <i className="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
                                   `,
                                     confirmButtonAriaLabel: "Thumbs up, great!",
                                     customClass: {
@@ -805,7 +807,7 @@ function User_Managements() {
                                       cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
                                     },
                                     cancelButtonText: `
-                                   <i class="fa fa-close"></i>
+                                   <i className="fa fa-close"></i>
                                   `,
                                     // cancelButtonAriaLabel: "Thumbs down"
                                   }).then((result) => {
@@ -841,7 +843,7 @@ function User_Managements() {
                                 }}
                               >
                                 <div className="font-icon-detail">
-                                  <div class="details_btn" id="detailsBtn">
+                                  <div className="details_btn" id="detailsBtn">
                                     <Detail onClick={(event) => {
                                       event.stopPropagation();
                                       handleDetailClick(user)
@@ -898,7 +900,7 @@ function User_Managements() {
                                     showCancelButton: true,
                                     focusConfirm: false,
                                     confirmButtonText: `
-                                   <i class="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
+                                   <i className="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
                                   `,
                                     confirmButtonAriaLabel: "Thumbs up, great!",
                                     customClass: {
@@ -908,7 +910,7 @@ function User_Managements() {
                                       cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
                                     },
                                     cancelButtonText: `
-                                   <i class="fa fa-close"></i>
+                                   <i className="fa fa-close"></i>
                                   `,
                                     // cancelButtonAriaLabel: "Thumbs down"
                                   }).then((result) => {
@@ -944,7 +946,7 @@ function User_Managements() {
                                 }}
                               >
                                 <div className="font-icon-detail">
-                                  <div class="details_btn" id="detailsBtn">
+                                  <div className="details_btn" id="detailsBtn">
                                     {user.type === "user" ? null : <Detail onClick={(event) => {
                                       event.stopPropagation();
                                       handleDetailClick(user)

@@ -3,20 +3,8 @@ import { selectAdmin } from "../Redux/adminSlice";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-// reactstrap components
-import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  CardText,
-  FormGroup,
-  Form,
-  Input,
-  Row,
-  Col,
-} from "reactstrap";
+import { Row, Col, Card, CardHeader, CardBody, Form, FormGroup, Input, Button, CardFooter, CardText } from 'reactstrap';
+
 
 function UserProfile() {
   const dispatch=useDispatch()

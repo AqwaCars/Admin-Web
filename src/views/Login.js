@@ -4,7 +4,8 @@ import "../assets/css/login.css";
 // import Head from 'next/head';
 import axios from 'axios';
 import { Login, selectAdmin } from '../Redux/adminSlice';
-import { Card, CardHeader, CardBody, Row, Col, Input, Label, FormGroup, Form, Button, Badge } from "reactstrap";
+import { Row, Col, Card, CardHeader, CardBody } from 'reactstrap';
+
 import Select from 'react-select';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";

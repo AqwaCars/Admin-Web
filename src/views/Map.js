@@ -18,7 +18,8 @@
 import React from "react";
 
 // reactstrap components
-import { Card, CardHeader, CardBody, Row, Col } from "reactstrap";
+import { Row, Col, Card, CardHeader, CardBody } from 'reactstrap';
+
 
 const MapWrapper = () => {
   const mapRef = React.useRef(null);
@@ -287,7 +288,7 @@ const MapWrapper = () => {
     });
 
     const contentString =
-      '<div class="info-window-content"><h2>BLK Dashboard React</h2>' +
+      '<div className="info-window-content"><h2>BLK Dashboard React</h2>' +
       "<p>A freebie Admin for ReactStrap, Bootstrap, React, and React Hooks.</p></div>";
 
     const infowindow = new google.maps.InfoWindow({

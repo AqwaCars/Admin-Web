@@ -19,18 +19,9 @@ import React from "react";
 // react plugin for creating notifications over the dashboard
 import NotificationAlert from "react-notification-alert";
 
-// reactstrap components
-import {
-  Alert,
-  UncontrolledAlert,
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  Row,
-  Col,
-} from "reactstrap";
+import { Row, Col, Card, CardHeader, CardTitle, CardBody, Alert, Button } from 'reactstrap';
+import { UncontrolledAlert } from 'reactstrap';
+
 
 function Notifications() {
   const notificationAlertRef = React.useRef(null);

@@ -18,7 +18,8 @@
 import React from "react";
 
 // reactstrap components
-import { Card, CardHeader, CardBody, CardTitle, Row, Col } from "reactstrap";
+import { Row, Col, Card, CardHeader, CardTitle, CardBody } from 'reactstrap';
+
 
 function Typography() {
   return (

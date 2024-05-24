@@ -3,12 +3,13 @@ import React, { useEffect, useRef } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import PerfectScrollbar from "perfect-scrollbar";
-import { Nav } from "reactstrap";
-import { BackgroundColorContext, backgroundColors } from "contexts/BackgroundColorContext";
+// import { Nav } from "reactstrap";
+import { BackgroundColorContext } from "contexts/BackgroundColorContext";
 import "../../assets/css/sideBar.css"
 import { useDispatch, useSelector } from "react-redux";
 import { selectAdmin, selectLoggedIn } from "../../Redux/adminSlice";
 import { setLoggedIn } from "../../Redux/adminSlice";
+import { Nav } from 'reactstrap';
 
 function Sidebar(props) {
   const Admin = useSelector(selectAdmin)
@@ -37,7 +38,7 @@ function Sidebar(props) {
         suppressScrollY: false,
       });
       return () => {
-        // ps.destroy();
+        ps.destroy();
       };
     }
   }, []);

@@ -9,3 +9,5 @@ export const ThemeContext = createContext({
   theme: themes.light,
   changeTheme: () => {},
 });
+
+export default ThemeContext;
