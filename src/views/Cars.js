@@ -1,4 +1,4 @@
-import { cancelRent, getAllRequests, selectAdmin, updateCar } from "../Redux/adminSlice";
+import { cancelRent, getAllRequests, selectAdmin, selectStaticAllCars, updateCar } from "../Redux/adminSlice";
 import { selectLoadingStatus } from "../Redux/adminSlice";
 import { selectAllRequests } from "../Redux/adminSlice";
 import { selectLoading } from "../Redux/adminSlice";
@@ -71,7 +71,7 @@ const fuels = ["Gasoline", "Diesel", "Electric"]
 const yearOptions = years?.map(year => ({ label: year.toString(), value: year.toString() }));
 const fuelOptions = fuels?.map(fuel => ({ label: fuel.toString(), value: fuel.toString() }));
 function Cars() {
-  
+
   const dispatch = useDispatch()
   const [returnTime, setReturnTime] = useState(null)
   const [rentalTime, setRentalTime] = useState(null)
@@ -167,8 +167,10 @@ function Cars() {
   };
   const [modalIsOpen, setIsOpen] = useState(false);
   const cars = useSelector(selectAllCars)
+  const staticAllCars = useSelector(selectStaticAllCars)
+  const [mappedCars, setMappedCars] = useState([])
   const carDates = useSelector(CarBookedPeriods)
-  const searchOptions = cars?.map(car => ({
+  const searchOptions = staticAllCars?.map(car => ({
     label: car.brand,
     value: car.id
   }));
@@ -200,9 +202,33 @@ function Cars() {
       dispatch(getLimitedCars())
     }
   }, [load, cars])
+
   useEffect(() => {
     console.log(carDates);
-    dispatch(getAllCars())
+    // Define an async function to handle the dispatch and state update
+    const fetchAndSetCars = async () => {
+      try {
+        // Await the dispatch to complete
+        const response = await dispatch(getAllCars());
+        console.log(await response);
+        // Assuming response.data contains the cars data you want to map
+        // const staticAllCars = response?.data.map(car => /* mapping logic */);
+        if (response?.meta?.requestStatus) {
+          await setMappedCars(response.payload);
+          console.log("yes mapped cars",await mappedCars);
+        }else{
+          console.log("no mapped cars");
+        }
+        // Update your state with the mapped cars
+      } catch (error) {
+        // Handle any errors that occurred during the dispatch
+        console.error("Error fetching cars:", error);
+      }
+    }
+
+    // Call the async function
+    fetchAndSetCars();
+
     console.log(cars);
   }, [load])
   const selectedYearOption = yearOptions.find(option => option.value === car.Year);
@@ -250,7 +276,9 @@ function Cars() {
   const searchCustomStyles = {
     menu: (provied, state) => ({
       ...provied,
-      background: "#fff"
+      background: "#fff",
+      width:"25rem"
+
     }),
     control: (provided, state) => ({
       ...provided,
@@ -292,6 +320,19 @@ function Cars() {
   };
   const Admin = useSelector(selectAdmin)
   // Now disabledDates contains the dates that are booked and should be disabled
+  const handleInputChange = (inputValue, { action }, filteredOptions) => {
+    if (action === 'input-change' && inputValue.length >= 0) {
+      setMenuIsOpen(true);
+      const filtered = staticAllCars.filter((e) => {
+        return ((e.brand).toLowerCase()).includes(inputValue.toLowerCase())
+      })
+      filtered[0] ? setMappedCars(filtered) : console.log(filtered);
+    }
+    else if (action === 'input-change' && inputValue.length === 0) {
+      setMenuIsOpen(false);
+      setMappedCars(staticAllCars)
+    }
+  };
   return (
     <>
       <div className="content">
@@ -302,21 +343,22 @@ function Cars() {
                 <CardTitle ><Button style={{
                   // fontSize: "1.2rem"
                 }}>List Of All Affiliated Cars</Button></CardTitle>
-                 <Select
-                  options={searchOptions}
-                  filterOption={(option, input) => input.length >= 2 && option.label.toLowerCase().includes(input.toLowerCase())}
-                  value={null}
-                  components={{
-                    DropdownIndicator: () => null,
-                    IndicatorSeparator: () => null
-                  }}
-                  styles={searchCustomStyles}
-                  placeholder="find a specific User..."
-                  // onInputChange={handleInputChange}
+                  <Select
+                    options={searchOptions}
+                    filterOption={(option, input) => input.length >= 1 && option.label.toLowerCase().includes(input.toLowerCase())}
+                    value={null}
+                    components={{
+                      DropdownIndicator: () => null,
+                      IndicatorSeparator: () => null
+                    }}
+                    styles={searchCustomStyles}
+                    placeholder="find a specific User..."
+                    onInputChange={handleInputChange}
+
                   // onChange={handleChange}
-                  // onBlur={handleBlur}
-                  // menuIsOpen={menuIsOpen}
-                />
+                  onBlur={handleBlur}
+                  menuIsOpen={menuIsOpen}
+                  />
               </CardHeader>
               <CardBody style={{ overflowX: 'auto', width: '100%' }}>
                 <Table striped responsive style={{
@@ -342,7 +384,7 @@ function Cars() {
                     </tr>
                   </thead>
                   <tbody>
-                    {Admin.clearance==="Level1"?cars.filter((car)=>car.Owner===Admin.Name):cars?.map((request, i) => {
+                    {Admin.clearance === "Level1" ? mappedCars.filter((car) => car.Owner === Admin.Name) : mappedCars?.map((request, i) => {
                       return (
                         <ReqRow setDate={setDate} key={i} setRefresh={setRefresh} request={request} handlePapers={handlePapers} openModal={openModal} openLocationInGoogleMaps={openLocationInGoogleMaps} setCar={setCar} />
                       );
@@ -359,7 +401,7 @@ function Cars() {
         isOpen={modalIsOpen}
         style={customStyles}
         onRequestClose={closeModal}
-        onAfterClose={()=>{
+        onAfterClose={() => {
           setCarRenter({})
           setRentalTime(null)
           setReturnTime(null)
@@ -432,7 +474,7 @@ function Cars() {
                       const startDate = new Date(date.startDate);
                       const endDate = new Date(date.endDate);
                       const diffDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-                  
+
                       if (diffDays >= 1) {
                         handleButtonClick();
                         Swal.fire('Changes Saved!', '', 'success');
@@ -441,12 +483,12 @@ function Cars() {
                       }
                     } else if (result.isDenied) {
                       Swal.fire('Change Discarded.', '', 'info');
-                    } else if (result.isConfirmed &&!Object.values(carRenter).length > 0) {
+                    } else if (result.isConfirmed && !Object.values(carRenter).length > 0) {
                       Swal.fire('Please select a user.', '', 'warning');
-                    } else if (result.isConfirmed && (!rentalTime ||!returnTime)) {
+                    } else if (result.isConfirmed && (!rentalTime || !returnTime)) {
                       Swal.fire('Please specify a Time.', '', 'warning');
                     }
-                                    
+
                   })
                 }>{
                     // `${format(date.startDate, "MMM,dd,yyyy")} to ${format(date.endDate, "MMM,dd,yyyy")}`
