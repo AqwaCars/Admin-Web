@@ -20,24 +20,17 @@ import React from "react";
 import classNames from "classnames";
 
 // reactstrap components
+// import React from 'react';
 import {
-  Button,
-  Collapse,
+  Button, Navbar, Container, NavbarToggler, NavbarBrand, Collapse, Nav, InputGroup, UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  UncontrolledDropdown,
-  Input,
-  InputGroup,
-  NavbarBrand,
-  Navbar,
-  NavLink,
-  Nav,
-  Container,
   Modal,
   ModalHeader,
-  NavbarToggler,
-} from "reactstrap";
+  Input, NavLink
+} from 'reactstrap';
+// import { Button } from 'react-bootstrap';
 
 function AdminNavbar(props) {
   const [collapseOpen, setcollapseOpen] = React.useState(false);

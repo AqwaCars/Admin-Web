@@ -10,11 +10,12 @@ import "./assets/scss/black-dashboard-react.scss";
 import "assets/demo/demo.css";
 import "assets/css/nucleo-icons.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import ThemeContextWrapper from "./components/ThemeWrapper/ThemeWrapper";
+// import ThemeContextWrapper from "./components/ThemeWrapper/ThemeWrapper";
 import BackgroundColorWrapper from "./components/BackgroundColorWrapper/BackgroundColorWrapper";
 import { Provider } from "react-redux";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import ThemeContextWrapper from "components/ThemeWrapper/ThemeWrapper";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 Modal.setAppElement('#root');
 root.render(

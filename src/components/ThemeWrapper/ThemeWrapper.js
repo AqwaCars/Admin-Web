@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ThemeContext, themes } from "contexts/ThemeContext";
 
-export default function ThemeContextWrapper(props) {
+ function ThemeContextWrapper(props) {
   const [theme, setTheme] = useState(themes.light);
 
   function changeTheme(theme) {
@@ -13,7 +13,6 @@ export default function ThemeContextWrapper(props) {
       case themes.light:
         document.body.classList.add("white-content");
         break;
-      case themes.light:
       default:
         document.body.classList.remove("white-content");
         break;
@@ -26,3 +25,4 @@ export default function ThemeContextWrapper(props) {
     </ThemeContext.Provider>
   );
 }
+export default ThemeContextWrapper

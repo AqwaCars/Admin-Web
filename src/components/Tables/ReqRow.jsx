@@ -1,5 +1,5 @@
 // import { getAllRequests } from "@/Redux/dachboardAdmin";
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "../../assets/css/nucleo-icons.css";
 import { getBookedDates } from "../../Redux/adminSlice";
@@ -9,7 +9,7 @@ const ReqRow = ({setDate, request, setCar,openModal }) => {
   const carBookedPeriods = useSelector(CarBookedPeriods)
   
   return (
-    <tr res hover onClick={async()=>{
+    <tr res="true" hover="true" onClick={async()=>{
       setCar(request)
       await dispatch(getBookedDates(request.id))
       openModal();

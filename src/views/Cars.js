@@ -1,7 +1,4 @@
-import { cancelRent, getAllRequests, selectAdmin, selectStaticAllCars, updateCar } from "../Redux/adminSlice";
-import { selectLoadingStatus } from "../Redux/adminSlice";
-import { selectAllRequests } from "../Redux/adminSlice";
-import { selectLoading } from "../Redux/adminSlice";
+import { cancelRent, selectAdmin, selectStaticAllCars, updateCar } from "../Redux/adminSlice";
 import { getLimitedCars } from "../Redux/adminSlice";
 import "../assets/css/addNewEntities.css"
 import "../assets/css/TableList.css"
@@ -15,19 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { format } from "date-fns"
-// reactstrap components
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  Table,
-  Row,
-  Col,
-  Button,
-  ButtonToolbar
-} from "reactstrap";
+import { Row, Col, Card, CardHeader, CardTitle, Button, CardBody, Table } from 'reactstrap';
 import { getAllCars } from "../Redux/adminSlice";
 import Select from "react-select";
 import { addBookedDate } from "../Redux/adminSlice";
@@ -177,7 +162,7 @@ function Cars() {
   const [refresh, setRefresh] = useState(false)
   const [car, setCar] = useState({})
 
-  console.log("car is in tableList", car);
+  // console.log("car is in tableList", car);
   function openModal() {
     setIsOpen(true);
   }
@@ -215,8 +200,8 @@ function Cars() {
         // const staticAllCars = response?.data.map(car => /* mapping logic */);
         if (response?.meta?.requestStatus) {
           await setMappedCars(response.payload);
-          console.log("yes mapped cars",await mappedCars);
-        }else{
+          console.log("yes mapped cars", await mappedCars);
+        } else {
           console.log("no mapped cars");
         }
         // Update your state with the mapped cars
@@ -277,7 +262,7 @@ function Cars() {
     menu: (provied, state) => ({
       ...provied,
       background: "#fff",
-      width:"25rem"
+      width: "25rem"
 
     }),
     control: (provided, state) => ({
@@ -343,22 +328,22 @@ function Cars() {
                 <CardTitle ><Button style={{
                   // fontSize: "1.2rem"
                 }}>List Of All Affiliated Cars</Button></CardTitle>
-                  <Select
-                    options={searchOptions}
-                    filterOption={(option, input) => input.length >= 1 && option.label.toLowerCase().includes(input.toLowerCase())}
-                    value={null}
-                    components={{
-                      DropdownIndicator: () => null,
-                      IndicatorSeparator: () => null
-                    }}
-                    styles={searchCustomStyles}
-                    placeholder="find a specific User..."
-                    onInputChange={handleInputChange}
+                <Select
+                  options={searchOptions}
+                  filterOption={(option, input) => input.length >= 1 && option.label.toLowerCase().includes(input.toLowerCase())}
+                  value={null}
+                  components={{
+                    DropdownIndicator: () => null,
+                    IndicatorSeparator: () => null
+                  }}
+                  styles={searchCustomStyles}
+                  placeholder="find a specific User..."
+                  onInputChange={handleInputChange}
 
-                  // onChange={handleChange}
+                  // onChange={handleChange}  
                   onBlur={handleBlur}
                   menuIsOpen={menuIsOpen}
-                  />
+                />
               </CardHeader>
               <CardBody style={{ overflowX: 'auto', width: '100%' }}>
                 <Table striped responsive style={{
@@ -384,11 +369,19 @@ function Cars() {
                     </tr>
                   </thead>
                   <tbody>
-                    {Admin.clearance === "Level1" ? mappedCars.filter((car) => car.Owner === Admin.Name) : mappedCars?.map((request, i) => {
-                      return (
-                        <ReqRow setDate={setDate} key={i} setRefresh={setRefresh} request={request} handlePapers={handlePapers} openModal={openModal} openLocationInGoogleMaps={openLocationInGoogleMaps} setCar={setCar} />
-                      );
-                    })}
+                    {Admin.clearance === "Level1" ?
+                      mappedCars.filter((car) => car.Owner === Admin.Name).map((filteredCar, index) => {
+                        return (
+                          <ReqRow setDate={setDate} key={index} setRefresh={setRefresh} request={filteredCar} handlePapers={handlePapers} openModal={openModal} openLocationInGoogleMaps={openLocationInGoogleMaps} setCar={setCar} />
+                        );
+                      }) :
+                      mappedCars?.map((request, i) => {
+                        return (
+                          <ReqRow setDate={setDate} key={i} setRefresh={setRefresh} request={request} handlePapers={handlePapers} openModal={openModal} openLocationInGoogleMaps={openLocationInGoogleMaps} setCar={setCar} />
+                        );
+                      })
+                    }
+
                   </tbody>
                 </Table>
               </CardBody>

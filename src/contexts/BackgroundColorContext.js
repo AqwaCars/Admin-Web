@@ -1,12 +1,15 @@
 import { createContext } from "react";
 
-export const backgroundColors = {
+const backgroundColors = {
   primary: "primary",
-  blue: "red",
+  blue: "blue",
   green: "green",
 };
 
-export const BackgroundColorContext = createContext({
-  color: backgroundColors.blue,
+const BackgroundColorContext = createContext({
+  color: backgroundColors.blue, // This is fine if you specifically want to start with "blue"
   changeColor: (color) => {},
 });
+
+// Correctly export both backgroundColors and BackgroundColorContext
+export { backgroundColors, BackgroundColorContext };

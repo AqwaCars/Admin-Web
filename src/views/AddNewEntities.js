@@ -1,15 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Row, Col, Card, CardHeader, CardBody, Button, ListGroup, ListGroupItem } from 'reactstrap';
 
-import {
-  Card,
-  CardBody,
-  Row,
-  Col,
-  CardHeader,
-  Button,
-  ListGroupItem,
-  ListGroup,
-} from "reactstrap";
 import { Audio, DNA } from 'react-loader-spinner'
 import "../assets/css/addNewEntities.css"
 import Select from 'react-select'

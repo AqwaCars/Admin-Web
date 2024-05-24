@@ -19,7 +19,9 @@
     "classnames": "2.3.2",
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.11",
+    "jquery": "^3.7.1",
     "perfect-scrollbar": "1.5.5",
+    "popper.js": "^1.16.1",
     "prop-types": "15.8.1",
     "react": "^18.3.1",
     "react-calendar": "^5.0.0",
@@ -64,7 +66,7 @@
   ],
   "optionalDependencies": {
     "eslint-plugin-flowtype": "8.0.3",
-    "reactstrap": "8.10.1"
+    "reactstrap": "^9.2.2"
   },
   "devDependencies": {
     "gulp": "^5.0.0",

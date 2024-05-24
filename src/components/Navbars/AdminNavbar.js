@@ -4,36 +4,16 @@ import React from "react";
 import classNames from "classnames";
 
 // reactstrap components
-import {
-  Button,
-  Collapse,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  Input,
-  InputGroup,
-  NavbarBrand,
-  Navbar,
-  NavLink,
-  Nav,
-  Container,
-  Modal,
-  NavbarToggler,
-  ModalHeader,
-} from "reactstrap";
-import { selectLoggedIn } from "../../Redux/adminSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { Navbar, Container, NavbarToggler, NavbarBrand, Collapse, Nav, UncontrolledDropdown, DropdownToggle, DropdownMenu, NavLink, Modal, ModalHeader, Input,DropdownItem } from 'reactstrap';
+
+import { useDispatch } from "react-redux";
 import { logout } from "../../Redux/adminSlice";
-import { useNavigate } from "react-router-dom";
 
 function AdminNavbar(props) {
   const dispatch=useDispatch()
   const [collapseOpen, setcollapseOpen] = React.useState(false);
   const [modalSearch, setmodalSearch] = React.useState(false);
   const [color, setcolor] = React.useState("navbar-transparent");
-  const logged = useSelector(selectLoggedIn)
-  const navigate=useNavigate()
   React.useEffect(() => {
     window.addEventListener("resize", updateColor);
     // Specify how to clean up after this effect:
@@ -153,7 +133,7 @@ function AdminNavbar(props) {
                   <b className="caret d-none d-lg-block d-xl-block" />
                   <p className="d-lg-none">Log out</p>
                 </DropdownToggle>
-                <DropdownMenu className="dropdown-navbar" right tag="ul">
+                <DropdownMenu className="dropdown-navbar" end tag="ul">
                   {/* <NavLink tag="li">
                     <DropdownItem className="nav-item" onClick={()=>{
                       navigate("/admin/user-profile")

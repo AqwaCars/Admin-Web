@@ -12,7 +12,7 @@ import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 import routes from "routes.js";
 
 import logo from "assets/img/logo-white.png";
-import { BackgroundColorContext } from "contexts/BackgroundColorContext";
+// import { BackgroundColorContext } from "contexts/BackgroundColorContext";
 import { useDispatch, useSelector } from "react-redux";
 import { selectLoggedIn } from "../../Redux/adminSlice";
 import { setLoggedIn } from "../../Redux/adminSlice";
@@ -24,6 +24,8 @@ import { getAllCars } from "../../Redux/adminSlice";
 import { getApprovedServices } from "../../Redux/adminSlice";
 import { getPendingServices } from "../../Redux/adminSlice";
 import { getRejectedServices } from "../../Redux/adminSlice";
+import { BackgroundColorContext } from "contexts/BackgroundColorContext";
+
 
 var ps;
 
@@ -73,7 +75,7 @@ function Admin(props) {
     }
     return function cleanup() {
       if (navigator.platform.indexOf("Win") > -1) {
-        // ps.destroy();
+        ps.destroy();
         document.documentElement.classList.add("perfect-scrollbar-off");
         document.documentElement.classList.remove("perfect-scrollbar-on");
       }

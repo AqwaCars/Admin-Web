@@ -8,17 +8,8 @@ import ReqRow from "components/Tables/ReqRow";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-// reactstrap components
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  Table,
-  Row,
-  Col,
-  Button,
-} from "reactstrap";
+import { Row, Col, Card, CardHeader, Button, CardBody, Table } from 'reactstrap';
+
 
 function Requests() {
   const loadingStatus = useSelector(selectLoadingStatus)
