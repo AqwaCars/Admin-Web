@@ -8,6 +8,7 @@ const initialState = {
     allUsers: [],
     staticAllUsers: [],
     allCars: [],
+    staticAllCars: [],
     limitedCars: [],
     requests: [],
     TempoRequest: {},
@@ -449,6 +450,7 @@ export const adminSlicer = createSlice({
         builder.addCase(getAllCars.fulfilled, (state, action) => {
             state.loadingStatus.getAllCars = false;
             state.allCars = action.payload;
+            state.staticAllCars = action.payload;
         });
         builder.addCase(getAllCars.rejected, (state, action) => {
             state.loadingStatus.getAllCars = false;
@@ -639,6 +641,7 @@ export const selectApproved = (state) => state.Admin.approvedRental;
 export const selectPending = (state) => state.Admin.PendingRental;
 export const selectRejected = (state) => state.Admin.RejectedRental;
 export const selectAllCars = (state) => state.Admin.allCars;
+export const selectStaticAllCars = (state) => state.Admin.staticAllCars;
 export const LimitedCars = (state) => state.Admin.limitedCars;
 export const LimitedCompanies = (state) => state.Admin.limitedCompanies;
 export const selectReviews = (state) => state.Admin.reviews;

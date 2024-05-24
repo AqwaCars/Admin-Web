@@ -37,7 +37,7 @@ function Sidebar(props) {
         suppressScrollY: false,
       });
       return () => {
-        ps.destroy();
+        // ps.destroy();
       };
     }
   }, []);
