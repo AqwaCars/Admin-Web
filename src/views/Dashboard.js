@@ -10,46 +10,35 @@ import { Row, Col, Card, CardHeader, CardTitle, CardBody, ButtonGroup, Button, T
 // core components
 import { chartExample1, chartExample2, chartExample3, chartExample4 } from '../variables/charts';
 
-import { useDispatch, useSelector } from "react-redux";
+import {
+  useSelector
+  //  useDispatch
+} from "react-redux";
 import { selectAdmin, selectAllUsers } from "../Redux/adminSlice";
-import { getAllUsers } from "../Redux/adminSlice";
-import { getApprovedServices } from "../Redux/adminSlice";
 import { selectApproved } from "../Redux/adminSlice";
-import { getPendingServices } from "../Redux/adminSlice";
-import { getRejectedServices } from "../Redux/adminSlice";
-import { getAllCars } from "../Redux/adminSlice";
-import { allCars } from "../Redux/adminSlice";
 import { selectAllCars } from "../Redux/adminSlice";
 import { selectPending } from "../Redux/adminSlice";
 import { selectRejected } from "../Redux/adminSlice";
-import { selectForeignUser } from "../Redux/adminSlice";
-import { getUserById } from "../Redux/adminSlice";
-import { selectLoggedIn } from "../Redux/adminSlice";
-import { getData } from "../Redux/adminSlice";
+
 import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const navigate = useNavigate();
   const [Loading, setLoading] = useState(true);
   const Admin = useSelector(selectAdmin)
-  const logged = useSelector(selectLoggedIn)
-  const foreignUser = useSelector(selectForeignUser)
   const rentalHistory = useSelector(selectApproved)?.historyData
   const pending = useSelector(selectPending)?.historyData
   const rejected = useSelector(selectRejected)?.historyData
-  const loading = useSelector((state) => state.Admin.loading);
   const users = useSelector(selectAllUsers)
   const allUsers = users.filter((user) => user.type === "user")
   const allCompanies = users.filter((user) => user.type === "company")
   const allCars = useSelector(selectAllCars)
-  const [refresh, setRefresh] = useState(false);
   const [bigChartData, setbigChartData] = React.useState("data1");
-  // const [userData, setUserData] = useState({})
   const setBgChartData = (name) => {
     setbigChartData(name);
   };
   const [startIndexCar, setStartIndexCar] = useState(0);
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   const handleUpClickCar = () => {
     if (startIndexCar > 0) {
       setStartIndexCar(startIndexCar - 10);
@@ -73,28 +62,20 @@ function Dashboard() {
       setStartIndex(startIndex + 10);
     }
   }
-  const getUserData = async (u) => {
-    try {
-      await dispatch(getUserById(u.UserId))
-      // setUserData(foreignUser)
-    } catch (error) {
-      console.error(error);
-    }
-  }
   useEffect(() => {
     const handleNavigation = () => {
       if (Admin.clearance === "Level1") {
         navigate(-1); // Navigate back to the previous page
       }
-      if (Admin.clearance === "Level1"||Admin.clearance === "Level2") {
+      if (Admin.clearance === "Level1" || Admin.clearance === "Level2") {
         navigate("/admin/Cars"); // Navigate back to the previous page
       }
     };
 
     handleNavigation();
-    setTimeout(()=>{
+    setTimeout(() => {
       setLoading(false)
-    },1000)
+    }, 1000)
   }, [Admin, navigate]);
 
   return (

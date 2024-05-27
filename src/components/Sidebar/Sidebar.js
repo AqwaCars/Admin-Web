@@ -6,30 +6,33 @@ import PerfectScrollbar from "perfect-scrollbar";
 // import { Nav } from "reactstrap";
 import { BackgroundColorContext } from "contexts/BackgroundColorContext";
 import "../../assets/css/sideBar.css"
-import { useDispatch, useSelector } from "react-redux";
-import { selectAdmin, selectLoggedIn } from "../../Redux/adminSlice";
-import { setLoggedIn } from "../../Redux/adminSlice";
+import { useSelector } from "react-redux";
+import {
+  selectAdmin,
+  //  selectLoggedIn
+} from "../../Redux/adminSlice";
+// import { setLoggedIn } from "../../Redux/adminSlice";
 import { Nav } from 'reactstrap';
 
 function Sidebar(props) {
   const Admin = useSelector(selectAdmin)
-  const logged = useSelector(selectLoggedIn)
+  // const logged = useSelector(selectLoggedIn)
   const location = useLocation();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const sidebarRef = useRef(null);
   const activeRoute = (routeName) => {
     return location.pathname === routeName ? "active" : "";
   };
-  const checkLog = () => {
-    const token = localStorage.getItem("Token");
-    if (token) {
-      dispatch(setLoggedIn(true))
-      console.log("jihed token accepted", token);
-    } else {
-      console.log("jihed token none", token);
-      // dispatch(setLoggedIn(false))
-    }
-  }
+  // const checkLog = () => {
+  //   const token = localStorage.getItem("Token");
+  //   if (token) {
+  //     dispatch(setLoggedIn(true))
+  //     console.log("jihed token accepted", token);
+  //   } else {
+  //     console.log("jihed token none", token);
+  //     // dispatch(setLoggedIn(false))
+  //   }
+  // }
   useEffect(() => {
     // checkLog()
     if (navigator.platform.indexOf("Win") > -1) {
@@ -42,9 +45,9 @@ function Sidebar(props) {
       };
     }
   }, []);
-  const linkOnClick = () => {
-    document.documentElement.classList.remove("nav-open");
-  };
+  // const linkOnClick = () => {
+  //   document.documentElement.classList.remove("nav-open");
+  // };
   const { routes, rtlActive, logo } = props;
   let logoImg = null;
   let logoText = null;
@@ -52,8 +55,10 @@ function Sidebar(props) {
     if (logo.outterLink !== undefined) {
       logoImg = (
         <a
+          href="https://www.tiktok.com/@aqwa.cars"
           className="simple-text logo-mini"
           target="_blank"
+          rel="noreferrer noopener"
           onClick={props.toggleSidebar}
         >
           {/* <div className="logo-img"> */}
@@ -63,7 +68,9 @@ function Sidebar(props) {
       );
       logoText = (
         <a
+          href="https://www.tiktok.com/@aqwa.cars"
           className="logo-text"
+          rel="noreferrer noopener"
           // className="simple-text logo-normal"
           style={{
             // maringTop:"2rem"
@@ -128,9 +135,7 @@ function Sidebar(props) {
                     }
                     key={key}
                   >
-                    {/* {console.log(Admin.clearance)} */}
-                    {
-                      // Check if the user has Level2 clearance and meets additional conditions
+                    {localStorage.getItem("Token") ? (
                       (Admin?.clearance === "Level1" &&
                         (prop.name === "Dashboard" ||
                           prop.name === "User Managements" ||
@@ -139,7 +144,7 @@ function Sidebar(props) {
                         null :
                         // Check if the user has Level1 clearance and meets additional conditions
                         (Admin?.clearance === "Level2" &&
-                          (prop.name === "Dashboard" )) ?
+                          (prop.name === "Dashboard")) ?
                           null :
                           // Default case for all other users or conditions
                           <NavLink
@@ -154,7 +159,7 @@ function Sidebar(props) {
                             <i className={prop.icon} />
                             <p>{rtlActive ? prop.rtlName : prop.name}</p>
                           </NavLink>
-                    }
+                    ) : null}
 
                   </li>
                 );

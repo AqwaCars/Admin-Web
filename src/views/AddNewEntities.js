@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Row, Col, Card, CardHeader, CardBody, Button, ListGroup, ListGroupItem } from 'reactstrap';
 
-import { Audio, DNA } from 'react-loader-spinner'
+import {  DNA } from 'react-loader-spinner'
 import "../assets/css/addNewEntities.css"
 import Select from 'react-select'
 import "../assets/css/customUpload.css"
@@ -249,7 +249,10 @@ const AddNewEntities = () => {
     };
   }, [modalIsOpen2]);
   useEffect(() => {
-    console.log("reload");
+    // console.log("reload");
+    // useEffect(()=>{
+    dispatch(getAllCars())
+    // },[])
   }, [cloudwait])
   // console.log(`${process.env.EXPO_PUBLIC_SERVER_IP}`)
   useEffect(() => {
@@ -284,8 +287,8 @@ const AddNewEntities = () => {
       dispatch(getLimitedCompanies());
     }
   }, [loading, dispatch]);
-  console.log(companies);
-  console.log(cars);
+  // console.log(companies);
+  // console.log(cars);
   const fileInputRef = useRef(null);
   const [imageSelected, setImageSelected] = useState(false);
   const handleSubmit = async () => {
@@ -443,7 +446,7 @@ const AddNewEntities = () => {
                   <Button onClick={() => {
                     if (Admin.clearance === "Level3") {
                       openModal2()
-                    }else{
+                    } else {
                       toast("NOT ALLOWED", {
                         position: "top-right",
                         autoClose: 2000,
@@ -456,7 +459,7 @@ const AddNewEntities = () => {
                         icon: true,
                         bodyClassName: "custom-toast-body",
                       });
-                      
+
                     }
                   }} style={{
                     display: "flex",
@@ -509,7 +512,7 @@ const AddNewEntities = () => {
         isOpen={modalIsOpen}
         // onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
-        // onAfterClose={() => setSelectedImage("")}
+        onAfterClose={() => setShownCarImage("")}
         style={customStyles}
         contentLabel="Example Modal"
       >
@@ -523,7 +526,7 @@ const AddNewEntities = () => {
             {shownCarImage ? (
               <>
                 {/* {console.log(carDetails.media)} */}
-                <img src={shownCarImage} alt="Selected" style={{ maxWidth: '100%', maxHeight: "20rem", }} />
+                <img  key={shownCarImage}  src={shownCarImage} alt="Selected" style={{ maxWidth: '100%', maxHeight: "20rem", }} />
                 {/* <div className="image-preview-text">Image selected</div> */}
               </>
             ) : (
@@ -544,7 +547,7 @@ const AddNewEntities = () => {
                 if (event.target.files && event.target.files.length > 0) {
                   setSelectedFile(event.target.files[0]);; // Update the state with the selected file
                   setShownCarImage(URL.createObjectURL(event.target.files[0])); // Create a blob URL for the selected file and pass it to handleCarChange
-                  setShownCarImage(URL.createObjectURL(event.target.files[0])); // Create a blob URL for the selected file and pass it to handleCarChange
+            
                 }
               }}
             />
@@ -671,9 +674,10 @@ const AddNewEntities = () => {
                 <Select
                   className="select-box"
                   options={[
-                    { value: 'Economic Class', label: 'Economic Class' },
-                    { value: 'Luxery Car', label: 'Luxery Car' },
-                    { value: 'Sports', label: 'Sports' },
+                    { value: 'Economy (Polo etc.) ', label: 'Economy (Polo etc.)' },
+                    { value: 'Premium (Mercedes C-Klasse, Audi A3)', label: 'Premium (Mercedes C-Klasse, Audi A3)' },
+                    { value: 'Compact (i20, Golf, Ibiza)', label: 'Compact (i20, Golf, Ibiza)' },
+                    { value: 'SUV', label: 'SUV' },
                   ]}
                   onChange={(selectedOption) => handleCarChange("Category", selectedOption.value)}
                   menuportaltarget={document.body}

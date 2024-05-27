@@ -1,9 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { getAllRequests, selectAdmin } from "../Redux/adminSlice";
-import { selectLoadingStatus } from "../Redux/adminSlice";
+import {  selectAdmin } from "../Redux/adminSlice";
 import { selectAllRequests } from "../Redux/adminSlice";
-import { selectLoading } from "../Redux/adminSlice";
-import { selectAllUsers } from "../Redux/adminSlice";
 import ReqRow from "components/Tables/ReqRow";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,8 +9,6 @@ import { Row, Col, Card, CardHeader, Button, CardBody, Table } from 'reactstrap'
 
 
 function Requests() {
-  const loadingStatus = useSelector(selectLoadingStatus)
-  const Requests = useSelector(selectAllRequests)
   const [refresh, setRefresh] = useState(false)
   const dispatch = useDispatch()
   const handlePapers = (papers) => {
@@ -29,9 +24,6 @@ function Requests() {
       console.error("Invalid location data.");
     }
   }
-  // useEffect(() => {
-  //   dispatch(getAllRequests())
-  // }, [])
   const allRequests = useSelector(selectAllRequests)
   const navigate = useNavigate();
   const Admin = useSelector(selectAdmin)
@@ -43,7 +35,7 @@ function Requests() {
     };
 
     handleNavigation();
-  }, [Admin, navigate]);
+  }, [Admin, navigate,refresh]);
 
   return (
     <>

@@ -19,12 +19,11 @@ import { getAgencyCars } from "../Redux/adminSlice";
 import { useNavigate } from "react-router-dom";
 import { Row, Col, Card, CardHeader, CardBody } from 'reactstrap';
 
-function User_Managements() {
+function UserManagements() {
   const Admin = useSelector(selectAdmin)
   const [selectedOption, setSelectedOptions] = useState({ value: 'all', label: 'Select Filter ...' });
   const AgencyCars = useSelector(agencyCars)
   const [selectedSortOption, setSelectedSortOptions] = useState({ value: "Select Sort...", label: "Select Sort ..." });
-  const [searchValue, setSearchValue] = useState("")
   const options = [
     { value: 'all', label: 'All Users' },
     { value: 'clients', label: 'Clients Only' },
@@ -375,7 +374,7 @@ function User_Managements() {
                                   showCancelButton: true,
                                   focusConfirm: false,
                                   confirmButtonText: `
-                                 <i className="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
+                                 <i class="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
                                 `,
                                   confirmButtonAriaLabel: "Thumbs up, great!",
                                   customClass: {
@@ -388,7 +387,7 @@ function User_Managements() {
                                     cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
                                   },
                                   cancelButtonText: `
-                                 <i className="fa fa-close"></i>
+                                 <i class="fa fa-close"></i>
                                 `,
                                 }).then((result) => {
                                   if (result.isConfirmed) {
@@ -487,7 +486,7 @@ function User_Managements() {
                                   showCancelButton: true,
                                   focusConfirm: false,
                                   confirmButtonText: `
-                                 <i className="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
+                                 <i class="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
                                 `,
                                   confirmButtonAriaLabel: "Thumbs up, great!",
                                   customClass: {
@@ -497,7 +496,7 @@ function User_Managements() {
                                     cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
                                   },
                                   cancelButtonText: `
-                                 <i className="fa fa-close"></i>
+                                 <i class="fa fa-close"></i>
                                 `,
                                   // cancelButtonAriaLabel: "Thumbs down"
                                 }).then((result) => {
@@ -590,7 +589,7 @@ function User_Managements() {
                                     showCancelButton: true,
                                     focusConfirm: false,
                                     confirmButtonText: `
-                                   <i className="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
+                                   <i class="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
                                   `,
                                     confirmButtonAriaLabel: "Thumbs up, great!",
                                     customClass: {
@@ -600,7 +599,7 @@ function User_Managements() {
                                       cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
                                     },
                                     cancelButtonText: `
-                                   <i className="fa fa-close"></i>
+                                   <i class="fa fa-close"></i>
                                   `,
                                     // cancelButtonAriaLabel: "Thumbs down"
                                   }).then((result) => {
@@ -695,7 +694,7 @@ function User_Managements() {
                                     showCancelButton: true,
                                     focusConfirm: false,
                                     confirmButtonText: `
-                                   <i className="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
+                                   <i class="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
                                   `,
                                     confirmButtonAriaLabel: "Thumbs up, great!",
                                     customClass: {
@@ -705,7 +704,7 @@ function User_Managements() {
                                       cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
                                     },
                                     cancelButtonText: `
-                                   <i className="fa fa-close"></i>
+                                   <i class="fa fa-close"></i>
                                   `,
                                     // cancelButtonAriaLabel: "Thumbs down"
                                   }).then((result) => {
@@ -797,7 +796,7 @@ function User_Managements() {
                                     showCancelButton: true,
                                     focusConfirm: false,
                                     confirmButtonText: `
-                                   <i className="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
+                                   <i class="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
                                   `,
                                     confirmButtonAriaLabel: "Thumbs up, great!",
                                     customClass: {
@@ -807,7 +806,7 @@ function User_Managements() {
                                       cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
                                     },
                                     cancelButtonText: `
-                                   <i className="fa fa-close"></i>
+                                   <i class="fa fa-close"></i>
                                   `,
                                     // cancelButtonAriaLabel: "Thumbs down"
                                   }).then((result) => {
@@ -900,7 +899,7 @@ function User_Managements() {
                                     showCancelButton: true,
                                     focusConfirm: false,
                                     confirmButtonText: `
-                                   <i className="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
+                                   <i class="fa fa-ban"></i> ${user.isBlocked ? "unBan this User?" : "ban this User?"}
                                   `,
                                     confirmButtonAriaLabel: "Thumbs up, great!",
                                     customClass: {
@@ -910,7 +909,7 @@ function User_Managements() {
                                       cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
                                     },
                                     cancelButtonText: `
-                                   <i className="fa fa-close"></i>
+                                   <i class="fa fa-close"></i>
                                   `,
                                     // cancelButtonAriaLabel: "Thumbs down"
                                   }).then((result) => {
@@ -1212,4 +1211,4 @@ function User_Managements() {
   );
 }
 
-export default User_Managements;
+export default UserManagements;

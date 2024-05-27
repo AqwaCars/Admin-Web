@@ -1,15 +1,15 @@
 
 import Dashboard from "views/Dashboard.js";
-import Map from "views/Map.js";
-import Notifications from "views/Notifications.js";
-import Rtl from "views/Rtl.js";
-import Typography from "views/Typography.js";
-import UserProfile from "views/UserProfile.js";
+// import Map from "views/Map.js";
+// import Notifications from "views/Notifications.js";
+// import Rtl from "views/Rtl.js";
+// import Typography from "views/Typography.js";
+// import UserProfile from "views/UserProfile.js";
 import LoginPage from "views/Login";
 import AddNewEntities from "views/AddNewEntities";
 import Requests from "views/Requests";
 import Cars from "views/Cars";
-import User_Managements from "views/User_Managements";
+import UserManagements from "views/UserManagements";
 
 var routes = [
   {
@@ -17,7 +17,7 @@ var routes = [
     name: "User Managements",
     rtlName: "الرموز",
     icon: "tim-icons icon-badge",
-    component: <User_Managements />,
+    component: <UserManagements />,
     layout: "/admin",
   },
   {

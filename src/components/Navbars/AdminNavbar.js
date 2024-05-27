@@ -130,7 +130,9 @@ function AdminNavbar(props) {
                   <div className="photo">
                     <img alt="..." src={require("assets/img/anime3.png")} />
                   </div>
-                  <b className="caret d-none d-lg-block d-xl-block" />
+                  <b style={{
+                    height:"10rem"
+                  }} className="caret d-none d-lg-block d-xl-block" />
                   <p className="d-lg-none">Log out</p>
                 </DropdownToggle>
                 <DropdownMenu className="dropdown-navbar" end tag="ul">

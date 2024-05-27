@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Route, Routes, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
 
@@ -14,16 +14,16 @@ import routes from "routes.js";
 import logo from "assets/img/logo-white.png";
 // import { BackgroundColorContext } from "contexts/BackgroundColorContext";
 import { useDispatch, useSelector } from "react-redux";
-import { selectLoggedIn } from "../../Redux/adminSlice";
-import { setLoggedIn } from "../../Redux/adminSlice";
+// import { selectLoggedIn } from "../../Redux/adminSlice";
+// import { setLoggedIn } from "../../Redux/adminSlice";
 import { selectAdmin } from "../../Redux/adminSlice";
 import { getData } from "../../Redux/adminSlice";
 import { selectLoadingStatus } from "../../Redux/adminSlice";
 import { getAllUsers } from "../../Redux/adminSlice";
 import { getAllCars } from "../../Redux/adminSlice";
-import { getApprovedServices } from "../../Redux/adminSlice";
-import { getPendingServices } from "../../Redux/adminSlice";
-import { getRejectedServices } from "../../Redux/adminSlice";
+// import { getApprovedServices } from "../../Redux/adminSlice";
+// import { getPendingServices } from "../../Redux/adminSlice";
+// import { getRejectedServices } from "../../Redux/adminSlice";
 import { BackgroundColorContext } from "contexts/BackgroundColorContext";
 
 
@@ -96,18 +96,23 @@ function Admin(props) {
   }, [location]);
   useEffect(() => {
     const token = localStorage.getItem("Token");
-    if (location.pathname !== "/admin/login" && !token && Object.values(loadingStatus).every(status => status === false)) {
+  
+    // Assuming Admin.clearance and loadingStatus are defined in your component scope
+    // and you have a way to ensure they don't cause unnecessary re-renders
+  
+    if (location.pathname!== "/admin/login" &&!token && Object.values(loadingStatus).every(status => status === false)) {
       navigate("/admin/login");
     }
-
-    if (location.pathname === "/admin/login"&&Admin.clearance==="Level3" && token && Object.values(loadingStatus).every(status => status === false)) {
+  
+    if (location.pathname === "/admin/login" && Admin.clearance === "Level3" && token && Object.values(loadingStatus).every(status => status === false)) {
       navigate("/admin/Dashboard");
     }
-    if (location.pathname === "/admin/login" && Admin.clearance === "Level1" || Admin.clearance === "Level2" && token && Object.values(loadingStatus).every(status => status === false)) {
+  
+    if ((location.pathname === "/admin/login" && (Admin.clearance === "Level1" || Admin.clearance === "Level2")) && token && Object.values(loadingStatus).every(status => status === false)) {
       navigate("/admin/Cars");
     }
-
-  }, [token]);     // this function opens and closes the sidebar on small devices
+  }, [token, location.pathname,navigate,loadingStatus]); // Adjusted dependency array
+       // this function opens and closes the sidebar on small devices
   const toggleSidebar = () => {
     document.documentElement.classList.toggle("nav-open");
     setsidebarOpened(!sidebarOpened);
@@ -139,7 +144,8 @@ function Admin(props) {
     if (!Object.keys(adminData ? adminData : {})?.length && token) {
       const loadData = async () => {
         try {
-          const res = await dispatch(getData(tk));
+          // const res =
+           await dispatch(getData(tk));
           // console.log(res.payload);
           dispatch(getAllUsers());
           dispatch(getAllCars());

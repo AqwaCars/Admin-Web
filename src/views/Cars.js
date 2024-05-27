@@ -73,7 +73,7 @@ function Cars() {
     key: 'selection',
   })
   const usersData = useSelector(selectAllUsers)
-  const users = usersData.filter((user) => {
+  const users = usersData?.filter((user) => {
     return user.type === "user"
   })
   const [carRenter, setCarRenter] = useState({})
@@ -188,34 +188,35 @@ function Cars() {
     }
   }, [load, cars])
 
+  const fetchAndSetCars = async () => {
+    try {
+      // Await the dispatch to complete
+      const response = await dispatch(getAllCars());
+      console.log(await response);
+      // Assuming response.data contains the cars data you want to map
+      // const staticAllCars = response?.data.map(car => /* mapping logic */);
+      if (response?.meta?.requestStatus) {
+        await setMappedCars(response.payload);
+        console.log("yes mapped cars", await mappedCars);
+      } else {
+        console.log("no mapped cars");
+      }
+      // Update your state with the mapped cars
+    } catch (error) {
+      // Handle any errors that occurred during the dispatch
+      console.error("Error fetching cars:", error);
+    }
+  }
   useEffect(() => {
     console.log(carDates);
     // Define an async function to handle the dispatch and state update
-    const fetchAndSetCars = async () => {
-      try {
-        // Await the dispatch to complete
-        const response = await dispatch(getAllCars());
-        console.log(await response);
-        // Assuming response.data contains the cars data you want to map
-        // const staticAllCars = response?.data.map(car => /* mapping logic */);
-        if (response?.meta?.requestStatus) {
-          await setMappedCars(response.payload);
-          console.log("yes mapped cars", await mappedCars);
-        } else {
-          console.log("no mapped cars");
-        }
-        // Update your state with the mapped cars
-      } catch (error) {
-        // Handle any errors that occurred during the dispatch
-        console.error("Error fetching cars:", error);
-      }
-    }
 
     // Call the async function
     fetchAndSetCars();
 
     console.log(cars);
   }, [load])
+
   const selectedYearOption = yearOptions.find(option => option.value === car.Year);
   const selectedTypeOption = [
     { value: 'Automatic', label: 'Automatic' },
@@ -308,7 +309,7 @@ function Cars() {
   const handleInputChange = (inputValue, { action }, filteredOptions) => {
     if (action === 'input-change' && inputValue.length >= 0) {
       setMenuIsOpen(true);
-      const filtered = staticAllCars.filter((e) => {
+      const filtered = staticAllCars?.filter((e) => {
         return ((e.brand).toLowerCase()).includes(inputValue.toLowerCase())
       })
       filtered[0] ? setMappedCars(filtered) : console.log(filtered);
@@ -370,7 +371,7 @@ function Cars() {
                   </thead>
                   <tbody>
                     {Admin.clearance === "Level1" ?
-                      mappedCars.filter((car) => car.Owner === Admin.Name).map((filteredCar, index) => {
+                      mappedCars?.filter((car) => car.Owner === Admin.Name)?.map((filteredCar, index) => {
                         return (
                           <ReqRow setDate={setDate} key={index} setRefresh={setRefresh} request={filteredCar} handlePapers={handlePapers} openModal={openModal} openLocationInGoogleMaps={openLocationInGoogleMaps} setCar={setCar} />
                         );
