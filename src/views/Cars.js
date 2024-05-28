@@ -9,6 +9,7 @@ import ReqRow from "components/Tables/ReqRow";
 import Swal from 'sweetalert2'
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Plus from "../assets/Svg/plus.js"
 import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
@@ -35,6 +36,7 @@ const customStyles = {
     right: 'auto',
     borderWidth: ".15rem",
     // borderStyle: "groove",
+    borderRadius: "1rem",
     borderColor: "#30416B",
     bottom: 'auto',
     marginRight: '-50%',
@@ -370,8 +372,8 @@ function Cars() {
                     </tr>
                   </thead>
                   <tbody>
-                    {Admin.clearance === "Level1" ?
-                      mappedCars?.filter((car) => car.Owner === Admin.Name)?.map((filteredCar, index) => {
+                    {Admin?.clearance === "Level1" ?
+                      mappedCars?.filter((car) => car.UserId === Admin.Name)?.map((filteredCar, index) => {
                         return (
                           <ReqRow setDate={setDate} key={index} setRefresh={setRefresh} request={filteredCar} handlePapers={handlePapers} openModal={openModal} openLocationInGoogleMaps={openLocationInGoogleMaps} setCar={setCar} />
                         );
@@ -411,26 +413,33 @@ function Cars() {
           <div style={{
             display: "flex",
             flexDirection: "row",
-            borderBottom: ".1rem solid #30416B",
+            // borderBottom: ".1rem solid #30416B",
             padding: "1rem",
             width: "100%",
             height: "30%",
             justifyContent: "space-around",
             // gap: "10rem"
           }}>
-            <img style={{
-              height: "25rem",
-              objectFit: "contain",
-              marginTop: "1rem",
-              // alignSelf:"flex-start",
-              borderRadius: "8%",
-              width: "20rem"
-            }} src={car.media} />
+            <div style={{ borderRadius: "1rem", overflow: "hidden" }}>
+              <img className="Car_details_img"
+                style={{
+                  height: "25rem",
+                  width: "20rem",
+                  objectFit: "contain",
+                  marginTop: "1rem",
+                }}
+                src={car.media}
+              />
+            </div>
+
             <div className="calender_Ctr">
               <Select
                 className="select-box"
                 placeholder="Select The Customer..."
-                options={options}
+                options={[
+                  { label: (<><Plus /> ,Select An Action...</>), value: '' },
+                  ...options
+                ]}
                 onChange={(selectedOption) => setCarRenter(selectedOption.value)}
                 menuPortalTarget={document.body}
 
@@ -453,51 +462,10 @@ function Cars() {
                   minDate={new Date()}
                 />
 
-                <Button onClick={async () =>
-                  Swal.fire({
-                    title: "Are you sure?",
-                    text: "This will make the car unavailable in the selected Date!",
-                    icon: "warning",
-                    showDenyButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes!"
-                  }).then((result) => {
-                    if (result.isConfirmed && Object.values(carRenter).length > 0 && rentalTime && returnTime && date.startDate && date.endDate) {
-                      // Check if the start date and end date are at least one day apart
-                      const startDate = new Date(date.startDate);
-                      const endDate = new Date(date.endDate);
-                      const diffDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-
-                      if (diffDays >= 1) {
-                        handleButtonClick();
-                        Swal.fire('Changes Saved!', '', 'success');
-                      } else {
-                        Swal.fire('The rental period must be at least two days.', '', 'warning');
-                      }
-                    } else if (result.isDenied) {
-                      Swal.fire('Change Discarded.', '', 'info');
-                    } else if (result.isConfirmed && !Object.values(carRenter).length > 0) {
-                      Swal.fire('Please select a user.', '', 'warning');
-                    } else if (result.isConfirmed && (!rentalTime || !returnTime)) {
-                      Swal.fire('Please specify a Time.', '', 'warning');
-                    }
-
-                  })
-                }>{
-                    // `${format(date.startDate, "MMM,dd,yyyy")} to ${format(date.endDate, "MMM,dd,yyyy")}`
-                    !cloudwait ? "Change The Car's Availability Timeline" : <DNA
-                      visible={true}
-                      height="2rem"
-                      width="2rem"
-                      ariaLabel="dna-loading"
-                    // wrapperStyle={{ paddingBottom: '1.5rem' }} // Adjust this value as needed
-                    // wrapperClass="dna-wrapper"
-                    />
-                  }</Button>
               </div>
 
             </div>
+
             <div className="digital-clock-full-height">
               <DigitalClock
                 classes={{
@@ -524,7 +492,49 @@ function Cars() {
             </div>
 
           </div>
-          <div className="Cancellation_ctr">
+          <Button onClick={async () =>
+            Swal.fire({
+              title: "Are you sure?",
+              text: "This will make the car unavailable in the selected Date!",
+              icon: "warning",
+              showDenyButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "Yes!"
+            }).then((result) => {
+              if (result.isConfirmed && Object.values(carRenter).length > 0 && rentalTime && returnTime && date.startDate && date.endDate) {
+                // Check if the start date and end date are at least one day apart
+                const startDate = new Date(date.startDate);
+                const endDate = new Date(date.endDate);
+                const diffDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+
+                if (diffDays >= 1) {
+                  handleButtonClick();
+                  Swal.fire('Changes Saved!', '', 'success');
+                } else {
+                  Swal.fire('The rental period must be at least two days.', '', 'warning');
+                }
+              } else if (result.isDenied) {
+                Swal.fire('Change Discarded.', '', 'info');
+              } else if (result.isConfirmed && !Object.values(carRenter).length > 0) {
+                Swal.fire('Please select a user.', '', 'warning');
+              } else if (result.isConfirmed && (!rentalTime || !returnTime)) {
+                Swal.fire('Please specify a Time.', '', 'warning');
+              }
+
+            })
+          }>{
+              // `${format(date.startDate, "MMM,dd,yyyy")} to ${format(date.endDate, "MMM,dd,yyyy")}`
+              !cloudwait ? "Change The Car's Availability Timeline" : <DNA
+                visible={true}
+                height="2rem"
+                width="2rem"
+                ariaLabel="dna-loading"
+              // wrapperStyle={{ paddingBottom: '1.5rem' }} // Adjust this value as needed
+              // wrapperClass="dna-wrapper"
+              />
+            }</Button>
+          {/* <div className="Cancellation_ctr">
             <header>
               <h1>
                 Rental Cancellation
@@ -585,7 +595,7 @@ function Cars() {
               </div>
 
             </div>
-          </div>
+          </div> */}
           <div className='scrollable-input-container'>
             <div style={{
               fontSize: "1.2rem",
@@ -600,7 +610,7 @@ function Cars() {
                 options={options}
                 placeholder="Cannot Change This Value"
                 isDisabled={true}
-                onChange={(selectedOption) => handleCarChange("Owner", selectedOption.value)}
+                onChange={(selectedOption) => handleCarChange("UserId", selectedOption.value)}
                 menuportaltarget={document.body}
                 styles={{
                   menuPortal: base => ({ ...base, zIndex: 9999 })

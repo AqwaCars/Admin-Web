@@ -28,7 +28,7 @@ const ReqRow = ({setDate, request, setCar,openModal }) => {
       <td>{request.brand}</td>
       <td>{request.price}</td>
       <td>{request.typeOfFuel}</td>
-      <td>{request.Owner}</td>
+      <td>{request.UserId}</td>
       <td>{request.Category}</td>
       <td>{request.Type}</td>
       <td>{request.peopleCount}</td>

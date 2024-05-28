@@ -1,28 +1,36 @@
 .details_btn {
-  position: absolute;
-  right: 10%;
-  top: 10%;
+  /* position: absolute; */
+  right: 5%;
+  top: 5%;
+  /* background-color: red; */
   border-radius: 25%;
-  height: 2rem;
-  width: 2rem;
+  height: 3rem;
+  width: 2.5rem;
+  padding: .5rem;
   border-style: ridge;
   border-color: lightgray;
-  cursor: help;
   align-items: center;
   justify-content: center;
   display: flex;
+  margin-bottom: 0px !important;
   border-width: 0rem; /* Adjusted for visibility */
 }
 
-.details_btn[data-tooltip]:hover::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  background-color: #333;
-  color: #fff;
-  padding: 5px;
-  border-radius: 5px;
-  z-index: 1000;
-  top: 2rem; /* Adjust this value as needed */
+.details_btn:hover {
+  /* content: attr(data-tooltip); */
+  /* position: absolute; */
+  background-color: rgba(0, 0, 0, 0.05);
+  /* color: #fff; */
+  /* padding: 5px; */
+  /* border-radius: 5px; */
+  /* z-index: 1; */
+  /* overflow: hidden; */
+  /* top: 2rem; Adjust this value as needed */
+}
+.usersContainer{
+  display: flex;
+  flex-direction: row;
+  gap: 0rem !important;
 }
 .three_div_container {
   display: flex;
@@ -87,21 +95,35 @@
   border-style: solid;
 }
 .car_img {
-  width: 8rem;
+  width: fit-content;
   height: 8rem;
   /* border-radius: 50%; */
   /* border-width: 0.1rem; */
-  /* border-style: solid; */
-  /* border-radius: 50%; */
+  border-style: solid;
+  padding: .2rem;
+  background-color: rgb(0,0,0,0.1);
+  border-radius: 1rem;
   /* overflow: hidden; */
-  border-right-color:lightgray ;
-  border-right-width:.1rem ;
+  display: flex;
+  justify-content: center;
+  border-color:#30416b ;
+  /* border-right-width:.1rem ; */
   /* padding-right: .4:rem; */
-  border-right-style: solid;
+  /* border-right-style: solid; */
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   margin-right: .8rem;
   margin-left: .8rem;
+}
+.car_img:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover for a 3D effect */
+  border-width: 0.15rem;
+  transform: scale(1); /* Slightly enlarge on hover */
+  /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); Enhance shadow on hover for a 3D effect */
+  background-color: #F5F5F5;
+  /* Optional: Add a CSS animation for a more dynamic effect */
+  animation: hoverEffect 0.5s ease-in-out forwards;
+
 }
 .review_img {
   min-width: 5rem;
@@ -150,6 +172,9 @@
   border-left: #30416b solid 0.1rem;
   border-right: #30416b solid 0.1rem;
   border-radius: 1rem;
+}
+.car_div span:hover{
+  text-decoration: underline ;
 }
 /* .car_div div span :hover { */
   /* Hover effect styling */

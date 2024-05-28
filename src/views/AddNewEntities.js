@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Row, Col, Card, CardHeader, CardBody, Button, ListGroup, ListGroupItem } from 'reactstrap';
 
-import {  DNA } from 'react-loader-spinner'
+import { DNA } from 'react-loader-spinner'
 import "../assets/css/addNewEntities.css"
 import Select from 'react-select'
 import "../assets/css/customUpload.css"
@@ -46,7 +46,11 @@ const customStyles = {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   content: {
+    borderRadius: "1rem",
     top: '50%',
+    
+    overflow:"scroll",
+    padding: "2rem",
     left: '50%',
     right: 'auto',
     borderWidth: ".01rem",
@@ -71,10 +75,12 @@ const customStyles2 = {
   content: {
     top: '50%',
     left: '50%',
+    padding: "2rem",
     right: 'auto',
     borderWidth: ".01rem",
     borderStyle: "groove",
     borderColor: "#30416B",
+    borderRadius: "1rem",
     bottom: 'auto',
     marginRight: '-50%',
     width: "70rem",
@@ -92,7 +98,7 @@ const AddNewEntities = () => {
   const cars = useSelector(LimitedCars)
   const options = companies?.map(company => ({
     label: company.userName, // Display the userName as the label
-    value: company.userName, // Use the id as the value
+    value: company.id, // Use the id as the value
   }));
   // const loadingStatus = useSelector(selectLoadingStatus.getAllCompanies)
   const dispatch = useDispatch()
@@ -105,7 +111,7 @@ const AddNewEntities = () => {
     type: "company"
   })
   const [carDetails, setCarDetails] = useState({
-    Owner: "",
+    UserId: "",
     model: "",
     price: "",
     brand: "",
@@ -304,10 +310,32 @@ const AddNewEntities = () => {
         // Log the response or handle it as needed
 
         carDetails.media = imageUrl
-        await dispatch(addCar(carDetails))
-        await dispatch(getAllCars())
-        setCloudWait(false)
-        closeModal()
+        const response = await dispatch(addCar(carDetails))
+        console.log(response.payload);
+        if (response.payload === undefined) {
+          toast.error("An Error Has Occured")
+          setCloudWait(false)
+        } else {
+          const response2 = await dispatch(getAllCars())
+          console.log(response2.payload);
+          setCloudWait(false)
+          setCarDetails({
+            UserId:"",
+            model: "",
+            price: "",
+            brand: "",
+            Type: "",
+            typeOfFuel: "",
+            Year: "",
+            peopleCount: "",
+            Category: "",
+            DoorNumber: "",
+            Capacity: "",
+          })
+          setShownCarImage(null)
+          setSelectedFile(null)
+          closeModal()
+        }
       } catch (err) {
         console.error("Cloudinary Upload Error:", err);
       }
@@ -334,10 +362,24 @@ const AddNewEntities = () => {
         companyDetails.selfie = imageUrl
         companyDetails.RNE = imageUrl2
         companyDetails.idCard = imageUrl3
-        dispatch(SignUpCompany(companyDetails))
-        dispatch(getAllCompanies())
-        setCloudWait(false)
-        closeModal2()
+        const response = dispatch(SignUpCompany(companyDetails))
+        if (response.payload === undefined) {
+          toast.error("An Error Has Occured")
+        } else {
+          dispatch(getAllCompanies())
+          setCloudWait(false)
+          setCompanyDetails({
+            userName: "",
+            email: "",
+            phoneNumber: "",
+            type: "company"
+          })
+          setShownCompanyImage(null)
+          setSelectedFile(null)
+          setRneFile(null)
+          setIdFile(null)
+          closeModal2()
+        }
       } catch (err) {
         console.error("Cloudinary Upload Error:", err);
       }
@@ -353,7 +395,7 @@ const AddNewEntities = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const handleNavigation = () => {
-      if (Admin.clearance === "Level1") {
+      if (Admin?.clearance === "Level1") {
         navigate(-1); // Navigate back to the previous page
       }
     };
@@ -433,7 +475,7 @@ const AddNewEntities = () => {
                         {/* </div> */}
                         <div>
                           <p style={{ fontSize: '18px', color: '#30416B' }}>{item.model}{item.brand}</p>
-                          <p style={{ fontSize: '14px', color: '#30416B' }}>{item.Owner}</p>
+                          {/* <p style={{ fontSize: '14px', color: '#30416B' }}>{item.Owner}</p> */}
                         </div>
 
                       </ListGroupItem>
@@ -444,7 +486,7 @@ const AddNewEntities = () => {
                 <div className='half'>
                   <div id='Title'>Newly Joined Companies</div>
                   <Button onClick={() => {
-                    if (Admin.clearance === "Level3") {
+                    if (Admin?.clearance === "Level3") {
                       openModal2()
                     } else {
                       toast("NOT ALLOWED", {
@@ -516,17 +558,21 @@ const AddNewEntities = () => {
         style={customStyles}
         contentLabel="Example Modal"
       >
-        <div className="whiteboard-container">
+        {/* <div className="whiteboard-container"> */}
           <button className="image-input-container" style={{
-            backgroundColor: shownCarImage ? "transparent" : "#f3f3f3",
-            // border: "none",
+            backgroundColor: shownCarImage ? "rgb(0,0,0,0.1)" : "rgb(0,0,0,0.1)",
+            borderRadius: "1rem",
             padding: 0,
             cursor: "pointer",
-          }} onClick={() => document.getElementById('imageInput').click()}>
+            borderWidth: shownCarImage ? ".2rem" : "0",
+            borderStyle: shownCarImage ? "dashed" : "solid",
+            borderColor: shownCarImage ? "#30416b" : "transparent",
+          }}
+            onClick={() => document.getElementById('imageInput').click()}>
             {shownCarImage ? (
               <>
                 {/* {console.log(carDetails.media)} */}
-                <img  key={shownCarImage}  src={shownCarImage} alt="Selected" style={{ maxWidth: '100%', maxHeight: "20rem", }} />
+                <img key={shownCarImage} src={shownCarImage} alt="Selected" style={{ maxWidth: '100%', borderRadius: "1rem", maxHeight: "90%", }} />
                 {/* <div className="image-preview-text">Image selected</div> */}
               </>
             ) : (
@@ -547,7 +593,7 @@ const AddNewEntities = () => {
                 if (event.target.files && event.target.files.length > 0) {
                   setSelectedFile(event.target.files[0]);; // Update the state with the selected file
                   setShownCarImage(URL.createObjectURL(event.target.files[0])); // Create a blob URL for the selected file and pass it to handleCarChange
-            
+
                 }
               }}
             />
@@ -566,7 +612,7 @@ const AddNewEntities = () => {
               <Select
                 className="select-box"
                 options={options}
-                onChange={(selectedOption) => handleCarChange("Owner", selectedOption.value)}
+                onChange={(selectedOption) => handleCarChange("UserId", selectedOption.value)}
                 menuportaltarget={document.body}
                 styles={{
                   menuPortal: base => ({ ...base, zIndex: 9999 })
@@ -674,9 +720,9 @@ const AddNewEntities = () => {
                 <Select
                   className="select-box"
                   options={[
-                    { value: 'Economy (Polo etc.) ', label: 'Economy (Polo etc.)' },
-                    { value: 'Premium (Mercedes C-Klasse, Audi A3)', label: 'Premium (Mercedes C-Klasse, Audi A3)' },
-                    { value: 'Compact (i20, Golf, Ibiza)', label: 'Compact (i20, Golf, Ibiza)' },
+                    { value: 'Economy', label: 'Economy (Polo etc.)' },
+                    { value: 'Premium', label: 'Premium (Mercedes C-Klasse, Audi A3)' },
+                    { value: 'Compact', label: 'Compact (i20, Golf, Ibiza)' },
                     { value: 'SUV', label: 'SUV' },
                   ]}
                   onChange={(selectedOption) => handleCarChange("Category", selectedOption.value)}
@@ -767,37 +813,38 @@ const AddNewEntities = () => {
                 />
               </div>
             </div>
-
+              <Button onClick={handleSubmit} className='pressEnter' style={{
+                // color: "grey",
+                // fontSize: "1rem",
+                // paddingTop: "1rem"
+              }}>{
+                  cloudwait ?
+                    <div style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      // backgroundColor: "red"
+                    }}>
+                      <DNA
+                        visible={true}
+                        height="4.5rem"
+                        width="4.5rem"
+                        ariaLabel="dna-loading"
+                        wrapperStyle={{ paddingBottom: '1.5rem' }} // Adjust this value as needed
+                      // wrapperClass="dna-wrapper"
+                      /></div> :
+                    "Press Here to Submit the form"
+                }
+              </Button>
           </div>
-          <Button onClick={handleSubmit} className='pressEnter' style={{
-            // color: "grey",
-            // fontSize: "1rem",
-            // paddingTop: "1rem"
-          }}>{
-              cloudwait ?
-                <div style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  // backgroundColor: "red"
-                }}>
-                  <DNA
-                    visible={true}
-                    height="4.5rem"
-                    width="4.5rem"
-                    ariaLabel="dna-loading"
-                    wrapperStyle={{ paddingBottom: '1.5rem' }} // Adjust this value as needed
-                  // wrapperClass="dna-wrapper"
-                  /></div> :
-                "Press Here to Submit the form"
-            }
-          </Button>
-        </div>
+            {/* <div> */}
+            {/* </div> */}
+        {/* </div> */}
       </Modal >
       <Modal
         isOpen={modalIsOpen2}
         // onAfterOpen={afterOpenModal}
         onRequestClose={closeModal2}
-        // onAfterClose={() => setSelectedImage("")}
+        onAfterClose={() => setShownCompanyImage("")}
         style={customStyles2}
         contentLabel="Example Modal"
       >
@@ -826,10 +873,13 @@ const AddNewEntities = () => {
 
           </div> */}
           <button className="image-input-container" style={{
-            backgroundColor: shownCompanyImage ? "transparent" : "#f3f3f3",
-            // border: "none",
+            backgroundColor: shownCompanyImage ? "rgb(0,0,0,0.1)" : "rgb(0,0,0,0.1)",
+            borderRadius: "1rem",
             padding: 0,
             cursor: "pointer",
+            borderWidth: shownCompanyImage ? ".2rem" : "0",
+            borderStyle: shownCompanyImage ? "dashed" : "solid",
+            borderColor: shownCompanyImage ? "#30416b" : "transparent",
           }} onClick={() => document.getElementById('imageInput').click()}>
             {shownCompanyImage ? (
               <>
@@ -962,7 +1012,7 @@ const AddNewEntities = () => {
             </div>
           </div>
           <Button className='pressEnter' onClick={
-            Admin.clearance === "Level3" ? handleSubmit2 : null} style={{
+            Admin?.clearance === "Level3" ? handleSubmit2 : null} style={{
               // color: "grey",
               // fontSize: "1rem",
               // paddingTop: "1rem",

@@ -46,13 +46,13 @@ export const updateStateBlock = createAsyncThunk(
 );
 export const getAgencyCars = createAsyncThunk(
     "user/getAgencyCars",
-    async (name) => {
+    async (id) => {
+        console.log(id);
         try {
             const response = await axios.get(
-                `http://localhost:5000/api/admin/getAgencyCars/${name}`
+                `http://localhost:5000/api/admin/getAgencyCars/${id}`
                 // `http://${process.env.NEXT_PUBLIC_API_URL}/api/admin/getAgencyCars/${name}`
             );
-
             return response.data;
         } catch (error) {
             console.log(error);

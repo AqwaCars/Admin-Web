@@ -30,8 +30,8 @@ function Dashboard() {
   const pending = useSelector(selectPending)?.historyData
   const rejected = useSelector(selectRejected)?.historyData
   const users = useSelector(selectAllUsers)
-  const allUsers = users.filter((user) => user.type === "user")
-  const allCompanies = users.filter((user) => user.type === "company")
+  const allUsers = users?.filter((user) => user.type === "user")
+  const allCompanies = users?.filter((user) => user.type === "company")
   const allCars = useSelector(selectAllCars)
   const [bigChartData, setbigChartData] = React.useState("data1");
   const setBgChartData = (name) => {
@@ -64,10 +64,10 @@ function Dashboard() {
   }
   useEffect(() => {
     const handleNavigation = () => {
-      if (Admin.clearance === "Level1") {
+      if (Admin?.clearance === "Level1") {
         navigate(-1); // Navigate back to the previous page
       }
-      if (Admin.clearance === "Level1" || Admin.clearance === "Level2") {
+      if (Admin?.clearance === "Level1" || Admin?.clearance === "Level2") {
         navigate("/admin/Cars"); // Navigate back to the previous page
       }
     };
@@ -156,8 +156,8 @@ function Dashboard() {
                 <CardBody>
                   <div className="chart-area">
                     <Line
-                      data={bigChartData === "data1" ? chartExample1.data1(rentalHistory) : bigChartData === "data2" ? chartExample1.data1(pending) : bigChartData === "data3" ? chartExample1.data1(rejected) : null}
-                      options={chartExample1.options}
+                      data={bigChartData === "data1" ? chartExample1?.data1(rentalHistory) : bigChartData === "data2" ? chartExample1?.data1(pending) : bigChartData === "data3" ? chartExample1?.data1(rejected) : null}
+                      options={chartExample1?.options}
                     />
                   </div>
                 </CardBody>
@@ -176,8 +176,8 @@ function Dashboard() {
                 <CardBody>
                   <div className="chart-area">
                     <Line
-                      data={chartExample2.data(users)}
-                      options={chartExample1.options}
+                      data={chartExample2?.data(users)}
+                      options={chartExample1?.options}
                     />
 
                   </div>
@@ -196,8 +196,8 @@ function Dashboard() {
                 <CardBody>
                   <div className="chart-area">
                     <Bar
-                      data={chartExample3.data([])}
-                      options={chartExample3.options}
+                      data={chartExample3?.data([])}
+                      options={chartExample3?.options}
                     />
                   </div>
                 </CardBody>
@@ -505,7 +505,7 @@ function Dashboard() {
                       </tr>
                     </thead>
                     <tbody>
-                      {allCompanies?.slice(startIndex, allCompanies.length > 10 ? startIndex + 10 : undefined)?.map((u, i) => (
+                      {allCompanies?.slice(startIndex, allCompanies.length > 10 ? startIndex + 10 : null)?.map((u, i) => (
                         <tr key={i}>
                           <td>{u.id}</td>
                           <td>{u.userName}</td>
@@ -539,7 +539,7 @@ function Dashboard() {
                       </tr>
                     </thead>
                     <tbody>
-                      {allUsers?.slice(startIndex, allUsers.length > 10 ? startIndex + 10 : undefined)?.map((u, i) => (
+                      {allUsers?.slice(startIndex, allUsers.length > 10 ? startIndex + 10 : null)?.map((u, i) => (
                         <tr key={i}>
                           <td>{u.id}</td>
                           <td>{u.userName}</td>

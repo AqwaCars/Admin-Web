@@ -29,7 +29,7 @@ function Requests() {
   const Admin = useSelector(selectAdmin)
   useEffect(() => {
     const handleNavigation = () => {
-      if (Admin.clearance === "Level1") {
+      if (Admin?.clearance === "Level1") {
         navigate(-1); // Navigate back to the previous page
       }
     };

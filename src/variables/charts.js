@@ -419,6 +419,7 @@ const chartExample4 = {
       };
     }
     console.log(typeof(array));
+    console.log(array);
     // Extract the creation dates from the user data
     const creationDates = array?.map(user => new Date(user?.createdAt));
 
