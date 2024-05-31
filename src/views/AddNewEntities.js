@@ -310,7 +310,11 @@ const AddNewEntities = () => {
         // Log the response or handle it as needed
 
         carDetails.media = imageUrl
-        const response = await dispatch(addCar(carDetails))
+        const updatedCarDetails = {
+          ...carDetails,
+           price: carDetails.price + 20,
+         };
+        const response = await dispatch(addCar(updatedCarDetails))
         console.log(response.payload);
         if (response.payload === undefined) {
           toast.error("An Error Has Occured")
@@ -836,9 +840,6 @@ const AddNewEntities = () => {
                 }
               </Button>
           </div>
-            {/* <div> */}
-            {/* </div> */}
-        {/* </div> */}
       </Modal >
       <Modal
         isOpen={modalIsOpen2}
@@ -849,29 +850,6 @@ const AddNewEntities = () => {
         contentLabel="Example Modal"
       >
         <div className="whiteboard-container">
-          {/* <div className="image-input-container" style={{
-            backgroundColor: companyDetails.avatar ? "transparent" : "#f3f3f3"
-          }} onClick={() => document.getElementById('imageInput').click()}>
-            {companyDetails.avatar ? (
-              <img src={companyDetails.avatar} alt="Selected" style={{ maxWidth: '100%', maxHeight: "20rem" }} />
-            ) : (
-              <div className="image-input-text">Press here to add image↓</div>
-            )}
-            <input
-              type="file"
-              id="imageInput"
-              style={{ display: 'none' }}
-              onChange={(e) => {
-                if (e.target.files && e.target.files.length > 0) {
-                  const file = e.target.files[0];
-                  const imageUri = URL.createObjectURL(file);
-                  handleCompanyChange("avatar", imageUri);
-                }
-              }}
-            />
-
-
-          </div> */}
           <button className="image-input-container" style={{
             backgroundColor: shownCompanyImage ? "rgb(0,0,0,0.1)" : "rgb(0,0,0,0.1)",
             borderRadius: "1rem",

@@ -5,12 +5,19 @@
   display: flex;
   flex-direction: row;
 }
+.extraUser:hover{
+background-color: rgb(0,0,0,0.1);
+}
 .separator {
   width: 0.005rem;
   background-color: #30416b;
 }
 .digital-clock-full-height.MuiDigitalClock-root {
-  max-height: 26rem!important; /* Force the height */
+  max-height: 30rem!important; /* Force the height */
+  border:.1rem black solid;
+  border-radius: 1rem;
+  padding: .5rem;
+  text-decoration: underline;
 }
 .custom-digital-clock-item {
   border-radius: 1rem!important; /* Example: fully rounded corners */

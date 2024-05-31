@@ -16,7 +16,7 @@ import logo from "assets/img/logo-white.png";
 import { useDispatch, useSelector } from "react-redux";
 // import { selectLoggedIn } from "../../Redux/adminSlice";
 // import { setLoggedIn } from "../../Redux/adminSlice";
-import { selectAdmin } from "../../Redux/adminSlice";
+import { getApprovedServices, getPendingServices, getRejectedServices, selectAdmin } from "../../Redux/adminSlice";
 import { getData } from "../../Redux/adminSlice";
 import { selectLoadingStatus } from "../../Redux/adminSlice";
 import { getAllUsers } from "../../Redux/adminSlice";
@@ -149,9 +149,9 @@ function Admin(props) {
           // console.log(res.payload);
           dispatch(getAllUsers());
           dispatch(getAllCars());
-          // dispatch(getApprovedServices());
-          // dispatch(getPendingServices());
-          // dispatch(getRejectedServices());
+          dispatch(getApprovedServices());
+          dispatch(getPendingServices());
+          dispatch(getRejectedServices());
         } catch (error) {
           console.error("Failed to load data:", error);
           // Handle error appropriately

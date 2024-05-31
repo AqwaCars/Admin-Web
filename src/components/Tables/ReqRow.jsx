@@ -2,13 +2,39 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "../../assets/css/nucleo-icons.css";
-import { getBookedDates } from "../../Redux/adminSlice";
+import { getBookedDates, handleBooking } from "../../Redux/adminSlice";
 import { CarBookedPeriods } from "../../Redux/adminSlice";
+import { Button } from "reactstrap";
+import Swal from "sweetalert2";
+
 const ReqRow = ({setDate, request, setCar,openModal }) => {
   const dispatch = useDispatch();
   const carBookedPeriods = useSelector(CarBookedPeriods)
-  
+  const handleRequest=async(status)=>{
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: `${status==="accept"?"question":status==="reject"?"warning":null}`,
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: `Confirm ${status==="accept"?"acceptation":status==="reject"?"rejection":null}`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const val=status==="accept"?"accepted":status==="reject"?"rejected":null
+        Swal.fire({
+          title: "Update",
+          text: `Your booking request status is now ${val}.`,          
+          icon: "success"
+        });
+        dispatch(handleBooking({acceptation:val,id:request.id}))
+      }
+    });
+  }
+  console.log(request);
   return (
+    
+      !request?.acceptation?
     <tr res="true" hover="true" onClick={async()=>{
       setCar(request)
       await dispatch(getBookedDates(request.id))
@@ -23,18 +49,75 @@ const ReqRow = ({setDate, request, setCar,openModal }) => {
       // fetchBookedDates();
       console.log(await carBookedPeriods);
     }} >
-      <td>{request.id}</td>
-      <td>{request.model}</td>
-      <td>{request.brand}</td>
-      <td>{request.price}</td>
-      <td>{request.typeOfFuel}</td>
-      <td>{request.UserId}</td>
-      <td>{request.Category}</td>
-      <td>{request.Type}</td>
-      <td>{request.peopleCount}</td>
-      <td>{request.DoorNumber}</td>
-      <td>{request.Capacity}</td>
-      <td>{request.Year}</td>
+      <>
+      <td>{request?.id}</td>
+      <td>{request?.model}</td>
+      <td>{request?.brand}</td>
+      <td>{request?.price-20}</td>
+      <td>{request?.typeOfFuel}</td>
+      <td>{request?.UserId}</td>
+      <td>{request?.Category}</td>
+      <td>{request?.Type}</td>
+      <td>{request?.peopleCount}</td>
+      <td>{request?.DoorNumber}</td>
+      <td>{request?.Capacity}</td>
+      <td>{request?.Year}</td>
+      </>
+      </tr>
+      :
+      // <>
+      <tr>
+      <td>{request?.id}</td>
+      {/* <td>{request?.from}</td> */}
+      {/* <td>{request?.to}</td> */}
+      <td>{request?.startDate}</td>
+      <td>{request?.endDate}</td>
+      <td>{request?.time}</td>
+      <td>{request?.acceptation}</td>
+      <td>{request?.name}</td>
+      <td>{request?.Email}</td>
+      <td>{request?.phoneNumber}</td>
+      <td>{request?.address}</td>
+      <td>{request?.postalCode}</td>
+      <td>{request?.city}</td>
+      {/* <td>{request?.flightNumber}</td> */}
+      
+     
+       <td  res="true" hover="true" >
+        <div style={{ display: "flex", gap: "1rem" }}>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => {
+            handleRequest("accept")
+            }}
+            style={{
+              padding: "0.5rem 2.5rem",
+              borderRadius: "0.3125rem",
+              background: "#04bfbf",
+              color: "#fff",
+            }}
+          >
+            Approve
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => {
+             handleRequest("reject")
+            }}
+            style={{
+              padding: "0.5rem 2.5rem",
+              borderRadius: "0.3125rem",
+              background: "#9250bc",
+              color: "#fff",
+            }}
+          >
+            Decline
+          </button>
+        </div>
+      </td> 
+      {/* </> */}
       {/* <td>
         <Button
           className="btn"
@@ -122,6 +205,7 @@ const ReqRow = ({setDate, request, setCar,openModal }) => {
         </div>
       </td> */}
     </tr>
+    
   );
 };
 

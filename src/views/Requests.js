@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import {  selectAdmin } from "../Redux/adminSlice";
+import { AllBooking, getAllBooking, selectAdmin } from "../Redux/adminSlice";
 import { selectAllRequests } from "../Redux/adminSlice";
 import ReqRow from "components/Tables/ReqRow";
 import React, { useEffect, useState } from "react";
@@ -24,8 +24,9 @@ function Requests() {
       console.error("Invalid location data.");
     }
   }
-  const allRequests = useSelector(selectAllRequests)
+  const allRequests = useSelector(AllBooking)
   const navigate = useNavigate();
+  console.log(allRequests);
   const Admin = useSelector(selectAdmin)
   useEffect(() => {
     const handleNavigation = () => {
@@ -33,9 +34,9 @@ function Requests() {
         navigate(-1); // Navigate back to the previous page
       }
     };
-
+    dispatch(getAllBooking())
     handleNavigation();
-  }, [Admin, navigate,refresh]);
+  }, [Admin, navigate, refresh]);
 
   return (
     <>
@@ -51,18 +52,27 @@ function Requests() {
                   <thead className="text-primary">
                     <tr>
                       <th>Id</th>
+                      {/* <th>From</th> */}
+                      {/* <th>To</th> */}
+                      <th>Starthate</th>
+                      <th>EndDate</th>
+                      <th>Time</th>
+                      <th>Acceptation</th>
                       <th>Name</th>
-                      <th>Agency Phone Number</th>
-                      <th>Agency Location</th>
-                      <th>Papers</th>
-                      <th>Response</th>
+                      <th>Email</th>
+                      <th>PhoneNumber</th>
+                      <th>Address</th>
+                      <th>PostalCode</th>
+                      <th>City</th>
+                      <th>Action</th>
+                      {/* <th>FlightNumber</th> */}
                     </tr>
                   </thead>
                   <tbody>
                     {/* <tr> */}
                     {allRequests?.map((request, i) => {
                       return (
-                        <ReqRow key={i} setRefresh={setRefresh} request={request} handlePapers={handlePapers} openLocationInGoogleMaps={openLocationInGoogleMaps} />
+                        <ReqRow key={i} request={request} setRefresh={setRefresh} />
                       );
                     })}
                     {/* <td>1</td>

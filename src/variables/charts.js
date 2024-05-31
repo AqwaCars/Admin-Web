@@ -72,17 +72,6 @@ let chartExample1 = {
     const creationDates = array?.map(user => new Date(user.createdAt));
 
     // Check if creationDates array is not empty
-    if (creationDates?.length === 0) {
-      return {
-        labels: [],
-        datasets: [
-          {
-            label: "Hide/Show Chart",
-            data: [],
-          },
-        ],
-      };
-    }
 
     // Create a labels array for the months
     const labels = Array.from({ length: 12 }, (_, i) => new Date(Array.isArray(creationDates) ? creationDates[0].getFullYear() : [], i).toLocaleString('default', { month: 'short' }));
@@ -141,6 +130,7 @@ let chartExample1 = {
     }
     const data = Array.from({ length: 12 }, (_, i) => creationDates?.filter(date => date.getMonth() === i).length);
     const labels = Array.from({ length: 12 }, (_, i) => new Date(Array.isArray(creationDates) ? creationDates[0].getFullYear() : [], i).toLocaleString('default', { month: 'short' }));
+    console.log(rentalHistory);
     return {
       labels: labels,
       datasets: [
@@ -164,7 +154,6 @@ let chartExample1 = {
       ],
     };
   },
-
   data3: (array) => {
     // Check if array array is not empty
     if (array?.length === 0) {
@@ -183,17 +172,6 @@ let chartExample1 = {
     const creationDates = array?.map(user => new Date(user.createdAt));
 
     // Check if creationDates array is not empty
-    if (creationDates?.length === 0) {
-      return {
-        labels: [],
-        datasets: [
-          {
-            label: "Hide/Show Chart",
-            data: [],
-          },
-        ],
-      };
-    }
 
     // Create a labels array for the months
     const labels = Array.from({ length: 12 }, (_, i) => new Date(Array.isArray(creationDates) ? creationDates[0].getFullYear() : [], i).toLocaleString('default', { month: 'short' }));

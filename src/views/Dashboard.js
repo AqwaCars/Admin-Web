@@ -11,10 +11,11 @@ import { Row, Col, Card, CardHeader, CardTitle, CardBody, ButtonGroup, Button, T
 import { chartExample1, chartExample2, chartExample3, chartExample4 } from '../variables/charts';
 
 import {
+  useDispatch,
   useSelector
   //  useDispatch
 } from "react-redux";
-import { selectAdmin, selectAllUsers } from "../Redux/adminSlice";
+import { selectAdmin, selectAllUsers, setAdminLoading, toggleAdminLoading } from "../Redux/adminSlice";
 import { selectApproved } from "../Redux/adminSlice";
 import { selectAllCars } from "../Redux/adminSlice";
 import { selectPending } from "../Redux/adminSlice";
@@ -27,6 +28,7 @@ function Dashboard() {
   const [Loading, setLoading] = useState(true);
   const Admin = useSelector(selectAdmin)
   const rentalHistory = useSelector(selectApproved)?.historyData
+  const dispatch = useDispatch()
   const pending = useSelector(selectPending)?.historyData
   const rejected = useSelector(selectRejected)?.historyData
   const users = useSelector(selectAllUsers)
@@ -63,6 +65,8 @@ function Dashboard() {
     }
   }
   useEffect(() => {
+    // dispatch(toggleAdminLoading(false))
+    // dispatch(toggleAdminLoading(true))
     const handleNavigation = () => {
       if (Admin?.clearance === "Level1") {
         navigate(-1); // Navigate back to the previous page
@@ -214,7 +218,7 @@ function Dashboard() {
                 <CardBody>
                   <div className="chart-area">
                     <Line
-                      data={chartExample4?.data(allCars)}
+                      data={chartExample4?.data(rentalHistory)}
                       options={chartExample4?.options}
                     />
                   </div>

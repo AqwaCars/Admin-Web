@@ -10,6 +10,7 @@ const initialState = {
     allCars: [],
     staticAllCars: [],
     limitedCars: [],
+    AllBooking:[],
     requests: [],
     TempoRequest: {},
     oneUser: {},
@@ -165,6 +166,7 @@ export const getApprovedServices = createAsyncThunk(
                 `http://127.0.0.1:5000/api/booking/rentalHistory`
                 // `http://${process.env.NEXT_PUBLIC_API_URL}/api/booking/rentalHistory`
             )
+            console.log(response.data);
             return response.data
         } catch (er) {
             console.error(er);
@@ -340,19 +342,63 @@ export const getBookedDates = createAsyncThunk("admin/getBookedDates", async (id
 export const addBookedDate = createAsyncThunk("admin/addBookedDates", async (data) => {
     try {
         // Transform the dates array to contain ISO string representations
-        const transformedData = {
-            ...data,
-            dates: data.dates?.map(date => date.toISOString()),
-        };
-
-        await axios.post(
-            `http://localhost:5000/api/bookedPeriods/addDate`, transformedData
+        console.log(data);
+        const re = await axios.post(
+            `http://localhost:5000/api/bookedPeriods/addDate`, data
             // `http://${process.env.NEXT_PUBLIC_API_URL}/api/bookedPeriods/addDate`, transformedData
         );
+        console.log(re, "redux periods");
+        return re.data;
     } catch (er) {
         console.log(JSON.stringify(er));
     }
 });
+export const CreateBooking = createAsyncThunk(
+    "admin/CreateBooking",
+    async (params) => {
+        console.log(params);
+        try {
+            const response = await axios.post(
+                `http://localhost:5000/api/booking/CreateBookingAdmin`,
+                params
+            );
+
+            console.log(response.data, "booking");
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+);
+export const handleBooking=createAsyncThunk(
+    "admin/updateBooking",
+    async(val)=>{
+        console.log(val)
+        try {
+            const response=await axios.put(
+                'http://localhost:5000/api/booking/updatebooking',
+                val
+            )
+        } catch (error) {
+            
+        }
+    }
+)
+export const getAllBooking = createAsyncThunk(
+    "admin/getAllBooking",
+    async () => {
+        try {
+            const response = await axios.get(
+                `http://localhost:5000/api/booking/getAllBooking`,
+                // `http://${process.env.NEXT_PUBLIC_API_URL}/api//booking/getAllBooking`,
+            )
+            console.log(response.data);
+            return response.data
+        } catch (error) {
+
+        }
+    }
+)
 export const cancelRent = createAsyncThunk("admin/cancelRent", async ({ userId, carId }) => {
     try {
         console.log(userId, carId);
@@ -386,6 +432,9 @@ export const adminSlicer = createSlice({
         },
         triggerRefresh: (state) => {
             state.refreshed = !state.refreshed;
+        },
+        toggleAdminLoading:(state)=>{
+            state.admin.loading=!state.admin.loading
         },
         setAdminData: (state, action) => {
             state.admin = action.payload
@@ -614,6 +663,18 @@ export const adminSlicer = createSlice({
             state.loadingStatus.getBookedDates = false;
             state.error = action.error.message;
         });
+        builder.addCase(getAllBooking.pending, (state) => {
+            state.loadingStatus.getAllBooking = true;
+            state.error = null;
+        });
+        builder.addCase(getAllBooking.fulfilled, (state, action) => {
+            state.loadingStatus.getAllBooking = false;
+            state.AllBooking = action.payload;
+        });
+        builder.addCase(getAllBooking.rejected, (state, action) => {
+            state.loadingStatus.getAllBooking = false;
+            state.error = action.error.message;
+        });
         builder.addCase(getAgencyCars.pending, (state) => {
             state.loadingStatus.getAgencyCars = true;
             state.error = null;
@@ -640,6 +701,7 @@ export const selectStaticAllUsers = (state) => state.Admin.staticAllUsers;
 export const selectApproved = (state) => state.Admin.approvedRental;
 export const selectPending = (state) => state.Admin.PendingRental;
 export const selectRejected = (state) => state.Admin.RejectedRental;
+export const AllBooking = (state) => state.Admin.AllBooking;
 export const selectAllCars = (state) => state.Admin.allCars;
 export const selectStaticAllCars = (state) => state.Admin.staticAllCars;
 export const LimitedCars = (state) => state.Admin.limitedCars;
@@ -651,5 +713,5 @@ export const Companies = (state) => state.Admin.companies;
 export const Media = (state) => state.Admin.Media;
 export const CarBookedPeriods = (state) => state.Admin.carBookedPeriods;
 export const selectForeignUser = (state) => state.Admin.foreignUser;
-export const { filterUsers, triggerRefresh, setAdminData, logout, setLoggedIn, setReqForSwal } = adminSlicer.actions;
+export const { filterUsers,toggleAdminLoading, triggerRefresh, setAdminData, logout, setLoggedIn, setReqForSwal } = adminSlicer.actions;
 export default adminSlicer.reducer;

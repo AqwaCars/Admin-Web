@@ -32,6 +32,7 @@ Created using IcoMoon - icomoon.io
 }
 .prev_next_btn{
   width: 19%;
+  height: 1% !important;
 }
 .prev_next_container{
   display: flex;

@@ -1,4 +1,4 @@
-import { cancelRent, selectAdmin, selectStaticAllCars, updateCar } from "../Redux/adminSlice";
+import { CreateBooking, cancelRent, selectAdmin, selectStaticAllCars, updateCar } from "../Redux/adminSlice";
 import { getLimitedCars } from "../Redux/adminSlice";
 import "../assets/css/addNewEntities.css"
 import "../assets/css/TableList.css"
@@ -20,6 +20,10 @@ import { addBookedDate } from "../Redux/adminSlice";
 import { CarBookedPeriods } from "../Redux/adminSlice";
 import { DNA } from "react-loader-spinner";
 import { DigitalClock } from "@mui/x-date-pickers";
+import ExtraUserModal from "components/Modals/ExtraUserModal";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const customStyles = {
   overlay: {
@@ -57,8 +61,11 @@ for (let year = 2000; year <= currentYear; year++) {
 const fuels = ["Gasoline", "Diesel", "Electric"]
 const yearOptions = years?.map(year => ({ label: year.toString(), value: year.toString() }));
 const fuelOptions = fuels?.map(fuel => ({ label: fuel.toString(), value: fuel.toString() }));
-function Cars() {
-
+const Cars = () => {
+  const [userModal, setUserModal] = useState(false)
+  const addExtraUser = async () => {
+    setUserModal(true)
+  }
   const dispatch = useDispatch()
   const [returnTime, setReturnTime] = useState(null)
   const [rentalTime, setRentalTime] = useState(null)
@@ -79,6 +86,7 @@ function Cars() {
     return user.type === "user"
   })
   const [carRenter, setCarRenter] = useState({})
+  const [ExtraUserForm, setExtraUserForm] = useState({})
   const [load, setLoad] = useState()
   const [userCancel, setUserCancel] = useState({})
   const options = users?.map(user => ({
@@ -88,8 +96,22 @@ function Cars() {
   // const [date, setDate] = useState({ startDate: null, endDate: null });
 
   const handleSelect = (ranges) => {
-    setDate(ranges.selection)
+    // Ensure ranges.selection exists before attempting to modify it
+    if (ranges && ranges.selection) {
+      // Assuming startDate and endDate are numbers, add 1 to them
+      ranges.selection.startDate += 1;
+      ranges.selection.endDate += 1;
+
+      // Log the modified startDate
+      console.log(ranges.selection);
+
+      // Update the state with the modified selection
+      setDate(ranges.selection);
+    } else {
+      console.error('Ranges or its selection property does not exist.');
+    }
   };
+
 
   const [cloudwait, setCloudWait] = useState(false)
   const handleCarDetailsUpdate = async () => {
@@ -110,34 +132,131 @@ function Cars() {
     // Assuming setUpdateCarLoad(false) indicates the end of the update process
     // setUpdateCarLoad(false);
   };
+
+  const [datesArray, setDatesArray] = useState([]); // Initialize datesArray with useState
+
+  // Helper function to generate dates array
+  const generateDatesArray = () => {
+    console.log("Selected dates:", date.startDate, date.endDate);
+
+    // Directly use the provided start and end dates without modifying their time components.
+    const startDate = new Date(date.startDate);
+    const endDate = new Date(date.endDate);
+
+    // Format the start and end dates to "Month-Day-Year"
+    const formattedStartDate = startDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    const formattedEndDate = endDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    // Debugging: Log the formatted start and end dates
+    console.log("Formatted Start date:", formattedStartDate);
+    console.log("Formatted End date:", formattedEndDate);
+    setDate(prevDetails => {
+      const newDetails = {
+        ...prevDetails,
+        startDate: formattedStartDate,
+        endDate: formattedEndDate
+      };
+      console.log('New state:', newDetails);
+      return newDetails;
+    })
+    // Convert the formatted start and end dates back to Date objects
+    const start = new Date(formattedStartDate);
+    const end = new Date(formattedEndDate);
+
+    // Calculate the total number of days between the start and end dates
+    const diffInMilliseconds = end.getTime() - start.getTime();
+    const totalDays = Math.ceil(diffInMilliseconds / (1000 * 60 * 60 * 24));
+
+    const array = [];
+    for (let i = 0; i < totalDays + 1; i++) {
+      // Create a new Date object for each day
+      let currentDate = new Date(start.getTime());
+      currentDate.setDate(currentDate.getDate() + i);
+
+      // Format the current date as a string in "Month-Day-Year" format
+      const dateString = currentDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+      // Push the formatted date string into the array
+      array.push(dateString);
+    }
+
+    // Assuming setDatesArray is a function to update state or similar
+
+
+    // Optionally, log the generated array of dates
+    console.log("Generated Dates Array:", array);
+    return array
+  };
+
+
+
+
+
+
+  // Other helper functions remain unchanged
+  const validateInputs = () => {
+    return date?.startDate && date?.endDate &&
+      (Object.values(carRenter).length > 0 || Object.values(ExtraUserForm).length > 0) &&
+      rentalTime && returnTime;
+  };
+
+  const prepareDataForDispatch = () => {
+    // const index=lastIndexOf(datesArray)
+    return Object(carRenter).length > 0 ?
+      { startDate: date.startDate, endDate: date.endDate, acceptation: "accepted", amount: car.price * generateDatesArray().length - 1, CarId: car.id, rentalTime, returnTime, dates: datesArray, UserId: carRenter.id } :
+      { startDate: date.startDate, endDate: date.endDate, acceptation: "accepted", amount: car.price * generateDatesArray().length - 1, CarId: car.id, rentalTime, returnTime, dates: datesArray, UserId: null };
+  };
+
+  const resetStateAfterSuccess = () => {
+    setCloudWait(false);
+    setLoad(false);
+    setCarRenter({});
+    setExtraUserForm({})
+    setRentalTime(null);
+    setReturnTime(null);
+  };
   const handleButtonClick = async () => {
     try {
-      const datesArray = [];
       console.log(carRenter);
-      if (date?.startDate && date?.endDate && Object.values(carRenter).length > 0 && rentalTime && returnTime) {
-        setLoad(true)
+      // Validate input before proceeding
+      if (!validateInputs()) {
+        console.log("Validation failed");
+        return; // Exit early if validation fails
+      }
 
-        // Generate an array of dates for the selected range
-        for (let d = new Date(date.startDate); d <= new Date(date.endDate); d.setDate(d.getDate() + 1)) {
-          datesArray.push(new Date(d));
-        }
-        setCloudWait(true)
-        // Dispatch an action to save the dates to the database
-        await dispatch(addBookedDate({ carId: car.id, rentalTime, returnTime, dates: datesArray, userId: carRenter.id }));
-        setCloudWait(false)
-        setLoad(false)
-        setCarRenter({})
-        setRentalTime(null)
-        setReturnTime(null)
+      setLoad(true); // Start loading
+
+      // Generate an array of dates for the selected range
+      // Pass setDatesArray to the function
+
+      // Prepare data for dispatch
+      const data = prepareDataForDispatch();
+      console.log(datesArray);
+      // Dispatch actions asynchronously
+      console.log("ddd", carRenter);
+      console.log("fff", car);
+      const task2 = await dispatch(CreateBooking({ ...ExtraUserForm, ...data }));
+      console.log(task2);
+      if (task2.payload === undefined) {
+        toast.error("An Error Has Occured", task2.payload)
+        resetStateAfterSuccess()
+        return
       }
-      else {
-        console.log("WRONG");
-      }
+      const task1 = await dispatch(addBookedDate({ BookingId: task2.payload.id, carId: car.id, rentalTime, returnTime, dates: generateDatesArray(), userId: Object(carRenter).length > 0 ? carRenter.id : null }));
+      console.log(task1.payload);
+      console.log(task2.payload);
+      // Reset state after successful operations
+      resetStateAfterSuccess();
+      setTimeout(()=>{
+        closeModal()
+      },1000)
+      console.log("Operations completed successfully");
     } catch (error) {
-      console.error("Failed to add booked dates:", error);
-      // Handle error appropriately, e.g., show an error message to the user
+      console.error("Failed to perform operations:", error);
+      // Optionally, handle error UI feedback here
     }
   };
+
 
 
 
@@ -431,22 +550,70 @@ function Cars() {
                 src={car.media}
               />
             </div>
-
             <div className="calender_Ctr">
+            <p style={{
+              alignSelf:"flex-start",
+              fontSize:"1rem",
+              // textDecoration:"underline"
+            }}>Select an existing user or add new details :</p>
               <Select
                 className="select-box"
                 placeholder="Select The Customer..."
-                options={[
-                  { label: (<><Plus /> ,Select An Action...</>), value: '' },
-                  ...options
-                ]}
-                onChange={(selectedOption) => setCarRenter(selectedOption.value)}
-                menuPortalTarget={document.body}
+                options={
+                  [
+                    {
+                      label: "None", // Clearer indication that selecting this option will deselect any previously selected value
+                      value: "", // Use the id as the value
+                    }, ...options]
 
+                }
+                onChange={(selectedOption) => (
+                  selectedOption.value = '' ? null :
+                    setCarRenter(selectedOption.value))}
+                menuPortalTarget={document.body}
                 styles={{
                   menuPortal: base => ({ ...base, zIndex: 9999 })
                 }}
               />
+              {/* <Button> */}
+              <div className="extraUser"
+                onClick={() => setUserModal(true)}
+                style={{
+                  width: "35rem",
+                  display: 'inline-flex', // Aligns items horizontally
+                  alignItems: 'center', // Vertically centers items
+                  justifyContent: 'flex-start', // Spaces out items
+                  cursor: 'pointer', // Indicates the div is clickable
+                  border: '1px solid #ccc', // Mimics the border of react-select
+                  borderRadius: '4px', // Rounded corners
+                  padding: '8px 12px', // Padding inside the div
+                  fontSize: '14px', // Text size
+                  fontWeight: '500', // Bold text
+                  backgroundColor: '#fff', // Background color
+                  boxShadow: 'inset 0 1px 3px rgba(0,0,0,.1)', // Adds depth
+                  minWidth: '200px', // Minimum width to accommodate the caret and text
+                  position: 'relative', // Needed for absolute positioning of the caret
+                  marginBottom: "1rem"
+                }}
+              >
+                {Object.values(ExtraUserForm).length > 0 ? <span style={{
+                  fontSize: "1.1rem",
+                  padding: ".4rem",
+                  border: ".1rem lightgreen solid",
+                  width: "100%",
+                  borderRadius: ".2rem",
+                  color: "lightgreen"
+                }}>✔User Data Saved</span> :
+                  <>
+                    < Plus style={{ height: "1.5rem" }} />
+                    <span style={{
+                      fontSize: ".8rem", fontWeight: "700"
+                    }}>Add External User Data</span>
+                  </>}
+              </div>
+
+
+              {/* </Button> */}
               <div
                 style={{
                   display: "flex",
@@ -492,7 +659,9 @@ function Cars() {
             </div>
 
           </div>
-          <Button onClick={async () =>
+          <Button style={{
+            width: "25rem"
+          }} onClick={async () =>
             Swal.fire({
               title: "Are you sure?",
               text: "This will make the car unavailable in the selected Date!",
@@ -502,7 +671,7 @@ function Cars() {
               cancelButtonColor: "#d33",
               confirmButtonText: "Yes!"
             }).then((result) => {
-              if (result.isConfirmed && Object.values(carRenter).length > 0 && rentalTime && returnTime && date.startDate && date.endDate) {
+              if (result.isConfirmed && (Object.values(ExtraUserForm).length > 0 || Object.values(carRenter).length > 0) && rentalTime && returnTime && date.startDate && date.endDate) {
                 // Check if the start date and end date are at least one day apart
                 const startDate = new Date(date.startDate);
                 const endDate = new Date(date.endDate);
@@ -510,13 +679,17 @@ function Cars() {
 
                 if (diffDays >= 1) {
                   handleButtonClick();
-                  Swal.fire('Changes Saved!', '', 'success');
+                  Swal.fire('Processing Your Request...', '', 'info');
+
                 } else {
                   Swal.fire('The rental period must be at least two days.', '', 'warning');
                 }
               } else if (result.isDenied) {
                 Swal.fire('Change Discarded.', '', 'info');
-              } else if (result.isConfirmed && !Object.values(carRenter).length > 0) {
+              } else if (result.isConfirmed &&
+                Object.values(carRenter).length === 0 &&
+                Object.values(ExtraUserForm).length === 0) {
+                console.log(Object.values(ExtraUserForm).length > 0);
                 Swal.fire('Please select a user.', '', 'warning');
               } else if (result.isConfirmed && (!rentalTime || !returnTime)) {
                 Swal.fire('Please specify a Time.', '', 'warning');
@@ -839,6 +1012,7 @@ function Cars() {
                 }
               })
             } style={{
+              width: "25rem",
               marginTop: "1rem"
             }}>{updateCarLoad ? <DNA
               visible={true}
@@ -851,6 +1025,7 @@ function Cars() {
           </div>
         </div>
       </Modal>
+      <ExtraUserModal setformData={setExtraUserForm} setShow={setUserModal} show={userModal} />
     </>
   );
 }
