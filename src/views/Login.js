@@ -1,31 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import "../assets/css/login.css";
 // import Head from 'next/head';
-import axios from 'axios';
-import { Login, selectAdmin } from '../Redux/adminSlice';
 import { Row, Col, Card, CardHeader, CardBody } from 'reactstrap';
-
-import Select from 'react-select';
+import { Login, selectAdmin } from '../Redux/adminSlice';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
-import img00 from "../assets/img/back00.jpg"
-import { getData } from '../Redux/adminSlice';
-import { selectLoggedIn } from '../Redux/adminSlice';
-import { selectLoading } from '../Redux/adminSlice';
 export default function LoginPage() {
-  // const [username, setUsername] = useState('');
-  // const [password, setPassword] = useState('');
-  const logged = useSelector(selectLoggedIn)
-  const loading = useSelector(selectLoading)
-  const Admin = useSelector(selectAdmin)
   const navigate = useNavigate();
-  const [error, setError] = useState(null);
   const [formChecked, setFormChecked] = useState(false);
-  const [formVisible, setFormVisible] = useState(true);
   const dispatch = useDispatch()
-  // const navigation = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -62,21 +45,7 @@ export default function LoginPage() {
   const [isAdminLoaded, setIsAdminLoaded] = useState(false);
   const [clearance, setClearance] = useState(null);
   const adminData = useSelector(selectAdmin);
-  const tk = useSelector((state) => state.Admin.token);
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem('Token');
-  //   console.log(tk);
-  //   if (!tk) {
-  //     console.log("No token found.");
-  //     return;
-  //   }
-
-  //   // Dispatch the getData action
-  //   dispatch(getData(tk)).then(() => {
-  //     setIsAdminLoaded(true);
-  //   });
-  // }, [dispatch]);
 
   useEffect(() => {
     // Update the clearance state whenever adminData changes
@@ -142,7 +111,7 @@ export default function LoginPage() {
 
                   <form style={{
 
-                  }} className={formVisible ? '' : 'fade-out'}>
+                  }} className={ 'fade-out'}>
                     <input type="text" placeholder="Email" onChange={(e) => {
                       formValidation()
                       setForm({ ...form, email: e.target.value })
@@ -151,11 +120,11 @@ export default function LoginPage() {
                       formValidation();
                       setForm({ ...form, password: e.target.value })
                     }} />
-                    <button type="submit" id="login-button" disabled={!formChecked} onClick={(e) => (
-                      e.preventDefault(),
-                      console.log("haha"),
+                    <button type="submit" id="login-button" disabled={!formChecked} onClick={(e) => {
+                      e.preventDefault();
+                      console.log("haha");
                       handleLogin()
-                    )}>Login</button>
+                    }}>Login</button>
                   </form>
                 </div>
 

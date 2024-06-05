@@ -5,15 +5,101 @@
   display: flex;
   flex-direction: row;
 }
+.extraUser:hover{
+background-color: rgb(0,0,0,0.1);
+}
 .separator {
   width: 0.005rem;
   background-color: #30416b;
 }
 .digital-clock-full-height.MuiDigitalClock-root {
-  max-height: 26rem!important; /* Force the height */
+  max-height: 30rem!important; /* Force the height */
+  border:.1rem black solid;
+  border-radius: 1rem;
+  padding: .5rem;
+  text-decoration: underline;
+}
+.hoverImage:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover for a 3D effect */
+  border-width: 0.15rem;
+  transform: scale(1); /* Slightly enlarge on hover */
+  /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); Enhance shadow on hover for a 3D effect */
+  background-color: #F5F5F5;
+  /* Optional: Add a CSS animation for a more dynamic effect */
+  animation: hoverEffect 0.5s ease-in-out forwards;
+}
+.hoverImage_review:hover {
+  border-radius: 50% !important;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover for a 3D effect */
+  border-width: 0.15rem;
+  transform: scale(1); /* Slightly enlarge on hover */
+  /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); Enhance shadow on hover for a 3D effect */
+  background-color: #F5F5F5;
+  /* Optional: Add a CSS animation for a more dynamic effect */
+  animation: hoverEffect 0.5s ease-in-out forwards;
 }
 .custom-digital-clock-item {
   border-radius: 1rem!important; /* Example: fully rounded corners */
+}
+/* StepperTouch.css */
+.stepper-touch-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* height: 100vh; */
+  background-color: #6C6DFF;
+  border-radius: 1rem;
+}
+
+.input-number {
+  position: relative;
+  width: 100px;
+  height: 40px;
+  background-color: transparent;
+  overflow: hidden;
+  border-radius: 20px;
+  margin: 2px;
+}
+
+.input-number span {
+  position: absolute;
+  left: 50%;
+  margin-left: -20px;
+  display: inline-block;
+  background-color: white;
+  height: 100%;
+  width: 40px;
+  border-radius: 20px;
+  text-align: center;
+  line-height: 40px;
+  font-size: 16px;
+  color: #6C6DFF;
+  letter-spacing: -1px;
+}
+
+.input-number button {
+  display: inline-block;
+  width: 50px;
+  height: 100%;
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  background-color: rgba(255,255,255,.2);
+  transition: background-color.2s ease;
+}
+
+.input-number button:nth-of-type(1) {
+  padding-right: 20px;
+}
+
+.input-number button:nth-of-type(2) {
+  padding-left: 20px;
+}
+
+.input-number button:hover {
+  background-color: rgba(255,255,255,.25);
 }
 
 #Title {
@@ -94,7 +180,9 @@
   box-sizing: border-box;
 }
 .pressEnter {
-  margin-top: 1.5rem!important;
+  align-self: center !important;
+  margin-top: 1rem!important;
+  margin-bottom: 1rem!important;
   height: 3rem;
   padding: 0 !important;
   width: 40rem;
@@ -120,13 +208,18 @@ header h1 {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 50%; /* Adjusted to 30% */
+  height: auto; /* Adjusted to 30% */
   background-color: white;
   padding-bottom: 4rem;
+  margin-top: .5rem;
   box-sizing: border-box;
-  border-bottom:.1rem solid #30416B;
+  border-style: ridge;
+  border-radius: 1rem;
+  border-width: .2rem;
+  border-color: rgb(0,0,0,0.1);
+  /* border-bottom:.1rem solid #30416B; */
   padding:1rem;
-  overflow-y: auto; 
+  /* overflow-y: hidden;  */
 }
 ::-webkit-scrollbar {
   display: none;
@@ -136,7 +229,6 @@ header h1 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: .2rem dashed #ccc;
   transition: border-color 0.3s ease;
   /* border-bottom-color: #30416b; */
   width: 100%;
@@ -148,6 +240,17 @@ header h1 {
 .image-input-container:hover {
   border-color: #30416b;
  }
+ .Car_details_img{
+  border-radius: 1rem;
+ }
+ .Car_details_img:hover {
+  transform: scale(1); /* Slightly enlarge on hover */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover for a 3D effect */
+  /* background-color: #F5F5F5; */
+  /* Optional: Add a CSS animation for a more dynamic effect */
+  animation: hoverEffect 1s ease-in-out backwards;
+ }
+ 
 .image-input-text {
   font-size: 2.5rem;
   font-weight: bold;
@@ -193,7 +296,7 @@ header h1 {
   padding: 6px;
   font-size: 16px;
   width: 100%;
-
+  text-transform:capitalize
   /* margin: bottom 200px !important; */
 }
 

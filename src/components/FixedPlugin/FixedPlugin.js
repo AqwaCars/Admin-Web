@@ -2,19 +2,19 @@
 import React from "react";
 
 // reactstrap components
-import { Button, Dropdown, DropdownToggle, Badge } from "reactstrap";
-import { ThemeContext, themes } from "contexts/ThemeContext";
-import { backgroundColors } from "contexts/BackgroundColorContext";
-import { useSelector } from "react-redux";
-import { selectLoggedIn } from "../../Redux/adminSlice";
+// import { Button, Dropdown, DropdownToggle, Badge } from "reactstrap";
+// import { ThemeContext, themes } from "contexts/ThemeContext";
+// import { backgroundColors } from "contexts/BackgroundColorContext";
+// import { useSelector } from "react-redux";
+// import { selectLoggedIn } from "../../Redux/adminSlice";
 // import { selectLoggedIn } from "Redux/adminSlice";
 
 function FixedPlugin(props) {
 
-  const [dropDownIsOpen, setdropDownIsOpen] = React.useState(false);
-  const handleClick = () => {
-    setdropDownIsOpen(!dropDownIsOpen);
-  };
+  // const [dropDownIsOpen, setdropDownIsOpen] = React.useState(false);
+  // const handleClick = () => {
+  //   setdropDownIsOpen(!dropDownIsOpen);
+  // };
   return (
     // <div className="fixed-plugin" style={{
     //   pointerEvents: !localStorage.getItem("Token")||localStorage.getItem("Token")==="undefined"  ? 'none' : 'auto',
