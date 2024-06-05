@@ -10,7 +10,6 @@ import { updateStateBlock } from "../Redux/adminSlice";
 import "../assets/css/nucleo-icons.css"
 import "../assets/css/usersList.css"
 import { Sort } from "../Redux/adminSlice";
-import { ReactComponent as Detail } from '../assets/Svg/details.svg';
 import { filterUsers } from "../Redux/adminSlice";
 import { selectStaticAllUsers } from "../Redux/adminSlice";
 import Modal from 'react-modal';
@@ -18,6 +17,8 @@ import { agencyCars } from "../Redux/adminSlice";
 import { getAgencyCars } from "../Redux/adminSlice";
 import { useNavigate } from "react-router-dom";
 import { Row, Col, Card, CardHeader, CardBody, Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
+import UserInfo from "components/Maps/UserInfo";
+// import AgencyInfo from "components/Maps/AgencyInfo";
 
 function UserManagements() {
   const Admin = useSelector(selectAdmin)
@@ -224,6 +225,41 @@ function UserManagements() {
       filtered[0] && dispatch(filterUsers(filtered));
     }
   }
+  const [UserReview, setUserReview] = useState(0)
+
+  const ratingTextMap = {
+    1: 'Extremely Dissatisfied',
+    2: 'Dissatisfied',
+    3: 'Neutral',
+    4: 'Satisfied',
+    5: 'Extremely Satisfied'
+  };
+  const ratingsMap = [
+    { rating: 0, filename: "../assets/img/Rating/zero.png" },
+    { rating: 0.5, filename: "../assets/img/Rating/half.png" },
+    { rating: 1, filename: "../assets/img/Rating/one" },
+    { rating: 1.5, filename: "../assets/img/RatingoneAndHalf/" },
+    { rating: 2, filename: "../assets/img/Rating/two" },
+    { rating: 2.5, filename: "../assets/img/Rating/2AndHalf" },
+    { rating: 3, filename: "../assets/img/Rating/three" },
+    { rating: 3.5, filename: "../assets/img/Rating/threeAndHalf" },
+    { rating: 4, filename: "../assets/img/Rating/four" },
+    { rating: 4.5, filename: "../assets/img/Rating/fourAndHalf" },
+    { rating: 5, filename: "../assets/img/Rating/five" }
+  ];
+  function getTextForRating(rating) {
+    // Round the rating to the nearest integer
+    const roundedRating = Math.round(rating);
+
+    // Find the closest matching key in the map
+    const key = Object.keys(ratingTextMap)
+      .sort((a, b) => Math.abs(a - roundedRating) - Math.abs(b - roundedRating))
+      .shift();
+
+    // Return the corresponding text
+    return ratingTextMap[key] || 'Invalid rating';
+  }
+  const ratingText = getTextForRating(UserReview.ratingCar);
   const loading = useSelector((state) => state.Admin.loading);
   const [refresh, setRefresh] = useState(false);
   const dispatch = useDispatch()
@@ -355,90 +391,7 @@ function UserManagements() {
                       <Row>
                         {allUsers?.map((user, i) =>
                           user.type === "user" ? (
-                            <Col
-                              key={i}
-                              className="font-icon-list col-xs-6 col-xs-6"
-                              lg="2"
-                              md="3"
-                              sm="4"
-                              onClick={() => {
-                                console.log(user);
-                                Swal.fire({
-                                  title: `<strong>${user.type === "user" ? "user" : "company"} Profile Details</strong>`,
-                                  html: `
-                                 <b>UserName: </b>${user.userName}
-                                 <br>
-                                 <b>email: </b>${user.email}
-                                 <br>
-                                 <b>phoneNumber: </b>${user.phoneNumber}
-                                 <br>
-                                 <b>type: </b>${user.type}
-                                `,
-                                  imageUrl: `${user.selfie}`,
-                                  imageWidth: 150,
-                                  imageHeight: 150,
-                                  imageAlt: "Custom image",
-                                  backdrop: `rgba(0, 0, 0, 0.5)`,
-                                  showCloseButton: true,
-                                  showCancelButton: true,
-                                  focusConfirm: false,
-                                  confirmButtonText: `
-                                 <i class="fa fa-ban"></i> ${user.isBlocked ? "unBlock ?" : "Block ?"}
-                                `,
-                                  confirmButtonAriaLabel: "Thumbs up, great!",
-                                  customClass: {
-                                    text: "swal-secondary-text",
-                                    text: {
-                                      color: "#30416b"
-                                    },
-                                    container: 'my-modal',
-                                    confirmButton: user.isBlocked ? 'unban-button' : 'ban-button',
-                                    cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
-                                  },
-                                  cancelButtonText: `
-                                 <i class="fa fa-close"></i> Cancel
-                                `,
-                                }).then((result) => {
-                                  if (result.isConfirmed) {
-                                    Swal.fire({
-                                      title: "Are you sure?",
-                                      html: user.isBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBlock <strong>${user.userName}</strong> ?`,
-                                      icon: "warning",
-                                      showCancelButton: true,
-                                      confirmButtonText: "Yes!",
-                                      cancelButtonText: "No, cancel!"
-                                    }).then((result) => {
-                                      if (result.isConfirmed) {
-                                        handleBlock(user.id)
-                                        Swal.fire({
-                                          title: user.isBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Blocked`,
-                                          text: user.isBlocked ? "Thank you for your Job Admin." : "Thank you for your Job Admin.",
-                                          icon: "success"
-                                        });
-                                      } else if (
-                                        result.dismiss === Swal.DismissReason.cancel
-                                      ) {
-                                        Swal.fire({
-                                          title: "Cancelled",
-                                          text: "The user ban has been cancelled.",
-                                          icon: "error"
-                                        });
-                                      }
-                                    });
-                                  }
-                                });
-                              }}
-                            >
-                              <div className="font-icon-detail" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                <div style={{ alignSelf: 'flex-end', marginRight: ".5rem" }}>
-                                  {user.type === "user" ? null : <Detail />}
-                                </div>
-                                <div style={{ display: 'flex', flexDirection: 'column', marginBottom: "0rem", alignItems: 'center', justifyContent: 'center', textAlign: 'center', }}>
-                                  <img src={user.selfie} style={{ maxHeight: "7rem", width: "3.5rem", objectFit: "contain" }} />
-                                  <p className="userNameCol" style={{}}>{user.userName}<br></br>{user.email}</p>
-                                </div>
-                              </div>
-                            </Col>) : null
+                            <UserInfo user={user} i={i} openModal={openModal} handleDetailClick={handleDetailClick} />) : null
                         )}
                       </Row>
                       <div style={{
@@ -459,101 +412,8 @@ function UserManagements() {
                       <div className="usersContainer">
                         {allUsers?.map((user, i) =>
                           user.type === "company" ? (
-
-                            <Col
-                              key={i}
-                              style={{
-                                paddingBottom: "1rem"
-                              }}
-                              className="font-icon-list col-xs-6"
-                              lg="2"
-                              md="4"
-                              sm="4"
-                              onClick={() => {
-                                console.log(user);
-                                Swal.fire({
-                                  title: `<strong>${user.type === "user" ? "user" : "company"} Profile Details</strong>`,
-                                  html: `
-                                 <b>UserName: </b>${user.userName}
-                                 <br>
-                                 <b>email: </b>${user.email}
-                                 <br>
-                                 <b>phoneNumber: </b>${user.phoneNumber}
-                                 <br>
-                                 <b>type: </b>${user.type}
-                                
-                                `,
-                                  imageUrl: `${user.selfie}`,
-                                  imageWidth: 150,
-                                  imageHeight: 150,
-                                  imageAlt: "Custom image",
-                                  backdrop: `rgba(0, 0, 0, 0.5)`,
-                                  showCloseButton: true,
-                                  showCancelButton: true,
-                                  // objectFit:"cover",
-                                  focusConfirm: false,
-                                  confirmButtonText: `
-                                 <i class="fa fa-ban"></i> ${user.isBlocked ? "unBlock ?" : "Block ?"}
-                                `,
-                                  confirmButtonAriaLabel: "Thumbs up, great!",
-                                  customClass: {
-                                    text: "swal-secondary-text",
-                                    container: 'my-modal',
-                                    confirmButton: user.isBlocked ? 'unban-button' : 'ban-button',
-                                    cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
-                                  },
-                                  cancelButtonText: `
-                                 <i class="fa fa-close"></i> Cancel
-                                `,
-                                  // cancelButtonAriaLabel: "Thumbs down"
-                                }).then((result) => {
-                                  if (result.isConfirmed) {
-                                    Swal.fire({
-                                      title: "Are you sure?",
-                                      html: user.isBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBlock <strong>${user.userName}</strong> ?`,
-                                      // text: user.isBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBlock <strong>${user.userName}</strong> ?`,
-                                      icon: "warning",
-                                      showCancelButton: true,
-                                      confirmButtonText: "Yes!",
-                                      cancelButtonText: "No, cancel!"
-                                    }).then((result) => {
-                                      if (result.isConfirmed) {
-                                        handleBlock(user.id)
-                                        Swal.fire({
-                                          title: user.isBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Blocked`,
-                                          text: user.isBlocked ? "Thank you for your Job Admin." : "Thank you for your Job Admin.",
-                                          icon: "success"
-                                        });
-                                      } else if (
-                                        result.dismiss === Swal.DismissReason.cancel
-                                      ) {
-                                        Swal.fire({
-                                          title: "Cancelled",
-                                          text: "The user ban has been cancelled.",
-                                          icon: "error"
-                                        });
-                                      }
-                                    });
-                                  }
-                                });
-                              }}
-
-                            >
-                              <div className="font-icon-detail" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                <div onClick={(event) => {
-                                  event.stopPropagation();
-                                  handleDetailClick(user);
-                                  openModal();
-                                }} className="details_btn" style={{ alignSelf: 'flex-end', marginRight: ".5rem" }}>
-                                  {user.type === "user" ? null : <Detail />}
-                                </div>
-                                <div style={{ display: 'flex', flexDirection: 'column', marginBottom: "0rem", alignItems: 'center', justifyContent: 'center', textAlign: 'center', }}>
-                                  <img src={user.selfie} style={{ maxHeight: "7rem", width: "3.5rem", objectFit: "contain" }} />
-                                  <p className="userNameCol" style={{}}>{user.userName}<br></br>{user.email}</p>
-                                </div>
-                              </div>
-
-                            </Col>) : null
+                            <UserInfo user={user} i={i} openModal={openModal} handleDetailClick={handleDetailClick} />
+                          ) : null
 
                         )}
                       </div>
@@ -568,89 +428,7 @@ function UserManagements() {
                         <Row>
                           {allUsers?.map((user, i) =>
                             user.type === "user" ? (
-                              < Col
-                                key={i}
-                                className="font-icon-list col-xs-6 col-xs-6"
-                                lg="2"
-                                md="3"
-                                sm="4"
-                                onClick={() => {
-                                  console.log(user);
-                                  Swal.fire({
-                                    title: `<strong>${user.type === "user" ? "user" : "company"} Profile Details</strong>`,
-                                    html: `
-                                   <b>UserName: </b>${user.userName}
-                                   <br>
-                                   <b>email: </b>${user.email}
-                                   <br>
-                                   <b>phoneNumber: </b>${user.phoneNumber}
-                                   <br>
-                                   <b>type: </b>${user.type}
-                                  `,
-                                    imageUrl: `${user.selfie}`,
-                                    imageWidth: 150,
-                                    imageHeight: 150,
-                                    imageAlt: "Custom image",
-                                    backdrop: `rgba(0, 0, 0, 0.5)`,
-                                    showCloseButton: true,
-                                    showCancelButton: true,
-                                    focusConfirm: false,
-                                    confirmButtonText: `
-                                   <i class="fa fa-ban"></i> ${user.isBlocked ? "unBlock ?" : "Block ?"}
-                                  `,
-                                    confirmButtonAriaLabel: "Thumbs up, great!",
-                                    customClass: {
-                                      text: "swal-secondary-text",
-                                      container: 'my-modal',
-                                      confirmButton: user.isBlocked ? 'unban-button' : 'ban-button',
-                                      cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
-                                    },
-                                    cancelButtonText: `
-                                   <i class="fa fa-close"></i> Cancel
-                                  `,
-                                    // cancelButtonAriaLabel: "Thumbs down"
-                                  }).then((result) => {
-                                    if (result.isConfirmed) {
-                                      Swal.fire({
-                                        title: "Are you sure?",
-                                        html: user.isBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBlock <strong>${user.userName}</strong> ?`,
-                                        // text: user.isBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBlock <strong>${user.userName}</strong> ?`,
-                                        icon: "warning",
-                                        showCancelButton: true,
-                                        confirmButtonText: "Yes!",
-                                        cancelButtonText: "No, cancel!"
-                                      }).then((result) => {
-                                        if (result.isConfirmed) {
-                                          handleBlock(user.id)
-                                          Swal.fire({
-                                            title: user.isBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Blocked`,
-                                            text: user.isBlocked ? "The user Can Now Login Freely" : "Thank you for your Job Admin.",
-                                            icon: "success"
-                                          });
-                                        } else if (
-                                          result.dismiss === Swal.DismissReason.cancel
-                                        ) {
-                                          Swal.fire({
-                                            title: "Cancelled",
-                                            text: "The user ban has been cancelled.",
-                                            icon: "error"
-                                          });
-                                        }
-                                      });
-                                    }
-                                  });
-                                }}
-                              >
-                                <div className="font-icon-detail" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                  <div style={{ alignSelf: 'flex-end', marginRight: ".5rem" }}>
-                                    {user.type === "user" ? null : <Detail />}
-                                  </div>
-                                  <div style={{ display: 'flex', flexDirection: 'column', marginBottom: "0rem", alignItems: 'center', justifyContent: 'center', textAlign: 'center', }}>
-                                    <img src={user.selfie} style={{ maxHeight: "7rem", width: "3.5rem", objectFit: "contain" }} />
-                                    <p className="userNameCol" style={{}}>{user.userName}<br></br>{user.email}</p>
-                                  </div>
-                                </div>
-                              </Col>
+                              <UserInfo user={user} i={i} openModal={openModal} handleDetailClick={handleDetailClick} />
                             ) : null
                           )}
                         </Row>
@@ -667,94 +445,7 @@ function UserManagements() {
                         <Row>
                           {allUsers?.map((user, i) =>
                             user.type === "company" ? (
-                              <Col
-                                key={i}
-                                className="font-icon-list col-xs-6 col-xs-6"
-                                lg="2"
-                                md="3"
-                                sm="4"
-                                onClick={() => {
-                                  console.log(user);
-                                  Swal.fire({
-                                    title: `<strong>${user.type === "user" ? "User" : "company"} Profile Details</strong>`,
-                                    html: `
-                                   <b>UserName: </b>${user.userName}
-                                   <br>
-                                   <b>email: </b>${user.email}
-                                   <br>
-                                   <b>phoneNumber: </b>${user.phoneNumber}
-                                   <br>
-                                   <b>type: </b>${user.type}
-
-                                  `,
-                                    imageUrl: `${user.selfie}`,
-                                    imageWidth: 150,
-                                    imageHeight: 150,
-                                    imageAlt: "Custom image",
-                                    backdrop: `rgba(0, 0, 0, 0.5)`,
-                                    showCloseButton: true,
-                                    showCancelButton: true,
-                                    focusConfirm: false,
-                                    confirmButtonText: `
-                                   <i class="fa fa-ban"></i> ${user.isBlocked ? "unBlock ?" : "Block ?"}
-                                  `,
-                                    confirmButtonAriaLabel: "Thumbs up, great!",
-                                    customClass: {
-                                      text: "swal-secondary-text",
-                                      container: 'my-modal',
-                                      confirmButton: user.isBlocked ? 'unban-button' : 'ban-button',
-                                      cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
-                                    },
-                                    cancelButtonText: `
-                                   <i class="fa fa-close"></i> Cancel
-                                  `,
-                                    // cancelButtonAriaLabel: "Thumbs down"
-                                  }).then((result) => {
-                                    if (result.isConfirmed) {
-                                      Swal.fire({
-                                        title: "Are you sure?",
-                                        html: user.isBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBlock <strong>${user.userName}</strong> ?`,
-                                        // text: user.isBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBlock <strong>${user.userName}</strong> ?`,
-                                        icon: "warning",
-                                        showCancelButton: true,
-                                        confirmButtonText: "Yes!",
-                                        cancelButtonText: "No, cancel!"
-                                      }).then((result) => {
-                                        if (result.isConfirmed) {
-                                          handleBlock(user.id)
-                                          Swal.fire({
-                                            title: user.isBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Blocked`,
-                                            text: user.isBlocked ? "Thank you for your Job Admin." : "Thank you for your Job Admin.",
-                                            icon: "success"
-                                          });
-                                        } else if (
-                                          result.dismiss === Swal.DismissReason.cancel
-                                        ) {
-                                          Swal.fire({
-                                            title: "Cancelled",
-                                            text: "The user ban has been cancelled.",
-                                            icon: "error"
-                                          });
-                                        }
-                                      });
-                                    }
-                                  });
-                                }}
-                              >
-                                <div className="font-icon-detail" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                  <div onClick={(event) => {
-                                    event.stopPropagation();
-                                    handleDetailClick(user);
-                                    openModal();
-                                  }} className="details_btn" style={{ alignSelf: 'flex-end', marginRight: ".5rem" }}>
-                                    {user.type === "user" ? null : <Detail />}
-                                  </div>
-                                  <div style={{ display: 'flex', flexDirection: 'column', marginBottom: "0rem", alignItems: 'center', justifyContent: 'center', textAlign: 'center', }}>
-                                    <img src={user.selfie} style={{ maxHeight: "7rem", width: "3.5rem", objectFit: "contain" }} />
-                                    <p className="userNameCol" style={{}}>{user.userName}<br></br>{user.email}</p>
-                                  </div>
-                                </div>
-                              </Col>
+                              <UserInfo user={user} i={i} openModal={openModal} handleDetailClick={handleDetailClick} />
                             ) : null
 
                           )}
@@ -770,93 +461,7 @@ function UserManagements() {
                         <Row>
                           {allUsers?.map((user, i) =>
                             user.isBlocked ? (
-                              < Col
-                                key={i}
-                                className="font-icon-list col-xs-6 col-xs-6"
-                                lg="2"
-                                md="3"
-                                sm="4"
-                                onClick={() => {
-                                  console.log(user);
-                                  Swal.fire({
-                                    title: `<strong>${user.type === "user" ? "User" : "company"} Profile Details</strong>`,
-                                    html: `
-                                   <b>UserName: </b>${user.userName}
-                                   <br>
-                                   <b>email: </b>${user.email}
-                                   <br>
-                                   <b>phoneNumber: </b>${user.phoneNumber}
-                                   <br>
-                                   <b>type: </b>${user.type}
-                                  `,
-                                    imageUrl: `${user.selfie}`,
-                                    imageWidth: 150,
-                                    imageHeight: 150,
-                                    imageAlt: "Custom image",
-                                    backdrop: `rgba(0, 0, 0, 0.5)`,
-                                    showCloseButton: true,
-                                    showCancelButton: true,
-                                    focusConfirm: false,
-                                    confirmButtonText: `
-                                   <i class="fa fa-ban"></i> ${user.isBlocked ? "unBlock ?" : "Block ?"}
-                                  `,
-                                    confirmButtonAriaLabel: "Thumbs up, great!",
-                                    customClass: {
-                                      text: "swal-secondary-text",
-                                      container: 'my-modal',
-                                      confirmButton: user.isBlocked ? 'unban-button' : 'ban-button',
-                                      cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
-                                    },
-                                    cancelButtonText: `
-                                   <i class="fa fa-close"></i> Cancel
-                                  `,
-                                    // cancelButtonAriaLabel: "Thumbs down"
-                                  }).then((result) => {
-                                    if (result.isConfirmed) {
-                                      Swal.fire({
-                                        title: "Are you sure?",
-                                        html: user.isBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBlock <strong>${user.userName}</strong> ?`,
-                                        // text: user.isBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBlock <strong>${user.userName}</strong> ?`,
-                                        icon: "warning",
-                                        showCancelButton: true,
-                                        confirmButtonText: "Yes!",
-                                        cancelButtonText: "No, cancel!"
-                                      }).then((result) => {
-                                        if (result.isConfirmed) {
-                                          handleBlock(user.id)
-                                          Swal.fire({
-                                            title: user.isBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Blocked`,
-                                            text: user.isBlocked ? "Thank you for your Job Admin." : "Thank you for your Job Admin.",
-                                            icon: "success"
-                                          });
-                                        } else if (
-                                          result.dismiss === Swal.DismissReason.cancel
-                                        ) {
-                                          Swal.fire({
-                                            title: "Cancelled",
-                                            text: "The user ban has been cancelled.",
-                                            icon: "error"
-                                          });
-                                        }
-                                      });
-                                    }
-                                  });
-                                }}
-                              >
-                                <div className="font-icon-detail" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                  <div onClick={(event) => {
-                                    event.stopPropagation();
-                                    handleDetailClick(user);
-                                    openModal();
-                                  }} className="details_btn" style={{ alignSelf: 'flex-end', marginRight: ".5rem" }}>
-                                    {user.type === "user" ? null : <Detail />}
-                                  </div>
-                                  <div style={{ display: 'flex', flexDirection: 'column', marginBottom: "0rem", alignItems: 'center', justifyContent: 'center', textAlign: 'center', }}>
-                                    <img src={user.selfie} style={{ maxHeight: "7rem", width: "3.5rem", objectFit: "contain" }} />
-                                    <p className="userNameCol" style={{}}>{user.userName}<br></br>{user.email}</p>
-                                  </div>
-                                </div>
-                              </Col>
+                              <UserInfo user={user} i={i} openModal={openModal} handleDetailClick={handleDetailClick} />
                             ) : null
                           )}
                         </Row>
@@ -872,93 +477,7 @@ function UserManagements() {
                         <Row>
                           {allUsers?.map((user, i) =>
                             !user.isBlocked ? (
-                              < Col
-                                key={i}
-                                className="font-icon-list col-xs-6 col-xs-6"
-                                lg="2"
-                                md="3"
-                                sm="4"
-                                onClick={() => {
-                                  console.log(user);
-                                  Swal.fire({
-                                    title: `<strong>${user.type === "user" ? "User" : "company"} Profile Details</strong>`,
-                                    html: `
-                                   <b>UserName: </b>${user.userName}
-                                   <br>
-                                   <b>email: </b>${user.email}
-                                   <br>
-                                   <b>phoneNumber: </b>${user.phoneNumber}
-                                   <br>
-                                   <b>type: </b>${user.type}
-                                  `,
-                                    imageUrl: `${user.selfie}`,
-                                    imageWidth: 150,
-                                    imageHeight: 150,
-                                    imageAlt: "Custom image",
-                                    backdrop: `rgba(0, 0, 0, 0.5)`,
-                                    showCloseButton: true,
-                                    showCancelButton: true,
-                                    focusConfirm: false,
-                                    confirmButtonText: `
-                                   <i class="fa fa-ban"></i> ${user.isBlocked ? "unBlock ?" : "Block ?"}
-                                  `,
-                                    confirmButtonAriaLabel: "Thumbs up, great!",
-                                    customClass: {
-                                      text: "swal-secondary-text",
-                                      container: 'my-modal',
-                                      confirmButton: user.isBlocked ? 'unban-button' : 'ban-button',
-                                      cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
-                                    },
-                                    cancelButtonText: `
-                                   <i class="fa fa-close"></i> Cancel
-                                  `,
-                                    // cancelButtonAriaLabel: "Thumbs down"
-                                  }).then((result) => {
-                                    if (result.isConfirmed) {
-                                      Swal.fire({
-                                        title: "Are you sure?",
-                                        html: user.isBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBlock <strong>${user.userName}</strong> ?`,
-                                        // text: user.isBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBlock <strong>${user.userName}</strong> ?`,
-                                        icon: "warning",
-                                        showCancelButton: true,
-                                        confirmButtonText: "Yes!",
-                                        cancelButtonText: "No, cancel!"
-                                      }).then((result) => {
-                                        if (result.isConfirmed) {
-                                          handleBlock(user.id)
-                                          Swal.fire({
-                                            title: user.isBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Blocked`,
-                                            text: user.isBlocked ? "Thank you for your Job Admin." : "Thank you for your Job Admin.",
-                                            icon: "success"
-                                          });
-                                        } else if (
-                                          result.dismiss === Swal.DismissReason.cancel
-                                        ) {
-                                          Swal.fire({
-                                            title: "Cancelled",
-                                            text: "The user ban has been cancelled.",
-                                            icon: "error"
-                                          });
-                                        }
-                                      });
-                                    }
-                                  });
-                                }}
-                              >
-                                <div className="font-icon-detail" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                  <div onClick={(event) => {
-                                    event.stopPropagation();
-                                    handleDetailClick(user);
-                                    openModal();
-                                  }} className="details_btn" style={{ alignSelf: 'flex-end', marginRight: ".5rem" }}>
-                                    {user.type === "user" ? null : <Detail />}
-                                  </div>
-                                  <div style={{ display: 'flex', flexDirection: 'column', marginBottom: "0rem", alignItems: 'center', justifyContent: 'center', textAlign: 'center', }}>
-                                    <img src={user.selfie} style={{ maxHeight: "7rem", width: "3.5rem", objectFit: "contain" }} />
-                                    <p className="userNameCol" style={{}}>{user.userName}<br></br>{user.email}</p>
-                                  </div>
-                                </div>
-                              </Col>
+                              <UserInfo user={user} i={i} openModal={openModal} handleDetailClick={handleDetailClick} />
                             ) : null
                           )}
                         </Row>
@@ -975,93 +494,7 @@ function UserManagements() {
                         <Row>
                           {allUsers?.map((user, i) =>
                             user.isArchived ? (
-                              < Col
-                                key={i}
-                                className="font-icon-list col-xs-6 col-xs-6"
-                                lg="2"
-                                md="3"
-                                sm="4"
-                                onClick={() => {
-                                  console.log(user);
-                                  Swal.fire({
-                                    title: `<strong>${user.type === "user" ? "User" : "company"} Profile Details</strong>`,
-                                    html: `
-                                   <b>UserName: </b>${user.userName}
-                                   <br>
-                                   <b>email: </b>${user.email}
-                                   <br>
-                                   <b>phoneNumber: </b>${user.phoneNumber}
-                                   <br>
-                                   <b>type: </b>${user.type}
-                                  `,
-                                    imageUrl: `${user.selfie}`,
-                                    imageWidth: 150,
-                                    imageHeight: 150,
-                                    imageAlt: "Custom image",
-                                    backdrop: `rgba(0, 0, 0, 0.5)`,
-                                    showCloseButton: true,
-                                    showCancelButton: true,
-                                    focusConfirm: false,
-                                    confirmButtonText: `
-                                   <i class="fa fa-ban"></i> ${user.isBlocked ? "unBlock ?" : "Block ?"}
-                                  `,
-                                    confirmButtonAriaLabel: "Thumbs up, great!",
-                                    customClass: {
-                                      text: "swal-secondary-text",
-                                      container: 'my-modal',
-                                      confirmButton: user.isBlocked ? 'unban-button' : 'ban-button',
-                                      cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
-                                    },
-                                    cancelButtonText: `
-                                   <i class="fa fa-close"></i> Cancel
-                                  `,
-                                    // cancelButtonAriaLabel: "Thumbs down"
-                                  }).then((result) => {
-                                    if (result.isConfirmed) {
-                                      Swal.fire({
-                                        title: "Are you sure?",
-                                        html: user.isBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBlock <strong>${user.userName}</strong> ?`,
-                                        // text: user.isBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBlock <strong>${user.userName}</strong> ?`,
-                                        icon: "warning",
-                                        showCancelButton: true,
-                                        confirmButtonText: "Yes!",
-                                        cancelButtonText: "No, cancel!"
-                                      }).then((result) => {
-                                        if (result.isConfirmed) {
-                                          handleBlock(user.id)
-                                          Swal.fire({
-                                            title: user.isBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Blocked`,
-                                            text: user.isBlocked ? "Thank you for your Job Admin." : "Thank you for your Job Admin.",
-                                            icon: "success"
-                                          });
-                                        } else if (
-                                          result.dismiss === Swal.DismissReason.cancel
-                                        ) {
-                                          Swal.fire({
-                                            title: "Cancelled",
-                                            text: "The user ban has been cancelled.",
-                                            icon: "error"
-                                          });
-                                        }
-                                      });
-                                    }
-                                  });
-                                }}
-                              >
-                                <div className="font-icon-detail" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                  <div onClick={(event) => {
-                                    event.stopPropagation();
-                                    handleDetailClick(user);
-                                    openModal();
-                                  }} className="details_btn" style={{ alignSelf: 'flex-end', marginRight: ".5rem" }}>
-                                    {user.type === "user" ? null : <Detail />}
-                                  </div>
-                                  <div style={{ display: 'flex', flexDirection: 'column', marginBottom: "0rem", alignItems: 'center', justifyContent: 'center', textAlign: 'center', }}>
-                                    <img src={user.selfie} style={{ maxHeight: "7rem", width: "3.5rem", objectFit: "contain" }} />
-                                    <p className="userNameCol" style={{}}>{user.userName}<br></br>{user.email}</p>
-                                  </div>
-                                </div>
-                              </Col>
+                              <UserInfo user={user} i={i} openModal={openModal} handleDetailClick={handleDetailClick} />
                             ) : null
                           )}
                         </Row>
@@ -1217,32 +650,110 @@ function UserManagements() {
                 paddingBottom: "5rem"
                 // height: "54rem",
               }}>
-                {AgencyReviews?.map((review,i)=>
-                   ( <div key={i} className="review_div">
-                    <div><span style={{
-                      fontSize: "1.1rem"
-                    }}>{review.Booking.User.userName}</span><span> / </span><span style={{
-                      fontSize: "1.1rem"
-                    }}>{review.ratingCar}</span></div>
+                {AgencyReviews?.map((review, i) =>
+                  // setUserReview(review.ratingCar)
+                  // (<div key={i} className="review_div">
+
+                  //   <div style={{
+                  //     display: "flex",
+                  //     flexDirection: "row",
+                  //     marginTop: ".5rem",
+                  //     alignItems: "center"
+                  //   }}>
+                  //     <div className="review_img">
+                  //       <img className="hoverImage_review" style={{
+                  //         height: "100%",
+                  //         width: "100%",
+                  //         objectFit: "cover",
+                  //         borderRadius: "50%"
+                  //       }} src={review.Booking.User.selfie} />
+                  //     </div>
+                  //     <div style={{
+                  //        display: "flex",
+                  //        flexDirection: "column",
+                  //       //  marginTop: ".5rem",
+                  //       // backgroundColor:"red",
+                  //       height:"4rem",
+                  //        alignItems: "center",
+                  //       //  gap:"2rem"
+                  //     }}>
+                  //     <div style={{
+                  //       // paddingBottom:"2rem"
+                  //       alignSelf:"flex-start"
+                  //     }}><span style={{
+                  //       fontSize: "1.2rem",
+                  //       fontWeight:"400"
+                  //     }}>{review.Booking.User.userName}</span><span> / </span><span style={{
+                  //       fontSize: "1.2rem",
+                  //       fontWeight:"400"
+                  //     }}>{review.ratingCar}</span></div>
+                  //     <div style={{
+                  //       paddingTop:".4rem",
+                  //       fontSize: ".9rem",
+                  //       // fontWeight:"600"
+                  //     }}>
+                  //       Extremely Dissatisfied !
+                  //     </div>
+                  //     </div>
+                  //   </div>
+                  // </div>)
+                  <div className="review_div">
                     <div style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      marginTop: ".5rem",
-                      alignItems: "center"
+                      width:"100%",
+                      display:"flex",
+                      justifyContent:"center",
+                      // backgroundColor:"red",
+                      height:"3rem"
                     }}>
-                      <div className="review_img">
-                        <img className="hoverImage_review" style={{
-                          height:"100%",
-                          width:"100%",
-                          objectFit:"cover",
-                          borderRadius:"50%"
-                        }} src={review.Booking.User.selfie} />
-                      </div>
-                      <div>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Et ultrices neque ornare aenean euismod elementum nisi quis eleifend.
-                      </div>
+                    <img style={{
+                      objectFit:"cover",
+                      // backgroundColor:"yellow",
+                      height:"100%"
+                    }} src={require("../assets/img/Rating/heartRating.png")}/>
                     </div>
-                  </div>))
+                    <div style={{
+                      color:"#242E39",
+                      fontSize:"23.75px",
+                      fontWeight:"bold"
+                    }}>{review.Booking.User.userName} Review</div>
+                    <div>Satisfied</div>
+                    <div 
+                     className="hoverImage"
+                    style={{
+                      backgroundColor:"#F7F8FA",
+                      paddingTop:"13.2px",
+                      paddingBottom:"13.2px",
+                      borderRadius:"7.92px",
+                      height:"53.39px",
+                      // width:"232px",
+                      paddingRight:"16px",
+                      paddingLeft:"16px",
+                      display:"flex",
+                      flexDirection:"row",
+                      justifyItems:"center",
+                      marginTop:"1rem",
+                      marginBottom:"1rem",
+                      
+                    }}>
+                      <img  style={{
+                      objectFit:"contain",
+                      // backgroundColor:"yellow",
+                      height:"auto",
+                      width:"auto"
+                    }} src={require("../assets/img/Rating/five.png")}/>
+                      <div style={{
+                        fontSize:"1.2rem",
+                        paddingLeft:"1rem",
+                        fontWeight:"400",
+                        // backgroundColor:"red",
+                        display:"flex",
+                        alignItems:"center",
+                        paddingTop:".2rem"
+                        // height:"3rem"
+                      }}>4.5/5</div>
+                    </div>
+                  </div>
+                )
                 }
               </div>
             </div>

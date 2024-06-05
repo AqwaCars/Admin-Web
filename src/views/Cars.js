@@ -271,7 +271,7 @@ const Cars = () => {
       console.log(task1.payload);
       console.log(task2.payload);
       // Reset state after successful operations
-      setformData({})
+      setExtraUserForm({})
       resetStateAfterSuccess();
       setTimeout(() => {
         closeModal()
