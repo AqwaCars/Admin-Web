@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 export default function LoginPage() {
   const navigate = useNavigate();
   const [formChecked, setFormChecked] = useState(false);
-  const [formVisible, setFormVisible] = useState(true);
   const dispatch = useDispatch()
   const [form, setForm] = useState({
     email: "",
@@ -112,7 +111,7 @@ export default function LoginPage() {
 
                   <form style={{
 
-                  }} className={!formVisible ? '' : 'fade-out'}>
+                  }} className={ 'fade-out'}>
                     <input type="text" placeholder="Email" onChange={(e) => {
                       formValidation()
                       setForm({ ...form, email: e.target.value })

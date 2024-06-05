@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import "../../assets/css/nucleo-icons.css";
 import { getBookedDates, handleBooking } from "../../Redux/adminSlice";
 import { CarBookedPeriods } from "../../Redux/adminSlice";
-import { Button } from "reactstrap";
 import Swal from "sweetalert2";
 
 const ReqRow = ({setDate, request, setCar,openModal }) => {
@@ -55,6 +54,7 @@ const ReqRow = ({setDate, request, setCar,openModal }) => {
       <td>{request?.brand}</td>
       <td>{request?.price-20}</td>
       <td>{request?.typeOfFuel}</td>
+      <td>{request?.deposit}</td>
       <td>{request?.UserId}</td>
       <td>{request?.Category}</td>
       <td>{request?.Type}</td>
@@ -62,6 +62,7 @@ const ReqRow = ({setDate, request, setCar,openModal }) => {
       <td>{request?.DoorNumber}</td>
       <td>{request?.Capacity}</td>
       <td>{request?.Year}</td>
+      <td>{request?.createdAt.split('T')[0]}</td>
       </>
       </tr>
       :

@@ -19,8 +19,87 @@ background-color: rgb(0,0,0,0.1);
   padding: .5rem;
   text-decoration: underline;
 }
+.hoverImage:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover for a 3D effect */
+  border-width: 0.15rem;
+  transform: scale(1); /* Slightly enlarge on hover */
+  /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); Enhance shadow on hover for a 3D effect */
+  background-color: #F5F5F5;
+  /* Optional: Add a CSS animation for a more dynamic effect */
+  animation: hoverEffect 0.5s ease-in-out forwards;
+}
+.hoverImage_review:hover {
+  border-radius: 50% !important;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover for a 3D effect */
+  border-width: 0.15rem;
+  transform: scale(1); /* Slightly enlarge on hover */
+  /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); Enhance shadow on hover for a 3D effect */
+  background-color: #F5F5F5;
+  /* Optional: Add a CSS animation for a more dynamic effect */
+  animation: hoverEffect 0.5s ease-in-out forwards;
+}
 .custom-digital-clock-item {
   border-radius: 1rem!important; /* Example: fully rounded corners */
+}
+/* StepperTouch.css */
+.stepper-touch-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* height: 100vh; */
+  background-color: #6C6DFF;
+  border-radius: 1rem;
+}
+
+.input-number {
+  position: relative;
+  width: 100px;
+  height: 40px;
+  background-color: transparent;
+  overflow: hidden;
+  border-radius: 20px;
+  margin: 2px;
+}
+
+.input-number span {
+  position: absolute;
+  left: 50%;
+  margin-left: -20px;
+  display: inline-block;
+  background-color: white;
+  height: 100%;
+  width: 40px;
+  border-radius: 20px;
+  text-align: center;
+  line-height: 40px;
+  font-size: 16px;
+  color: #6C6DFF;
+  letter-spacing: -1px;
+}
+
+.input-number button {
+  display: inline-block;
+  width: 50px;
+  height: 100%;
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  background-color: rgba(255,255,255,.2);
+  transition: background-color.2s ease;
+}
+
+.input-number button:nth-of-type(1) {
+  padding-right: 20px;
+}
+
+.input-number button:nth-of-type(2) {
+  padding-left: 20px;
+}
+
+.input-number button:hover {
+  background-color: rgba(255,255,255,.25);
 }
 
 #Title {
@@ -217,7 +296,7 @@ header h1 {
   padding: 6px;
   font-size: 16px;
   width: 100%;
-
+  text-transform:capitalize
   /* margin: bottom 200px !important; */
 }
 

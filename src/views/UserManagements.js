@@ -1,5 +1,5 @@
 
-import { getAllUsers, selectAdmin } from "../Redux/adminSlice";
+import { agencyReviews, getAgencyReviews, getAllUsers, selectAdmin } from "../Redux/adminSlice";
 import { selectAllUsers } from "../Redux/adminSlice";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,12 +17,14 @@ import Modal from 'react-modal';
 import { agencyCars } from "../Redux/adminSlice";
 import { getAgencyCars } from "../Redux/adminSlice";
 import { useNavigate } from "react-router-dom";
-import { Row, Col, Card, CardHeader, CardBody } from 'reactstrap';
+import { Row, Col, Card, CardHeader, CardBody, Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
 
 function UserManagements() {
   const Admin = useSelector(selectAdmin)
   const [selectedOption, setSelectedOptions] = useState({ value: 'all', label: 'Select Filter ...' });
   const AgencyCars = useSelector(agencyCars)
+  const AgencyReviews = useSelector(agencyReviews)
+  console.log(AgencyReviews);
   const [selectedSortOption, setSelectedSortOptions] = useState({ value: "Select Sort...", label: "Select Sort ..." });
   const options = [
     { value: 'all', label: 'All Users' },
@@ -30,6 +32,7 @@ function UserManagements() {
     { value: 'agencies', label: 'Agencies Only' },
     { value: 'ban', label: 'Banned Only' },
     { value: 'active', label: 'Active Only' },
+    { value: 'archived', label: 'Archived Only' },
   ];
   const replaceSelectedOption = (selectedSortOption) => {
     const newOptions = [
@@ -71,6 +74,7 @@ function UserManagements() {
   const handleDetailClick = (user) => {
     console.log(user);
     dispatch(getAgencyCars(user.id))
+    dispatch(getAgencyReviews(user.id))
     setModalData(user)
   }
   const searchCustomStyles = {
@@ -225,6 +229,11 @@ function UserManagements() {
   const dispatch = useDispatch()
   const allUsers = useSelector(selectAllUsers)
   const staticAllUsers = useSelector(selectStaticAllUsers)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const toggle = () => {
+    setDropdownOpen(prev => !prev);
+  };
+
   const searchOptions = allUsers?.map(user => ({
     label: user.userName,
     value: user.id
@@ -366,7 +375,7 @@ function UserManagements() {
                                  <b>type: </b>${user.type}
                                 `,
                                   imageUrl: `${user.selfie}`,
-                                  imageWidth: 250,
+                                  imageWidth: 150,
                                   imageHeight: 150,
                                   imageAlt: "Custom image",
                                   backdrop: `rgba(0, 0, 0, 0.5)`,
@@ -421,11 +430,11 @@ function UserManagements() {
                               }}
                             >
                               <div className="font-icon-detail" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                <div  style={{ alignSelf: 'flex-end', marginRight: ".5rem" }}>
+                                <div style={{ alignSelf: 'flex-end', marginRight: ".5rem" }}>
                                   {user.type === "user" ? null : <Detail />}
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', marginBottom: "0rem", alignItems: 'center', justifyContent: 'center', textAlign: 'center', }}>
-                                  <img src={user.selfie} style={{ height: "100%", width: "65%", objectFit: "cover" }} />
+                                  <img src={user.selfie} style={{ maxHeight: "7rem", width: "3.5rem", objectFit: "contain" }} />
                                   <p className="userNameCol" style={{}}>{user.userName}<br></br>{user.email}</p>
                                 </div>
                               </div>
@@ -475,7 +484,7 @@ function UserManagements() {
                                 
                                 `,
                                   imageUrl: `${user.selfie}`,
-                                  imageWidth: 250,
+                                  imageWidth: 150,
                                   imageHeight: 150,
                                   imageAlt: "Custom image",
                                   backdrop: `rgba(0, 0, 0, 0.5)`,
@@ -539,7 +548,7 @@ function UserManagements() {
                                   {user.type === "user" ? null : <Detail />}
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', marginBottom: "0rem", alignItems: 'center', justifyContent: 'center', textAlign: 'center', }}>
-                                  <img src={user.selfie} style={{ height: "100%", width: "65%",objectFit: "cover" }} />
+                                  <img src={user.selfie} style={{ maxHeight: "7rem", width: "3.5rem", objectFit: "contain" }} />
                                   <p className="userNameCol" style={{}}>{user.userName}<br></br>{user.email}</p>
                                 </div>
                               </div>
@@ -579,7 +588,7 @@ function UserManagements() {
                                    <b>type: </b>${user.type}
                                   `,
                                     imageUrl: `${user.selfie}`,
-                                    imageWidth: 250,
+                                    imageWidth: 150,
                                     imageHeight: 150,
                                     imageAlt: "Custom image",
                                     backdrop: `rgba(0, 0, 0, 0.5)`,
@@ -633,11 +642,11 @@ function UserManagements() {
                                 }}
                               >
                                 <div className="font-icon-detail" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                  <div   style={{ alignSelf: 'flex-end', marginRight: ".5rem" }}>
+                                  <div style={{ alignSelf: 'flex-end', marginRight: ".5rem" }}>
                                     {user.type === "user" ? null : <Detail />}
                                   </div>
                                   <div style={{ display: 'flex', flexDirection: 'column', marginBottom: "0rem", alignItems: 'center', justifyContent: 'center', textAlign: 'center', }}>
-                                    <img src={user.selfie} style={{ height: "100%", width: "65%", objectFit: "cover" }} />
+                                    <img src={user.selfie} style={{ maxHeight: "7rem", width: "3.5rem", objectFit: "contain" }} />
                                     <p className="userNameCol" style={{}}>{user.userName}<br></br>{user.email}</p>
                                   </div>
                                 </div>
@@ -679,7 +688,7 @@ function UserManagements() {
 
                                   `,
                                     imageUrl: `${user.selfie}`,
-                                    imageWidth: 250,
+                                    imageWidth: 150,
                                     imageHeight: 150,
                                     imageAlt: "Custom image",
                                     backdrop: `rgba(0, 0, 0, 0.5)`,
@@ -741,7 +750,7 @@ function UserManagements() {
                                     {user.type === "user" ? null : <Detail />}
                                   </div>
                                   <div style={{ display: 'flex', flexDirection: 'column', marginBottom: "0rem", alignItems: 'center', justifyContent: 'center', textAlign: 'center', }}>
-                                    <img src={user.selfie} style={{ height: "100%", width: "65%", objectFit: "cover" }} />
+                                    <img src={user.selfie} style={{ maxHeight: "7rem", width: "3.5rem", objectFit: "contain" }} />
                                     <p className="userNameCol" style={{}}>{user.userName}<br></br>{user.email}</p>
                                   </div>
                                 </div>
@@ -750,7 +759,8 @@ function UserManagements() {
 
                           )}
                         </Row></>
-                    ) : selectedOption.label === "Banned Only" ? (
+                    ) :
+                    selectedOption.label === "Banned Only" ? (
                       <>
                         <div style={{
                           fontSize: "1rem"
@@ -780,7 +790,7 @@ function UserManagements() {
                                    <b>type: </b>${user.type}
                                   `,
                                     imageUrl: `${user.selfie}`,
-                                    imageWidth: 250,
+                                    imageWidth: 150,
                                     imageHeight: 150,
                                     imageAlt: "Custom image",
                                     backdrop: `rgba(0, 0, 0, 0.5)`,
@@ -842,7 +852,7 @@ function UserManagements() {
                                     {user.type === "user" ? null : <Detail />}
                                   </div>
                                   <div style={{ display: 'flex', flexDirection: 'column', marginBottom: "0rem", alignItems: 'center', justifyContent: 'center', textAlign: 'center', }}>
-                                    <img src={user.selfie} style={{ height: "100%", width: "65%", objectFit: "cover" }} />
+                                    <img src={user.selfie} style={{ maxHeight: "7rem", width: "3.5rem", objectFit: "contain" }} />
                                     <p className="userNameCol" style={{}}>{user.userName}<br></br>{user.email}</p>
                                   </div>
                                 </div>
@@ -882,7 +892,7 @@ function UserManagements() {
                                    <b>type: </b>${user.type}
                                   `,
                                     imageUrl: `${user.selfie}`,
-                                    imageWidth: 250,
+                                    imageWidth: 150,
                                     imageHeight: 150,
                                     imageAlt: "Custom image",
                                     backdrop: `rgba(0, 0, 0, 0.5)`,
@@ -944,7 +954,110 @@ function UserManagements() {
                                     {user.type === "user" ? null : <Detail />}
                                   </div>
                                   <div style={{ display: 'flex', flexDirection: 'column', marginBottom: "0rem", alignItems: 'center', justifyContent: 'center', textAlign: 'center', }}>
-                                    <img src={user.selfie} style={{ height: "100%", width: "65%", objectFit: "cover" }} />
+                                    <img src={user.selfie} style={{ maxHeight: "7rem", width: "3.5rem", objectFit: "contain" }} />
+                                    <p className="userNameCol" style={{}}>{user.userName}<br></br>{user.email}</p>
+                                  </div>
+                                </div>
+                              </Col>
+                            ) : null
+                          )}
+                        </Row>
+
+                      </>
+                    ) : selectedOption.label === "Archived Only" ? (
+                      <>
+                        <div style={{
+                          fontSize: "1rem",
+                          color: "black"
+                        }}>
+                          All Archived :
+                        </div>
+                        <Row>
+                          {allUsers?.map((user, i) =>
+                            user.isArchived ? (
+                              < Col
+                                key={i}
+                                className="font-icon-list col-xs-6 col-xs-6"
+                                lg="2"
+                                md="3"
+                                sm="4"
+                                onClick={() => {
+                                  console.log(user);
+                                  Swal.fire({
+                                    title: `<strong>${user.type === "user" ? "User" : "company"} Profile Details</strong>`,
+                                    html: `
+                                   <b>UserName: </b>${user.userName}
+                                   <br>
+                                   <b>email: </b>${user.email}
+                                   <br>
+                                   <b>phoneNumber: </b>${user.phoneNumber}
+                                   <br>
+                                   <b>type: </b>${user.type}
+                                  `,
+                                    imageUrl: `${user.selfie}`,
+                                    imageWidth: 150,
+                                    imageHeight: 150,
+                                    imageAlt: "Custom image",
+                                    backdrop: `rgba(0, 0, 0, 0.5)`,
+                                    showCloseButton: true,
+                                    showCancelButton: true,
+                                    focusConfirm: false,
+                                    confirmButtonText: `
+                                   <i class="fa fa-ban"></i> ${user.isBlocked ? "unBlock ?" : "Block ?"}
+                                  `,
+                                    confirmButtonAriaLabel: "Thumbs up, great!",
+                                    customClass: {
+                                      text: "swal-secondary-text",
+                                      container: 'my-modal',
+                                      confirmButton: user.isBlocked ? 'unban-button' : 'ban-button',
+                                      cancelButton: !user.isBlocked ? 'unban-button' : 'ban-button'
+                                    },
+                                    cancelButtonText: `
+                                   <i class="fa fa-close"></i> Cancel
+                                  `,
+                                    // cancelButtonAriaLabel: "Thumbs down"
+                                  }).then((result) => {
+                                    if (result.isConfirmed) {
+                                      Swal.fire({
+                                        title: "Are you sure?",
+                                        html: user.isBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBlock <strong>${user.userName}</strong> ?`,
+                                        // text: user.isBlocked ?`You will ban <strong>${user.userName}</strong> ?`:`You will unBlock <strong>${user.userName}</strong> ?`,
+                                        icon: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonText: "Yes!",
+                                        cancelButtonText: "No, cancel!"
+                                      }).then((result) => {
+                                        if (result.isConfirmed) {
+                                          handleBlock(user.id)
+                                          Swal.fire({
+                                            title: user.isBlocked ? `User <b>${user.userName}</b> Can Log in freely Now` : `User ${user.userName} Blocked`,
+                                            text: user.isBlocked ? "Thank you for your Job Admin." : "Thank you for your Job Admin.",
+                                            icon: "success"
+                                          });
+                                        } else if (
+                                          result.dismiss === Swal.DismissReason.cancel
+                                        ) {
+                                          Swal.fire({
+                                            title: "Cancelled",
+                                            text: "The user ban has been cancelled.",
+                                            icon: "error"
+                                          });
+                                        }
+                                      });
+                                    }
+                                  });
+                                }}
+                              >
+                                <div className="font-icon-detail" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                  <div onClick={(event) => {
+                                    event.stopPropagation();
+                                    handleDetailClick(user);
+                                    openModal();
+                                  }} className="details_btn" style={{ alignSelf: 'flex-end', marginRight: ".5rem" }}>
+                                    {user.type === "user" ? null : <Detail />}
+                                  </div>
+                                  <div style={{ display: 'flex', flexDirection: 'column', marginBottom: "0rem", alignItems: 'center', justifyContent: 'center', textAlign: 'center', }}>
+                                    <img src={user.selfie} style={{ maxHeight: "7rem", width: "3.5rem", objectFit: "contain" }} />
                                     <p className="userNameCol" style={{}}>{user.userName}<br></br>{user.email}</p>
                                   </div>
                                 </div>
@@ -1004,7 +1117,7 @@ function UserManagements() {
                 paddingLeft: "1rem"
               }}><span style={{
                 textDecorationLine: "none"
-              }}>Company designation: </span>{modalData?.userName}</div>
+              }}>Company Title : </span>{modalData?.userName}</div>
               <div style={{
                 display: "flex",
                 flexDirection: "row",
@@ -1012,8 +1125,8 @@ function UserManagements() {
               }}>
                 {/* <div className="company_img"> */}
                 <div style={{
-                  alignItems:"center",
-                  backgroundColor:"transparent"
+                  alignItems: "center",
+                  backgroundColor: "transparent"
                 }} className="car_img">
                   <img style={{
                     width: "8rem", /* Take up the full width of the container */
@@ -1033,7 +1146,60 @@ function UserManagements() {
                   paddingLeft: "1rem",
                   gap: "1rem"
                 }}>
-                  <div className="company_details">Contact: {modalData?.phoneNumber}</div>
+                  <div style={{
+                    alignItems: "center",
+                    flexDirection: "row",
+                    display: "flex",
+                    gap: ".5rem"
+                  }}>
+                    <div className="company_details">Contact: {modalData?.phoneNumber}</div>
+                    <Dropdown style={{
+                      paddingLeft: "2rem"
+                    }} isOpen={dropdownOpen} toggle={toggle}>
+                      <DropdownToggle caret>
+                        Files
+                      </DropdownToggle>
+                      <DropdownMenu>
+                        {/* Corrected DropdownItems */}
+                        {/* <DropdownItem header>Header</DropdownItem> */}
+                        {/* <DropdownItem>Some Action</DropdownItem> */}
+                        {/* <DropdownItem active>Active Item</DropdownItem> */}
+                        <DropdownItem
+                          onClick={() => window.open(modalData.RNE, '_blank')}
+                          style={{
+                            fontSize: ".8rem", color: "black"
+                          }}>R.N.E</DropdownItem>
+                        {/* <DropdownItem divider /> */}
+                        <DropdownItem
+                          onClick={() => window.open(modalData.cardIdFront, '_blank')}
+                          style={{
+                            fontSize: ".8rem", color: "black"
+                          }}>CardId Front-Side</DropdownItem>
+                        <DropdownItem
+                          onClick={() => window.open(modalData.cardIdBack, '_blank')}
+                          style={{
+                            fontSize: ".8rem", color: "black"
+                          }}>CardId Back-Side</DropdownItem>
+                        <DropdownItem
+                          onClick={() => window.open(modalData.drivingLicenseFront, '_blank')}
+                          style={{
+                            fontSize: ".8rem", color: "black"
+                          }}>Driving License Front-Side</DropdownItem>
+                        <DropdownItem
+                          onClick={() => window.open(modalData.drivingLicenseBack, '_blank')}
+                          style={{
+                            fontSize: ".8rem", color: "black"
+                          }}>Driving License Back-Side</DropdownItem>
+                        <DropdownItem
+                          onClick={() => window.open(modalData.passport, '_blank')}
+                          style={{
+                            fontSize: ".8rem", color: "black"
+                          }}>Passport</DropdownItem>
+                        {/* <DropdownItem active>Active Item</DropdownItem> */}
+                        {/* <DropdownItem>Quo Action</DropdownItem> */}
+                      </DropdownMenu>
+                    </Dropdown>
+                  </div>
                   <div className="company_details">Contact: {modalData?.email}</div>
                   <div className="company_details">Joined Us On {new Date(modalData?.createdAt).toLocaleDateString()}</div>
                 </div>
@@ -1051,86 +1217,33 @@ function UserManagements() {
                 paddingBottom: "5rem"
                 // height: "54rem",
               }}>
-                <div className="review_div">
-                  <div><span style={{
-                    fontSize: "1.1rem"
-                  }}>UserName</span><span> / </span><span style={{
-                    fontSize: "1.1rem"
-                  }}>Rating</span></div>
-                  <div style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    marginTop: ".5rem",
-                    alignItems: "center"
-                  }}>
-                    <div className="review_img">
-                      <img />
+                {AgencyReviews?.map((review,i)=>
+                   ( <div key={i} className="review_div">
+                    <div><span style={{
+                      fontSize: "1.1rem"
+                    }}>{review.Booking.User.userName}</span><span> / </span><span style={{
+                      fontSize: "1.1rem"
+                    }}>{review.ratingCar}</span></div>
+                    <div style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      marginTop: ".5rem",
+                      alignItems: "center"
+                    }}>
+                      <div className="review_img">
+                        <img className="hoverImage_review" style={{
+                          height:"100%",
+                          width:"100%",
+                          objectFit:"cover",
+                          borderRadius:"50%"
+                        }} src={review.Booking.User.selfie} />
+                      </div>
+                      <div>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Et ultrices neque ornare aenean euismod elementum nisi quis eleifend.
+                      </div>
                     </div>
-                    <div>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Et ultrices neque ornare aenean euismod elementum nisi quis eleifend.
-                    </div>
-                  </div>
-                </div>
-                <div className="review_div">
-                  <div><span style={{
-                    fontSize: "1.1rem"
-                  }}>UserName</span><span> / </span><span style={{
-                    fontSize: "1.1rem"
-                  }}>Rating</span></div>
-                  <div style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    marginTop: ".5rem",
-                    alignItems: "center"
-                  }}>
-                    <div className="review_img">
-                      <img />
-                    </div>
-                    <div>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Et ultrices neque ornare aenean euismod elementum nisi quis eleifend.
-                    </div>
-                  </div>
-                </div>
-                <div className="review_div">
-                  <div><span style={{
-                    fontSize: "1.1rem"
-                  }}>UserName</span><span> / </span><span style={{
-                    fontSize: "1.1rem"
-                  }}>Rating</span></div>
-                  <div style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    marginTop: ".5rem",
-                    alignItems: "center"
-                  }}>
-                    <div className="review_img">
-                      <img />
-                    </div>
-                    <div>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Et ultrices neque ornare aenean euismod elementum nisi quis eleifend.
-                    </div>
-                  </div>
-                </div>
-                <div className="review_div">
-                  <div><span style={{
-                    fontSize: "1.1rem"
-                  }}>UserName</span><span> / </span><span style={{
-                    fontSize: "1.1rem"
-                  }}>Rating</span></div>
-                  <div style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    marginTop: ".5rem",
-                    alignItems: "center"
-                  }}>
-                    <div className="review_img">
-                      <img />
-                    </div>
-                    <div>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Et ultrices neque ornare aenean euismod elementum nisi quis eleifend.
-                    </div>
-                  </div>
-                </div>
+                  </div>))
+                }
               </div>
             </div>
           </div>

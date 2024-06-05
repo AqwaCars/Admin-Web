@@ -1,4 +1,4 @@
-import { CreateBooking, cancelRent, selectAdmin, selectStaticAllCars, updateCar } from "../Redux/adminSlice";
+import { CreateBooking, selectAdmin, selectStaticAllCars, updateCar } from "../Redux/adminSlice";
 import { getLimitedCars } from "../Redux/adminSlice";
 import "../assets/css/addNewEntities.css"
 import "../assets/css/TableList.css"
@@ -88,7 +88,7 @@ const Cars = () => {
   const [carRenter, setCarRenter] = useState({})
   const [ExtraUserForm, setExtraUserForm] = useState({})
   const [load, setLoad] = useState()
-  const [userCancel, setUserCancel] = useState({})
+  // const [userCancel, setUserCancel] = useState({})
   const options = users?.map(user => ({
     label: user.userName, // Display the userName as the label
     value: user, // Use the id as the value
@@ -201,11 +201,36 @@ const Cars = () => {
   };
 
   const prepareDataForDispatch = () => {
-    // const index=lastIndexOf(datesArray)
-    return Object(carRenter).length > 0 ?
-      { startDate: date.startDate, endDate: date.endDate, acceptation: "accepted", amount: car.price * generateDatesArray().length - 1, CarId: car.id, rentalTime, returnTime, dates: datesArray, UserId: carRenter.id } :
-      { startDate: date.startDate, endDate: date.endDate, acceptation: "accepted", amount: car.price * generateDatesArray().length - 1, CarId: car.id, rentalTime, returnTime, dates: datesArray, UserId: null };
+    // Assuming 'date', 'car', 'carRenter', 'datesArray', 'rentalTime', and 'returnTime' are already defined and accessible within this scope.
+
+    // Calculate the multiplier based on the length of the datesArray minus one.
+    const multiplier = datesArray.length - 1;
+
+    return Object.keys(carRenter).length > 0 ? {
+      startDate: date.startDate,
+      endDate: date.endDate,
+      acceptation: "accepted",
+      amount: car.price * multiplier, // Adjusted line
+      CarId: car.id,
+      rentalTime,
+      returnTime,
+      dates: datesArray,
+      UserId: carRenter.id
+    }
+      :
+      {
+        startDate: date.startDate,
+        endDate: date.endDate,
+        acceptation: "accepted",
+        amount: car.price * multiplier, // Adjusted line
+        CarId: car.id,
+        rentalTime,
+        returnTime,
+        dates: datesArray,
+        UserId: null
+      };
   };
+
 
   const resetStateAfterSuccess = () => {
     setCloudWait(false);
@@ -246,10 +271,11 @@ const Cars = () => {
       console.log(task1.payload);
       console.log(task2.payload);
       // Reset state after successful operations
+      setformData({})
       resetStateAfterSuccess();
-      setTimeout(()=>{
+      setTimeout(() => {
         closeModal()
-      },1000)
+      }, 1000)
       console.log("Operations completed successfully");
     } catch (error) {
       console.error("Failed to perform operations:", error);
@@ -480,14 +506,15 @@ const Cars = () => {
                       <th>Brand</th>
                       <th>Price</th>
                       <th>Type Of Fuel</th>
-                      {/* <th>Status</th> */}
+                      <th>Deposit</th>
                       <th>Agency</th>
                       <th>Category</th>
                       <th>Type</th>
                       <th>peopleCount</th>
                       <th>DoorNumber</th>
                       <th>Capacity</th>
-                      <th>Year Of Manufacturing</th>
+                      <th>Made At</th>
+                      <th>Added At</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -521,7 +548,9 @@ const Cars = () => {
           setRentalTime(null)
           setReturnTime(null)
         }}>
-        <header>
+        <header style={{
+          borderBottom:"lightgrey .15rem solid"
+        }}>
           <h1>Change Availability for {car.brand + " " + car.model}</h1>
         </header>
         <div style={{
@@ -551,11 +580,11 @@ const Cars = () => {
               />
             </div>
             <div className="calender_Ctr">
-            <p style={{
-              alignSelf:"flex-start",
-              fontSize:"1rem",
-              // textDecoration:"underline"
-            }}>Select an existing user or add new details :</p>
+              <p style={{
+                alignSelf: "flex-start",
+                fontSize: "1rem",
+                // textDecoration:"underline"
+              }}>Select an existing user or add new details :</p>
               <Select
                 className="select-box"
                 placeholder="Select The Customer..."
@@ -599,10 +628,11 @@ const Cars = () => {
                 {Object.values(ExtraUserForm).length > 0 ? <span style={{
                   fontSize: "1.1rem",
                   padding: ".4rem",
-                  border: ".1rem lightgreen solid",
+                  fontWeight:"600",
+                  border: ".2rem #344675 solid",
                   width: "100%",
                   borderRadius: ".2rem",
-                  color: "lightgreen"
+                  color: "#344675"
                 }}>✔User Data Saved</span> :
                   <>
                     < Plus style={{ height: "1.5rem" }} />

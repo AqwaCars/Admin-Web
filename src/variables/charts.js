@@ -83,7 +83,7 @@ let chartExample1 = {
       labels: labels,
       datasets: [
         {
-          label: "Rentals Accepted",
+          label: "Hide/Show Chart",
           fill: true,
           backgroundColor: "rgba(29,140,248,0.2)",
           borderColor: "#1f8ef1",
@@ -249,7 +249,7 @@ let chartExample2 = {
       labels: labels,
       datasets: [
         {
-          label: "User Count",
+          label: "Hide/Show Chart",
           fill: true,
           backgroundColor: "rgba(29,140,248,0.2)",
           borderColor: "#1f8ef1",
@@ -276,62 +276,70 @@ let chartExample2 = {
 // #########################################
 let chartExample3 = {
   data: (array) => {
-    // Check if array array is not empty
-    if (array?.length === 0) {
+    // Check if array is not empty
+    if (!array || array.length === 0) {
       return {
         labels: [],
-        datasets: [
-          {
-            label: "Hide/Show Chart",
-            data: [],
-          },
-        ],
+        datasets: [{
+          label: "Hide/Show Chart",
+          data: [],
+        }],
       };
     }
 
     // Extract the creation dates from the user data
-    const creationDates = array?.map(user => new Date(user.createdAt));
+    const creationDates = array.map(car => new Date(car.createdAt));
 
     // Check if creationDates array is not empty
-    if (creationDates?.length === 0) {
+    if (!creationDates || creationDates.length === 0) {
       return {
         labels: [],
-        datasets: [
-          {
-            label: "Hide/Show Chart",
-            data: [],
-          },
-        ],
+        datasets: [{
+          label: "Hide/Show Chart",
+          data: [],
+        }],
       };
     }
 
     // Create a labels array for the months
-    const labels = Array.from({ length: 12 }, (_, i) => new Date(Array.isArray(creationDates) ? creationDates[0].getFullYear() : [], i).toLocaleString('default', { month: 'short' }));
+    const labels = Array.from({ length: 12 }, (_, i) => new Date(creationDates[0].getFullYear(), i, 1).toLocaleString('default', { month: 'short' }));
 
-    // Create a data array for the Hide/Show Charts
-    const data = Array.from({ length: 12 }, (_, i) => creationDates?.filter(date => date.getMonth() === i).length);
+    // Calculate the total amount for each month
+    const data = Array.from({ length: 12 }, (_, i) => {
+      const monthlyCars = array.filter(car => new Date(car.createdAt).getMonth() === i);
+      console.log(`Month ${i+1}:`, monthlyCars); // Debugging output
+    
+      const totalAmount = monthlyCars.reduce((acc, curr) => {
+        console.log(acc,"acc",curr,"curr");
+        const carAmount = curr?.amount || 0;
+        console.log(`Car amount (type): ${typeof carAmount}`); // Inspect the type
+        return acc + carAmount;
+      }, 0);
+      
+    
+      return totalAmount;
+    });
+    
 
     return {
       labels: labels,
-      datasets: [
-        {
-          label: "Income ",
-          fill: true,
-          backgroundColor: "rgba(29,140,248,0.2)",
-          borderColor: "#1f8ef1",
-          borderWidth: 2,
-          borderDash: [],
-          borderDashOffset: 0.0,
-          pointBackgroundColor: "#1f8ef1",
-          pointBorderColor: "rgba(255,255,255,0)",
-          pointHoverBackgroundColor: "#1f8ef1",
-          pointBorderWidth: 20,
-          pointHoverRadius: 4,
-          pointHoverBorderWidth: 15,
-          pointRadius: 4,
-          data: data,
-        },
-      ],
+      datasets: [{
+        label: "Hide/Show Chart",
+        fill: true,
+        backgroundColor: "rgba(75,192,192,0.2)",
+        borderColor: "#4caf50",
+        borderWidth: 2,
+        borderDash: [],
+        borderDashOffset: 0.0,
+        pointBackgroundColor: "#4caf50",
+        pointBorderColor: "rgba(255,255,255,0)",
+        pointHoverBackgroundColor: "#4caf50",
+        pointBorderWidth: 20,
+        pointHoverRadius: 4,
+        pointHoverBorderWidth: 15,
+        pointRadius: 4,
+        data: data,
+      }],
     };
   },
   options: {
@@ -358,8 +366,7 @@ let chartExample3 = {
           zeroLineColor: "transparent",
         },
         ticks: {
-          suggestedMin: 60,
-          suggestedMax: 120,
+          suggestedMin: 0, // Ensure positive numbers are shown
           padding: 20,
           fontColor: "#9e9e9e",
         },
@@ -379,6 +386,8 @@ let chartExample3 = {
   },
 };
 
+
+
 // #########################################
 // // // used inside src/views/Dashboard.js
 // #########################################
@@ -390,7 +399,7 @@ const chartExample4 = {
         labels: [],
         datasets: [
           {
-            label: "Cars Count",
+            label: "Affiliated Cars",
             data: [],
           },
         ],

@@ -48,8 +48,8 @@ const customStyles = {
   content: {
     borderRadius: "1rem",
     top: '50%',
-    
-    overflow:"scroll",
+
+    overflow: "scroll",
     padding: "2rem",
     left: '50%',
     right: 'auto',
@@ -122,6 +122,7 @@ const AddNewEntities = () => {
     Category: "",
     DoorNumber: "",
     Capacity: "",
+    deposit:""
   })
   const [shownCarImage, setShownCarImage] = useState("")
   const [shownCompanyImage, setShownCompanyImage] = useState("")
@@ -227,8 +228,27 @@ const AddNewEntities = () => {
       return prevDetails;
     });
   };
-
-
+  const [carCount,setCarCount]=useState(1)
+  const increment=()=>{
+    setCarCount(prevDetails => {
+      // Directly update the value of the specified key
+      // If the key is meant to hold an array, this approach will still work because
+      // JavaScript allows arrays to be assigned to object keys.
+      prevDetails += 1;
+      console.log('New state:', prevDetails);
+      return prevDetails;
+    });
+  };
+  const decrement=()=>{
+    setCarCount(prevDetails => {
+      // Directly update the value of the specified key
+      // If the key is meant to hold an array, this approach will still work because
+      // JavaScript allows arrays to be assigned to object keys.
+      prevDetails -= 1;
+      console.log('New state:', prevDetails);
+      return prevDetails;
+    });
+  }
   useEffect(() => {
     const handleKeyDown = (event) => {
       console.log('Key pressed:', event.key); // Debugging line
@@ -295,8 +315,6 @@ const AddNewEntities = () => {
   }, [loading, dispatch]);
   // console.log(companies);
   // console.log(cars);
-  const fileInputRef = useRef(null);
-  const [imageSelected, setImageSelected] = useState(false);
   const handleSubmit = async () => {
     console.log(carDetails);
     if (Object.values(carDetails).every(value => value)) {
@@ -312,19 +330,22 @@ const AddNewEntities = () => {
         carDetails.media = imageUrl
         const updatedCarDetails = {
           ...carDetails,
-           price: carDetails.price + 20,
+           price: Number(carDetails.price) + 20, // Ensures price is treated as a number
          };
-        const response = await dispatch(addCar(updatedCarDetails))
+         
+        const response = await dispatch(addCar({updatedCarDetails,carCount}))
         console.log(response.payload);
-        if (response.payload === undefined) {
-          toast.error("An Error Has Occured")
-          setCloudWait(false)
-        } else {
+        //!Would fix this function because it always happens even if the response is fullfilled
+        // if (response.payload === undefined) {
+        //   toast.error("An Error Has Occured")
+        //   setCloudWait(false)
+        // }
+        //  else {
           const response2 = await dispatch(getAllCars())
           console.log(response2.payload);
           setCloudWait(false)
           setCarDetails({
-            UserId:"",
+            UserId: "",
             model: "",
             price: "",
             brand: "",
@@ -339,7 +360,8 @@ const AddNewEntities = () => {
           setShownCarImage(null)
           setSelectedFile(null)
           closeModal()
-        }
+          setCloudWait(false)
+        // }
       } catch (err) {
         console.error("Cloudinary Upload Error:", err);
       }
@@ -436,14 +458,6 @@ const AddNewEntities = () => {
                 }}>
                   <div id='Title'>Recently Added Cars</div>
                   <Button onClick={() => {
-                    setCarDetails(prevDetails => {
-                      const newDetails = {
-                        ...prevDetails,
-                        "media": []
-                      };
-                      console.log('New state:', newDetails);
-                      return newDetails;
-                    });
                     openModal()
                   }} style={{
                     display: "flex",
@@ -563,87 +577,147 @@ const AddNewEntities = () => {
         contentLabel="Example Modal"
       >
         {/* <div className="whiteboard-container"> */}
-          <button className="image-input-container" style={{
-            backgroundColor: shownCarImage ? "rgb(0,0,0,0.1)" : "rgb(0,0,0,0.1)",
-            borderRadius: "1rem",
-            padding: 0,
-            cursor: "pointer",
-            borderWidth: shownCarImage ? ".2rem" : "0",
-            borderStyle: shownCarImage ? "dashed" : "solid",
-            borderColor: shownCarImage ? "#30416b" : "transparent",
-          }}
-            onClick={() => document.getElementById('imageInput').click()}>
-            {shownCarImage ? (
-              <>
-                {/* {console.log(carDetails.media)} */}
-                <img key={shownCarImage} src={shownCarImage} alt="Selected" style={{ maxWidth: '100%', borderRadius: "1rem", maxHeight: "90%", }} />
-                {/* <div className="image-preview-text">Image selected</div> */}
-              </>
-            ) : (
-              <div style={{
-                flexDirection: "row-reverse",
-                display: "flex"
-              }}>
-                <i className="fas fa-camera"></i> {/* Example using Font Awesome */}
-                <div className="image-input-text">Press here to add Car image</div>
-              </div >
-            )}
+        <button className="image-input-container" style={{
+          backgroundColor: shownCarImage ? "rgb(0,0,0,0.1)" : "rgb(0,0,0,0.1)",
+          borderRadius: "1rem",
+          padding: 0,
+          cursor: "pointer",
+          borderWidth: shownCarImage ? ".2rem" : "0",
+          borderStyle: shownCarImage ? "dashed" : "solid",
+          borderColor: shownCarImage ? "#30416b" : "transparent",
+        }}
+          onClick={() => document.getElementById('imageInput').click()}>
+          {shownCarImage ? (
+            <>
+              {/* {console.log(carDetails.media)} */}
+              <img className='hoverImage' key={shownCarImage} src={shownCarImage} alt="Selected" style={{ maxWidth: '100%', borderRadius: "1rem", maxHeight: "90%", }} />
+              {/* <div className="image-preview-text">Image selected</div> */}
+            </>
+          ) : (
+            <div style={{
+              flexDirection: "row-reverse",
+              display: "flex"
+            }}>
+              <i className="fas fa-camera"></i> {/* Example using Font Awesome */}
+              <div className="image-input-text">Press here to add Car image</div>
+            </div >
+          )}
 
-            <input
-              type="file"
-              id="imageInput"
-              style={{ display: 'none' }}
-              onChange={(event) => {
-                if (event.target.files && event.target.files.length > 0) {
-                  setSelectedFile(event.target.files[0]);; // Update the state with the selected file
-                  setShownCarImage(URL.createObjectURL(event.target.files[0])); // Create a blob URL for the selected file and pass it to handleCarChange
+          <input
+            type="file"
+            id="imageInput"
+            style={{ display: 'none' }}
+            onChange={(event) => {
+              if (event.target.files && event.target.files.length > 0) {
+                setSelectedFile(event.target.files[0]);; // Update the state with the selected file
+                setShownCarImage(URL.createObjectURL(event.target.files[0])); // Create a blob URL for the selected file and pass it to handleCarChange
 
-                }
+              }
+            }}
+          />
+        </button>
+
+
+        <div className='scrollable-input-container'>
+          <div style={{
+            fontSize: "1.2rem",
+            paddingBottom: "0.5rem"
+          }}>Input The Car's Details here :</div>
+          <div className='first-select-container'>
+            <div style={{
+              fontSize: ".9rem"
+            }}>Which Company Owns This Car :</div>
+            <Select
+              className="select-box"
+              options={options}
+              onChange={(selectedOption) => handleCarChange("UserId", selectedOption.value)}
+              menuportaltarget={document.body}
+              styles={{
+                menuPortal: base => ({ ...base, zIndex: 9999 })
               }}
             />
-          </button>
 
-
-          <div className='scrollable-input-container'>
+          </div>
+          <div style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignContent: "center",
+            justifyItems: "center",
+            flexDirection: "column",
+            marginBottom: "1rem",
+            width: "100%",
+          }}>
             <div style={{
-              fontSize: "1.2rem",
-              paddingBottom: "0.5rem"
-            }}>Input The Car's Details here :</div>
-            <div className='first-select-container'>
-              <div style={{
-                fontSize: ".9rem"
-              }}>Which Company Owns This Car :</div>
-              <Select
-                className="select-box"
-                options={options}
-                onChange={(selectedOption) => handleCarChange("UserId", selectedOption.value)}
+              fontSize: ".9rem",
+
+            }}>What Is The Daily Price For This Car :</div>
+            <div style={{
+            }} className="input-container">
+              <input
+                className="input-box"
+                type='number'
+                placeholder='Type here...'
+                onChange={(e) => handleCarChange("price", e.target.value)}
                 menuportaltarget={document.body}
                 styles={{
                   menuPortal: base => ({ ...base, zIndex: 9999 })
                 }}
               />
-
             </div>
+          </div>
+          <div style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignContent: "center",
+            justifyItems: "center",
+            flexDirection: "column",
+            marginBottom: "1rem",
+            width: "100%",
+          }}>
             <div style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignContent: "center",
-              justifyItems: "center",
-              flexDirection: "column",
-              marginBottom: "1rem",
-              width: "100%",
-            }}>
-              <div style={{
-                fontSize: ".9rem",
+              fontSize: ".9rem",
 
-              }}>What Is The Daily Price For This Car :</div>
+            }}>How much Is The Deposit For This Car :</div>
+            <div style={{
+            }} className="input-container">
+              <input
+                className="input-box"
+                type='number'
+                placeholder='Type here...'
+                onChange={(e) => handleCarChange("deposit", e.target.value)}
+                menuportaltarget={document.body}
+                styles={{
+                  menuPortal: base => ({ ...base, zIndex: 9999 })
+                }}
+              />
+            </div>
+          </div>
+          <div className='first-select-container'>
+            <div style={{
+              fontSize: ".9rem"
+            }}>What Is The Type Of Fuel That This Car Uses :</div>
+            <Select
+              className="select-box"
+              options={fuelOptions}
+              onChange={(selectedOption) => handleCarChange("typeOfFuel", selectedOption.value)}
+              menuportaltarget={document.body}
+              styles={{
+                menuPortal: base => ({ ...base, zIndex: 9999 })
+              }}
+            />
+
+          </div>
+          <div className="two-select-container">
+            <div className='select-container'>
               <div style={{
-              }} className="input-container">
+                fontSize: ".9rem"
+              }}>Insert The Brand Of The Car :</div>
+              <div className="input-container">
                 <input
                   className="input-box"
-                  type='number'
                   placeholder='Type here...'
-                  onChange={(e) => handleCarChange("price", e.target.value)}
+                  // options={Object.keys(data)?.map(key => ({ label: key, value: key }))}
+                  onChange={(e) => handleCarChange("brand", e.target.value)}
                   menuportaltarget={document.body}
                   styles={{
                     menuPortal: base => ({ ...base, zIndex: 9999 })
@@ -651,195 +725,178 @@ const AddNewEntities = () => {
                 />
               </div>
             </div>
-            <div className='first-select-container'>
+            <div className="select-container">
               <div style={{
                 fontSize: ".9rem"
-              }}>What Is The Type Of Fuel That This Car Uses :</div>
+              }}>Select The Type Of The Car :</div>
               <Select
                 className="select-box"
-                options={fuelOptions}
-                onChange={(selectedOption) => handleCarChange("typeOfFuel", selectedOption.value)}
+                options={[
+                  { value: 'Automatic', label: 'Automatic' },
+                  { value: 'Manual', label: 'Manual' },
+                ]}
+                onChange={(selectedOption) => handleCarChange("Type", selectedOption.value)}
                 menuportaltarget={document.body}
                 styles={{
                   menuPortal: base => ({ ...base, zIndex: 9999 })
                 }}
               />
-
             </div>
-            <div className="two-select-container">
-              <div className='select-container'>
-                <div style={{
-                  fontSize: ".9rem"
-                }}>Insert The Brand Of The Car :</div>
-                <div className="input-container">
-                  <input
-                    className="input-box"
-                    placeholder='Type here...'
-                    // options={Object.keys(data)?.map(key => ({ label: key, value: key }))}
-                    onChange={(e) => handleCarChange("brand", e.target.value)}
-                    menuportaltarget={document.body}
-                    styles={{
-                      menuPortal: base => ({ ...base, zIndex: 9999 })
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="select-container">
-                <div style={{
-                  fontSize: ".9rem"
-                }}>Select The Type Of The Car :</div>
-                <Select
-                  className="select-box"
-                  options={[
-                    { value: 'Automatic', label: 'Automatic' },
-                    { value: 'Manual', label: 'Manual' },
-                  ]}
-                  onChange={(selectedOption) => handleCarChange("Type", selectedOption.value)}
-                  menuportaltarget={document.body}
-                  styles={{
-                    menuPortal: base => ({ ...base, zIndex: 9999 })
-                  }}
-                />
-              </div>
-            </div>
-            <div className="two-select-container">
-              <div className='select-container'>
-                <div style={{
-                  fontSize: ".9rem"
-                }}>What Year Was The Car Created At :</div>
-                <Select
-                  className="select-box"
-                  options={yearOptions.reverse()}
-                  onChange={(selectedOption) => handleCarChange("Year", selectedOption.value)}
-                  menuportaltarget={document.body}
-                  styles={{
-                    menuPortal: base => ({ ...base, zIndex: 9999 })
-                  }}
-                />
-              </div>
-              <div className="select-container">
-                <div style={{
-                  fontSize: ".9rem"
-                }}>Select The Category Of The Car :</div>
-                <Select
-                  className="select-box"
-                  options={[
-                    { value: 'Economy', label: 'Economy (Polo etc.)' },
-                    { value: 'Premium', label: 'Premium (Mercedes C-Klasse, Audi A3)' },
-                    { value: 'Compact', label: 'Compact (i20, Golf, Ibiza)' },
-                    { value: 'SUV', label: 'SUV' },
-                  ]}
-                  onChange={(selectedOption) => handleCarChange("Category", selectedOption.value)}
-                  menuportaltarget={document.body}
-                  styles={{
-                    menuPortal: base => ({ ...base, zIndex: 9999 })
-                  }}
-                />
-              </div>
-            </div>
-
-            <div className="two-select-container">
-              <div className="select-container">
-                <div style={{
-                  fontSize: ".9rem"
-                }}>Select How Many Doors In Your Car :</div>
-                <Select
-                  className="select-box"
-                  options={[
-                    { label: '3', value: 3 },
-                    { label: '5', value: 5 },
-                  ]}
-                  onChange={(selectedOption) => handleCarChange("DoorNumber", selectedOption.value)}
-                  menuportaltarget={document.body}
-                  styles={{
-                    menuPortal: base => ({ ...base, zIndex: 9999 })
-                  }}
-                />
-              </div>
-              <div className="select-container">
-                <div style={{
-                  fontSize: ".9rem"
-                }}>Select the Capacity of the Car's Luggage :</div>
-                <Select
-                  className="select-box"
-                  options={[
-                    { label: "1 suitcase", value: 1 },
-                    { label: "2 suitcases", value: 2 },
-                    { label: "3 suitcases", value: 3 },
-                    { label: "4 suitcases", value: 4 },
-                    { label: "5 suitcases", value: 5 }
-                  ]}
-                  onChange={(selectedOption) => handleCarChange("Capacity", selectedOption.value)}
-                  menuportaltarget={document.body}
-                  styles={{
-                    menuPortal: base => ({ ...base, zIndex: 9999 })
-                  }}
-                />
-              </div>
-            </div>
-            <div className="two-select-container">
-              <div className='select-container'>
-                <div style={{
-                  fontSize: ".9rem"
-                }}>Insert The Model Of The Car :</div>
-                <div className="input-container">
-                  <input
-                    className="input-box"
-                    placeholder='Type here...'
-                    // options={Object.keys(data)?.map(key => ({ label: key, value: key }))}
-                    onChange={(e) => handleCarChange("model", e.target.value)}
-                    menuportaltarget={document.body}
-                    styles={{
-                      menuPortal: base => ({ ...base, zIndex: 9999 })
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="select-container">
-                <div style={{
-                  fontSize: ".9rem"
-                }}>Select How Many People Can Fit Into This Car :</div>
-                <Select
-                  className="select-box"
-                  options={[
-                    { label: "2 Seats", value: 2 },
-                    { label: "4 Seats", value: 4 },
-                    { label: "5 Seats", value: 5 },
-                    { label: "15 Seats", value: 15 },
-                  ]
-
-                  }
-                  onChange={(selectedOption) => handleCarChange("peopleCount", selectedOption.value)}
-                  menuportaltarget={document.body}
-                  styles={{
-                    menuPortal: base => ({ ...base, zIndex: 9999 })
-                  }}
-                />
-              </div>
-            </div>
-              <Button onClick={handleSubmit} className='pressEnter' style={{
-                // color: "grey",
-                // fontSize: "1rem",
-                // paddingTop: "1rem"
-              }}>{
-                  cloudwait ?
-                    <div style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      // backgroundColor: "red"
-                    }}>
-                      <DNA
-                        visible={true}
-                        height="4.5rem"
-                        width="4.5rem"
-                        ariaLabel="dna-loading"
-                        wrapperStyle={{ paddingBottom: '1.5rem' }} // Adjust this value as needed
-                      // wrapperClass="dna-wrapper"
-                      /></div> :
-                    "Press Here to Submit the form"
-                }
-              </Button>
           </div>
+          <div className="two-select-container">
+            <div className='select-container'>
+              <div style={{
+                fontSize: ".9rem"
+              }}>What Year Was The Car Created At :</div>
+              <Select
+                className="select-box"
+                options={yearOptions.reverse()}
+                onChange={(selectedOption) => handleCarChange("Year", selectedOption.value)}
+                menuportaltarget={document.body}
+                styles={{
+                  menuPortal: base => ({ ...base, zIndex: 9999 })
+                }}
+              />
+            </div>
+            <div className="select-container">
+              <div style={{
+                fontSize: ".9rem"
+              }}>Select The Category Of The Car :</div>
+              <Select
+                className="select-box"
+                options={[
+                  { value: 'Economy', label: 'Economy (Polo etc.)' },
+                  { value: 'Premium', label: 'Premium (Mercedes C-Klasse, Audi A3)' },
+                  { value: 'Compact', label: 'Compact (i20, Golf, Ibiza)' },
+                  { value: 'SUV', label: 'SUV' },
+                ]}
+                onChange={(selectedOption) => handleCarChange("Category", selectedOption.value)}
+                menuportaltarget={document.body}
+                styles={{
+                  menuPortal: base => ({ ...base, zIndex: 9999 })
+                }}
+              />
+            </div>
+          </div>
+
+          <div className="two-select-container">
+            <div className="select-container">
+              <div style={{
+                fontSize: ".9rem"
+              }}>Select How Many Doors In Your Car :</div>
+              <Select
+                className="select-box"
+                options={[
+                  { label: '3', value: 3 },
+                  { label: '5', value: 5 },
+                ]}
+                onChange={(selectedOption) => handleCarChange("DoorNumber", selectedOption.value)}
+                menuportaltarget={document.body}
+                styles={{
+                  menuPortal: base => ({ ...base, zIndex: 9999 })
+                }}
+              />
+            </div>
+            <div className="select-container">
+              <div style={{
+                fontSize: ".9rem"
+              }}>Select the Capacity of the Car's Luggage :</div>
+              <Select
+                className="select-box"
+                options={[
+                  { label: "1 suitcase", value: 1 },
+                  { label: "2 suitcases", value: 2 },
+                  { label: "3 suitcases", value: 3 },
+                  { label: "4 suitcases", value: 4 },
+                  { label: "5 suitcases", value: 5 }
+                ]}
+                onChange={(selectedOption) => handleCarChange("Capacity", selectedOption.value)}
+                menuportaltarget={document.body}
+                styles={{
+                  menuPortal: base => ({ ...base, zIndex: 9999 })
+                }}
+              />
+            </div>
+          </div>
+          <div className="two-select-container">
+            <div className='select-container'>
+              <div style={{
+                fontSize: ".9rem"
+              }}>Insert The Model Of The Car :</div>
+              <div className="input-container">
+                <input
+                  className="input-box"
+                  placeholder='Type here...'
+                  // options={Object.keys(data)?.map(key => ({ label: key, value: key }))}
+                  onChange={(e) => handleCarChange("model", e.target.value)}
+                  menuportaltarget={document.body}
+                  styles={{
+                    menuPortal: base => ({ ...base, zIndex: 9999 })
+                  }}
+                />
+              </div>
+            </div>
+            <div className="select-container">
+              <div style={{
+                fontSize: ".9rem"
+              }}>Select How Many People Can Fit Into This Car :</div>
+              <Select
+                className="select-box"
+                options={[
+                  { label: "2 Seats", value: 2 },
+                  { label: "4 Seats", value: 4 },
+                  { label: "5 Seats", value: 5 },
+                  { label: "15 Seats", value: 15 },
+                ]
+
+                }
+                onChange={(selectedOption) => handleCarChange("peopleCount", selectedOption.value)}
+                menuportaltarget={document.body}
+                styles={{
+                  menuPortal: base => ({ ...base, zIndex: 9999 })
+                }}
+              />
+            </div>
+          </div>
+          <div style={{
+            flexDirection:"row",
+            display:"flex",
+            alignItems:"center",
+            gap:"3rem"
+            // justifyContent:"space-between"
+          }}>
+            <Button onClick={handleSubmit} className='pressEnter' style={{
+              // color: "grey",
+              // fontSize: "1rem",
+              // paddingTop: "1rem"
+            }}>{
+                cloudwait ?
+                  <div style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    // backgroundColor: "red"
+                  }}>
+                    <DNA
+                      visible={true}
+                      height="4.5rem"
+                      width="4.5rem"
+                      ariaLabel="dna-loading"
+                      wrapperStyle={{ paddingBottom: '1.5rem' }} // Adjust this value as needed
+                    // wrapperClass="dna-wrapper"
+                    /></div> :
+                  "Press Here to Submit the form"
+              }
+            </Button>
+            <div className="stepper-touch-container">
+              <div className="input-number">
+                <span>{carCount<10?"0"+carCount:carCount}</span>
+                <button onClick={decrement}>-</button>
+                <button onClick={increment}>+</button>
+              </div>
+              {/* Repeat the above div for additional inputs if needed */}
+            </div>
+          </div>
+        </div>
       </Modal >
       <Modal
         isOpen={modalIsOpen2}

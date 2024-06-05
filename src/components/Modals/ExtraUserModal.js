@@ -32,7 +32,7 @@ const customStyles = {
         transform: 'translate(-50%, -50%)',
     },
 };
-const ExtraUserModal = ({ setformData,setShow, show }) => {
+const ExtraUserModal = ({ setformData, setShow, show }) => {
     const [formData, setFormData] = useState({
         name: "",
         Email: "",
@@ -52,7 +52,7 @@ const ExtraUserModal = ({ setformData,setShow, show }) => {
     }
     const handleFinish = async () => {
         console.log(formData);
-        if(Object.values(formData).includes("")){
+        if (Object.values(formData).includes("")) {
             return
         }
         setformData(formData)
@@ -74,14 +74,14 @@ const ExtraUserModal = ({ setformData,setShow, show }) => {
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
-                        width:"90%",
-                        paddingTop:"1rem", // Ensure this is uncommented to allow align-self to work
+                        width: "90%",
+                        paddingTop: "1rem", // Ensure this is uncommented to allow align-self to work
                         justifyContent: "center", // Use space-between to push elements to the edges
                         // gap: "5rem"
                     }}>
-                        <div  onClick={() => {
-                                setShow(false)
-                            }} className='colorHover' style={{ alignSelf: "flex-end",fontSize:"1rem",cursor:"pointer" }}>X</div> {/* Explicitly center-align the "X" */}
+                        <div onClick={() => {
+                            setShow(false)
+                        }} className='colorHover' style={{ alignSelf: "flex-end", fontSize: "1rem", cursor: "pointer" }}>X</div> {/* Explicitly center-align the "X" */}
                         <div className="title">Extra User Data</div>
                     </div>
 
@@ -125,7 +125,7 @@ const ExtraUserModal = ({ setformData,setShow, show }) => {
                         <div>
                             <button onClick={() => {
                                 handleFinish()
-                            }} className="btn_22">SIGN UP</button>
+                            }} className="btn_22">Save User Data</button>
                             <p>User Registred Already? <span onClick={() => {
                                 setShow(false)
                             }} className="link" >Go Back!</span></p>

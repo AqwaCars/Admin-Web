@@ -28,7 +28,8 @@ const initialState = {
     limitedCompanies: [],
     Media: [],
     carBookedPeriods: [],
-    AgencyCars: []
+    AgencyCars: [],
+    agencyReviews:[]
 };
 export const updateStateBlock = createAsyncThunk(
     "user/updateStateBlock",
@@ -54,6 +55,22 @@ export const getAgencyCars = createAsyncThunk(
                 `http://localhost:5000/api/admin/getAgencyCars/${id}`
                 // `http://${process.env.NEXT_PUBLIC_API_URL}/api/admin/getAgencyCars/${name}`
             );
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+);
+export const getAgencyReviews = createAsyncThunk(
+    "user/getAgencyReviews",
+    async (id) => {
+        console.log(id);
+        try {
+            const response = await axios.get(
+                `http://localhost:5000/api/admin/getAgencyReviews/${id}`
+                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/admin/getAgencyCars/${name}`
+            );
+            console.log(response.data);
             return response.data;
         } catch (error) {
             console.log(error);
@@ -104,11 +121,12 @@ export const getAllUsers = createAsyncThunk("user/getAllUsers", async () => {
     }
 });
 
-export const addCar = createAsyncThunk("admin/addCar", async (carDetails) => {
+export const addCar = createAsyncThunk("admin/addCar", async (data) => {
     try {
-        console.log(carDetails);
+        console.log(data.carCount);
+        console.log(data.updatedCarDetails);
         const carResp = await axios.post(
-            `http://localhost:5000/api/car/newCar`, carDetails
+            `http://localhost:5000/api/car/newCar/${data.carCount}`, data.updatedCarDetails
             // `http://${process.env.NEXT_PUBLIC_API_URL}/api/car/newCar`, carDetails
         );
         console.log(carResp.data);
@@ -687,12 +705,25 @@ export const adminSlicer = createSlice({
             state.loadingStatus.getAgencyCars = false;
             state.error = action.error.message;
         });
+        builder.addCase(getAgencyReviews.pending, (state) => {
+            state.loadingStatus.getAgencyReviews = true;
+            state.error = null;
+        });
+        builder.addCase(getAgencyReviews.fulfilled, (state, action) => {
+            state.loadingStatus.getAgencyReviews = false;
+            state.agencyReviews = action.payload;
+        });
+        builder.addCase(getAgencyReviews.rejected, (state, action) => {
+            state.loadingStatus.getAgencyReviews = false;
+            state.error = action.error.message;
+        });
 
 
     }
 })
 
 export const agencyCars = (state) => state.Admin.AgencyCars;
+export const agencyReviews = (state) => state.Admin.agencyReviews;
 export const selectAdmin = (state) => state.Admin.admin;
 export const selectLoading = (state) => state.Admin.loading;
 export const selectAllUsers = (state) => state.Admin.allUsers;
