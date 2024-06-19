@@ -430,7 +430,7 @@ function UserManagements() {
                       <div className="usersContainer">
                         {allUsers?.map((user, i) =>
                           user.type === "company" ? (
-                            <UserInfo openSecondModal={openSecondModal} user={user} i={i} openModal={openModal} handleDetailClick={handleDetailClick} />
+                            <UserInfo handleBlock={handleBlock} openSecondModal={openSecondModal} user={user} i={i} openModal={openModal} handleDetailClick={handleDetailClick} />
                           ) : null
 
                         )}

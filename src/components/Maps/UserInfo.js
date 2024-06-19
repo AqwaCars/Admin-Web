@@ -3,7 +3,7 @@ import { Col } from 'reactstrap';
 import { ReactComponent as Detail } from '../../assets/Svg/details.svg';
 import Swal from 'sweetalert2';
 
-const UserInfo = ({ user, i, handleDetailClick, openModal,openSecondModal }) => {
+const UserInfo = ({ handleBlock,user, i, handleDetailClick, openModal,openSecondModal }) => {
   return (
     <Col
       key={i}
