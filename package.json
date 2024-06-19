@@ -37,6 +37,7 @@
     "react-scripts": "5.0.1",
     "react-select": "^5.8.0",
     "react-select-search": "^4.1.7",
+    "react-simple-star-rating": "^5.1.7",
     "react-toastify": "^10.0.5",
     "sass": "1.62.1",
     "sweetalert": "^2.1.2",

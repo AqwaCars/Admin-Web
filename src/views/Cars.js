@@ -121,7 +121,7 @@ const Cars = () => {
 
     try {
       await dispatch(updateCar({
-        carId: car.id, // Make sure  is defined and has an id property
+        carId: car?.id, // Make sure  is defined and has an id property
         data: car // Ensure  contains the updated data
       }));
     } catch (error) {
@@ -204,14 +204,14 @@ const Cars = () => {
     // Assuming 'date', 'car', 'carRenter', 'datesArray', 'rentalTime', and 'returnTime' are already defined and accessible within this scope.
 
     // Calculate the multiplier based on the length of the datesArray minus one.
-    const multiplier = datesArray.length - 1;
+    const multiplier = (generateDatesArray().length) - 1;
 
     return Object.keys(carRenter).length > 0 ? {
       startDate: date.startDate,
       endDate: date.endDate,
       acceptation: "accepted",
-      amount: car.price * multiplier, // Adjusted line
-      CarId: car.id,
+      amount: car?.price * multiplier, // Adjusted line
+      CarId: car?.id,
       rentalTime,
       returnTime,
       dates: datesArray,
@@ -222,8 +222,8 @@ const Cars = () => {
         startDate: date.startDate,
         endDate: date.endDate,
         acceptation: "accepted",
-        amount: car.price * multiplier, // Adjusted line
-        CarId: car.id,
+        amount: car?.price * multiplier, // Adjusted line
+        CarId: car?.id,
         rentalTime,
         returnTime,
         dates: datesArray,
@@ -267,7 +267,7 @@ const Cars = () => {
         resetStateAfterSuccess()
         return
       }
-      const task1 = await dispatch(addBookedDate({ BookingId: task2.payload.id, carId: car.id, rentalTime, returnTime, dates: generateDatesArray(), userId: Object(carRenter).length > 0 ? carRenter.id : null }));
+      const task1 = await dispatch(addBookedDate({ BookingId: task2.payload.id, carId: car?.id, rentalTime, returnTime, dates: generateDatesArray(), userId: Object(carRenter).length > 0 ? carRenter.id : null }));
       console.log(task1.payload);
       console.log(task2.payload);
       // Reset state after successful operations
@@ -303,11 +303,22 @@ const Cars = () => {
   const [mappedCars, setMappedCars] = useState([])
   const carDates = useSelector(CarBookedPeriods)
   const searchOptions = staticAllCars?.map(car => ({
-    label: car.brand,
-    value: car.id
+    label: car?.brand,
+    value: car?.id
   }));
+  const compareValuesOnly = (obj1, obj2) => {
+    const values1 = Object.values(obj1);
+    const values2 = Object.values(obj2);
+
+    values1.sort();
+    values2.sort();
+
+    return JSON.stringify(values1) === JSON.stringify(values2);
+  }
+
   const [refresh, setRefresh] = useState(false)
   const [car, setCar] = useState({})
+  const [defaultCar, setDefaultCar] = useState({})
 
   // console.log("car is in tableList", car);
   function openModal() {
@@ -364,34 +375,34 @@ const Cars = () => {
     console.log(cars);
   }, [load])
 
-  const selectedYearOption = yearOptions.find(option => option.value === car.Year);
+  const selectedYearOption = yearOptions.find(option => option.value === car?.Year);
   const selectedTypeOption = [
     { value: 'Automatic', label: 'Automatic' },
     { value: 'Manual', label: 'Manual' },
-  ].find(option => option.value === car.Type);
-  const selectedTypeOfFuel = fuelOptions.find(option => option.value === car.typeOfFuel);
+  ].find(option => option.value === car?.Type);
+  const selectedTypeOfFuel = fuelOptions.find(option => option.value === car?.typeOfFuel);
   const selectedDoorNumberOption = [
     { label: '3', value: 3 },
     { label: '5', value: 5 },
-  ].find(option => option.value === car.DoorNumber);
+  ].find(option => option.value === car?.DoorNumber);
   const selectedCategoryOption = [
     { value: 'Economic Class', label: 'Economic Class' },
     { value: 'Luxery Car', label: 'Luxery Car' },
     { value: 'Sports', label: 'Sports' },
-  ].find(option => option.value === car.Category);
+  ].find(option => option.value === car?.Category);
   const selectedCapacityOption = [
     { label: "1 suitcase", value: 1 },
     { label: "2 suitcases", value: 2 },
     { label: "3 suitcases", value: 3 },
     { label: "4 suitcases", value: 4 },
     { label: "5 suitcases", value: 5 }
-  ].find(option => option.value === car.Capacity);
+  ].find(option => option.value === car?.Capacity);
   const selectedPeopleCountOption = [
     { label: "2 Seats", value: 2 },
     { label: "4 Seats", value: 4 },
     { label: "5 Seats", value: 5 },
     { label: "15 Seats", value: 15 },
-  ].find(option => option.value === car.peopleCount);
+  ].find(option => option.value === car?.peopleCount);
 
 
   const disabledDates = carDates?.data?.reduce((acc, date) => {
@@ -519,14 +530,14 @@ const Cars = () => {
                   </thead>
                   <tbody>
                     {Admin?.clearance === "Level1" ?
-                      mappedCars?.filter((car) => car.UserId === Admin.Name)?.map((filteredCar, index) => {
+                      mappedCars?.filter((car) => car?.UserId === Admin.Name)?.map((filteredCar, index) => {
                         return (
                           <ReqRow setDate={setDate} key={index} setRefresh={setRefresh} request={filteredCar} handlePapers={handlePapers} openModal={openModal} openLocationInGoogleMaps={openLocationInGoogleMaps} setCar={setCar} />
                         );
                       }) :
                       mappedCars?.map((request, i) => {
                         return (
-                          <ReqRow setDate={setDate} key={i} setRefresh={setRefresh} request={request} handlePapers={handlePapers} openModal={openModal} openLocationInGoogleMaps={openLocationInGoogleMaps} setCar={setCar} />
+                          <ReqRow setDate={setDate} key={i} setRefresh={setRefresh} request={request} handlePapers={handlePapers} openModal={openModal} openLocationInGoogleMaps={openLocationInGoogleMaps} setDefaultCar={setDefaultCar} setCar={setCar} />
                         );
                       })
                     }
@@ -549,9 +560,9 @@ const Cars = () => {
           setReturnTime(null)
         }}>
         <header style={{
-          borderBottom:"lightgrey .15rem solid"
+          borderBottom: "lightgrey .15rem solid"
         }}>
-          <h1>Change Availability for {car.brand + " " + car.model}</h1>
+          <h1>Change Availability for {car?.brand + " " + car?.model}</h1>
         </header>
         <div style={{
           display: "flex",
@@ -576,7 +587,7 @@ const Cars = () => {
                   objectFit: "contain",
                   marginTop: "1rem",
                 }}
-                src={car.media}
+                src={car?.media}
               />
             </div>
             <div className="calender_Ctr">
@@ -606,7 +617,7 @@ const Cars = () => {
               />
               {/* <Button> */}
               <div className="extraUser"
-                onClick={() => setUserModal(true)}
+                onClick={() => addExtraUser()}
                 style={{
                   width: "35rem",
                   display: 'inline-flex', // Aligns items horizontally
@@ -628,7 +639,7 @@ const Cars = () => {
                 {Object.values(ExtraUserForm).length > 0 ? <span style={{
                   fontSize: "1.1rem",
                   padding: ".4rem",
-                  fontWeight:"600",
+                  fontWeight: "600",
                   border: ".2rem #344675 solid",
                   width: "100%",
                   borderRadius: ".2rem",
@@ -781,7 +792,7 @@ const Cars = () => {
                   }).then((result) => {
                     if (result.isConfirmed && Object.values(userCancel).length > 0) {
                       setLoad(true)
-                      dispatch(cancelRent({ userId: userCancel.id, carId: car.id }))
+                      dispatch(cancelRent({ userId: userCancel.id, carId: car?.id }))
                       setLoad(false)
                       Swal.fire('Booking Cancelled!', '', 'success')
                     } else if (result.isDenied) {
@@ -838,7 +849,7 @@ const Cars = () => {
               }} className="input-container">
                 <input
                   className="input-box"
-                  value={car.price}
+                  value={car?.price-20}
                   type='number'
                   placeholder='Type here...'
                   onChange={(e) => handleCarChange("price", e.target.value)}
@@ -875,7 +886,7 @@ const Cars = () => {
                     className="input-box"
                     type="text"
                     placeholder='Type here...'
-                    value={car.brand}
+                    value={car?.brand}
                     onChange={(e) => handleCarChange("brand", e.target.value)}
                     menuportaltarget={document.body}
                     styles={{
@@ -989,7 +1000,7 @@ const Cars = () => {
                 <div className="input-container">
                   <input
                     className="input-box"
-                    value={car.model}
+                    value={car?.model}
                     placeholder='Type here...'
                     onChange={(e) => handleCarChange("model", e.target.value)}
                     menuportaltarget={document.body}
@@ -1032,13 +1043,23 @@ const Cars = () => {
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Yes, Update it!"
               }).then((result) => {
-                if (result.isConfirmed) {
-                  setUpdateCarLoad(true)
-                  handleCarDetailsUpdate()
-                  setUpdateCarLoad(false)
-                  Swal.fire('Car Data updated!', '', 'success')
-                } else if (result.isDenied) {
+                console.log(compareValuesOnly(car, defaultCar));
+                if (result.isConfirmed && Object.keys(car).length > 0 && !compareValuesOnly(car, defaultCar)) {
+                  setUpdateCarLoad(true);
+                  handleCarDetailsUpdate();
+                  setDefaultCar(car)
+                  setUpdateCarLoad(false);
+                  Swal.fire('Car Data updated!', '', 'success');
+                }
+                else if (result.isDenied) {
                   Swal.fire('Car Data is Not updated.', '', 'info')
+                }
+                else if (compareValuesOnly(car, defaultCar)) {
+                  Swal.fire({
+                    title: "Check again",
+                    text: "Type Something in the inputs to change it's value",
+                    icon: "warning"
+                  })
                 }
               })
             } style={{

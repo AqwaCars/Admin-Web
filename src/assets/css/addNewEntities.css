@@ -20,11 +20,11 @@ background-color: rgb(0,0,0,0.1);
   text-decoration: underline;
 }
 .hoverImage:hover {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover for a 3D effect */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Enhance shadow on hover for a 3D effect */
   border-width: 0.15rem;
   transform: scale(1); /* Slightly enlarge on hover */
   /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); Enhance shadow on hover for a 3D effect */
-  background-color: #F5F5F5;
+  /* background-color: #F5F5F5; */
   /* Optional: Add a CSS animation for a more dynamic effect */
   animation: hoverEffect 0.5s ease-in-out forwards;
 }
@@ -34,7 +34,7 @@ background-color: rgb(0,0,0,0.1);
   border-width: 0.15rem;
   transform: scale(1); /* Slightly enlarge on hover */
   /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); Enhance shadow on hover for a 3D effect */
-  background-color: #F5F5F5;
+  /* background-color: #F5F5F5; */
   /* Optional: Add a CSS animation for a more dynamic effect */
   animation: hoverEffect 0.5s ease-in-out forwards;
 }

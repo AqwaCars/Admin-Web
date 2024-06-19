@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Card, CardHeader, CardBody, Button, ListGroup, ListGroupItem } from 'reactstrap';
 
 import { DNA } from 'react-loader-spinner'
@@ -317,7 +317,7 @@ const AddNewEntities = () => {
   // console.log(cars);
   const handleSubmit = async () => {
     console.log(carDetails);
-    if (Object.values(carDetails).every(value => value)) {
+    if (Object.values(carDetails).every(value => value)&&selectedFile) {
       try {
         setCloudWait(true)
         // Debugging: Log the selectedFile to verify its contents
@@ -389,9 +389,9 @@ const AddNewEntities = () => {
         companyDetails.RNE = imageUrl2
         companyDetails.idCard = imageUrl3
         const response = dispatch(SignUpCompany(companyDetails))
-        if (response.payload === undefined) {
-          toast.error("An Error Has Occured")
-        } else {
+        // if (response.payload === undefined) {
+          // toast.error("An Error Has Occured")
+        // } else {
           dispatch(getAllCompanies())
           setCloudWait(false)
           setCompanyDetails({
@@ -405,7 +405,7 @@ const AddNewEntities = () => {
           setRneFile(null)
           setIdFile(null)
           closeModal2()
-        }
+        // }
       } catch (err) {
         console.error("Cloudinary Upload Error:", err);
       }

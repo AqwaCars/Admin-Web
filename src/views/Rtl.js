@@ -19,7 +19,7 @@ import React from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // react plugin used to create charts
-import { Line, Bar } from "react-chartjs-2";
+// import { Line, Bar } from "react-chartjs-2";
 
 
 import { Row, Col, Card, CardHeader, CardTitle, CardBody, ButtonGroup, Button, Table, FormGroup, Label, Input } from 'reactstrap';
@@ -27,12 +27,12 @@ import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from
 import { UncontrolledTooltip } from 'reactstrap';
 
 // core components
-import {
-  chartExample1,
-  chartExample2,
-  chartExample3,
-  chartExample4,
-} from "variables/charts.js";
+// import {
+//   chartExample1,
+//   chartExample2,
+//   chartExample3,
+//   chartExample4,
+// } from "variables/charts.js";
 
 function Rtl() {
   const [bigChartData, setbigChartData] = React.useState("data1");
@@ -113,10 +113,10 @@ function Rtl() {
               </CardHeader>
               <CardBody>
                 <div className="chart-area">
-                  <Line
-                    data={chartExample1[bigChartData]}
-                    options={chartExample1.options}
-                  />
+                  {/* <Line
+                    data={chartExample1?.data}
+                    options={chartExample1?.options}
+                  /> */}
                 </div>
               </CardBody>
             </Card>
@@ -133,10 +133,10 @@ function Rtl() {
               </CardHeader>
               <CardBody>
                 <div className="chart-area">
-                  <Line
-                    data={chartExample2.data}
-                    options={chartExample2.options}
-                  />
+                  {/* <Line
+                    data={chartExample2?.data}
+                    options={chartExample2?.options}
+                  /> */}
                 </div>
               </CardBody>
             </Card>
@@ -152,10 +152,10 @@ function Rtl() {
               </CardHeader>
               <CardBody>
                 <div className="chart-area">
-                  <Bar
+                  {/* <Bar
                     data={chartExample3.data}
                     options={chartExample3.options}
-                  />
+                  /> */}
                 </div>
               </CardBody>
             </Card>
@@ -170,10 +170,10 @@ function Rtl() {
               </CardHeader>
               <CardBody>
                 <div className="chart-area">
-                  <Line
-                    data={chartExample4.data}
-                    options={chartExample4.options}
-                  />
+                  {/* <Line
+                    data={chartExample4?.data}
+                    options={chartExample4?.options}
+                  /> */}
                 </div>
               </CardBody>
             </Card>

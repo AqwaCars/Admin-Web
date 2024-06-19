@@ -39,7 +39,7 @@
 //         // objectFit:"cover",
 //         focusConfirm: false,
 //         confirmButtonText: `
-//        <i class="fa fa-ban"></i> ${user.isBlocked ? "unBlock ?" : "Block ?"}
+//        <i class="fa fa-ban"></i> ${user.isBlocked ? "unBlock" : "Block"}
 //       `,
 //         confirmButtonAriaLabel: "Thumbs up, great!",
 //         customClass: {

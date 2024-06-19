@@ -10,7 +10,7 @@ const initialState = {
     allCars: [],
     staticAllCars: [],
     limitedCars: [],
-    AllBooking:[],
+    AllBooking: [],
     requests: [],
     TempoRequest: {},
     oneUser: {},
@@ -29,15 +29,15 @@ const initialState = {
     Media: [],
     carBookedPeriods: [],
     AgencyCars: [],
-    agencyReviews:[]
+    agencyReviews: []
 };
 export const updateStateBlock = createAsyncThunk(
     "user/updateStateBlock",
     async (id) => {
         try {
             const response = await axios.put(
-                `http://localhost:5000/api/admin/update/${id}`
-                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/admin/update/${id}`
+                `http://${process.env.REACT_APP_API_URL}/api/admin/update/${id}`
+                // `http://${process.env.REACT_APP_API_URL}/api/admin/update/${id}`
             );
 
             return response.data;
@@ -46,14 +46,29 @@ export const updateStateBlock = createAsyncThunk(
         }
     }
 );
+export const updateUser = createAsyncThunk(
+    "user/updateData",
+    async (data) => {
+        try {
+            const response = await axios.put(
+                `http://${process.env.REACT_APP_API_URL}/api/admin/updateData/${data.id}`,data.userDetails
+                // `http://${process.env.REACT_APP_API_URL}/api/admin/updateData/${id}`
+            );
+            console.log(response.data);
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+)
 export const getAgencyCars = createAsyncThunk(
     "user/getAgencyCars",
     async (id) => {
         console.log(id);
         try {
             const response = await axios.get(
-                `http://localhost:5000/api/admin/getAgencyCars/${id}`
-                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/admin/getAgencyCars/${name}`
+                `http://${process.env.REACT_APP_API_URL}/api/admin/getAgencyCars/${id}`
+                // `http://${process.env.REACT_APP_API_URL}/api/admin/getAgencyCars/${name}`
             );
             return response.data;
         } catch (error) {
@@ -67,8 +82,8 @@ export const getAgencyReviews = createAsyncThunk(
         console.log(id);
         try {
             const response = await axios.get(
-                `http://localhost:5000/api/admin/getAgencyReviews/${id}`
-                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/admin/getAgencyCars/${name}`
+                `http://${process.env.REACT_APP_API_URL}/api/admin/getAgencyReviews/${id}`
+                // `http://${process.env.REACT_APP_API_URL}/api/admin/getAgencyCars/${name}`
             );
             console.log(response.data);
             return response.data;
@@ -83,7 +98,7 @@ export const approveRequest = createAsyncThunk(
         try {
             const response = await axios.post(
                 `http://127.0.0.1:5000/api/agency/addAgency/${request.id}`,
-                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/agency/addAgency/${request.id}`,
+                // `http://${process.env.REACT_APP_API_URL}/api/agency/addAgency/${request.id}`,
                 { UserId: request.UserId }
             );
             // thunkAPI.dispatch(getAllRequests())
@@ -99,7 +114,7 @@ export const declineRequest = createAsyncThunk(
         try {
             const response = await axios.delete(
                 `http://127.0.0.1:5000/api/request/decline/${request.id}`
-                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/request/decline/${request.id}`
+                // `http://${process.env.REACT_APP_API_URL}/api/request/decline/${request.id}`
             );
             thunkAPI.dispatch(getAllRequests())
             return response.data;
@@ -111,8 +126,8 @@ export const declineRequest = createAsyncThunk(
 export const getAllUsers = createAsyncThunk("user/getAllUsers", async () => {
     try {
         const response = await axios.get(
-            `http://localhost:5000/api/admin/allUsers`
-            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/admin/allUsers`
+            `http://${process.env.REACT_APP_API_URL}/api/admin/allUsers`
+            // `http://${process.env.REACT_APP_API_URL}/api/admin/allUsers`
         );
 
         return response.data;
@@ -126,11 +141,11 @@ export const addCar = createAsyncThunk("admin/addCar", async (data) => {
         console.log(data.carCount);
         console.log(data.updatedCarDetails);
         const carResp = await axios.post(
-            `http://localhost:5000/api/car/newCar/${data.carCount}`, data.updatedCarDetails
-            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/car/newCar`, carDetails
+            `http://${process.env.REACT_APP_API_URL}/api/car/newCar/${data.carCount}`, data.updatedCarDetails
+            // `http://${process.env.REACT_APP_API_URL}/api/car/newCar`, carDetails
         );
         console.log(carResp.data);
-        // const imgResp = await axios.post(`http://localhost:5000/api/media/add/car/${carResp.data.id}`, carDetails.media);
+        // const imgResp = await axios.post(`http://${process.env.REACT_APP_API_URL}/api/media/add/car/${carResp.data.id}`, carDetails.media);
 
         // Combine responses if needed
         // const combinedResponse = {
@@ -152,7 +167,7 @@ export const getAllRequests = createAsyncThunk(
         try {
             const response = await axios.get(
                 `http://127.0.0.1:5000/api/request/getAllUnverified`
-                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/request/getAllUnverified`
+                // `http://${process.env.REACT_APP_API_URL}/api/request/getAllUnverified`
             );
             return response.data;
         } catch (error) {
@@ -167,7 +182,7 @@ export const SignUpCompany = createAsyncThunk(
             console.log(companyDetails, "companyDetails from SignUpCompany");
             const response = await axios.post(
                 `http://127.0.0.1:5000/api/users/SignUpCompany`,
-                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/users/SignUpCompany`,
+                // `http://${process.env.REACT_APP_API_URL}/api/users/SignUpCompany`,
                 companyDetails
             )
             return response.companyDetails
@@ -182,7 +197,7 @@ export const getApprovedServices = createAsyncThunk(
         try {
             const response = await axios.get(
                 `http://127.0.0.1:5000/api/booking/rentalHistory`
-                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/booking/rentalHistory`
+                // `http://${process.env.REACT_APP_API_URL}/api/booking/rentalHistory`
             )
             console.log(response.data);
             return response.data
@@ -197,7 +212,7 @@ export const getRejectedServices = createAsyncThunk(
         try {
             const response = await axios.get(
                 `http://127.0.0.1:5000/api/booking/rejectedHistory`
-                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/booking/rejectedHistory`
+                // `http://${process.env.REACT_APP_API_URL}/api/booking/rejectedHistory`
             )
             return response.data
         } catch (er) {
@@ -211,7 +226,7 @@ export const getPendingServices = createAsyncThunk(
         try {
             const response = await axios.get(
                 `http://127.0.0.1:5000/api/booking/pedningHistory`
-                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/booking/pedningHistory`
+                // `http://${process.env.REACT_APP_API_URL}/api/booking/pedningHistory`
             )
             return response.data
         } catch (er) {
@@ -222,8 +237,8 @@ export const getPendingServices = createAsyncThunk(
 export const getAllCompanies = createAsyncThunk("user/getAllCompanies", async () => {
     try {
         const response = await axios.get(
-            `http://localhost:5000/api/admin/allCompanies`
-            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/admin/allCompanies`
+            `http://${process.env.REACT_APP_API_URL}/api/admin/allCompanies`
+            // `http://${process.env.REACT_APP_API_URL}/api/admin/allCompanies`
         );
         return response.data;
     } catch (error) {
@@ -233,8 +248,8 @@ export const getAllCompanies = createAsyncThunk("user/getAllCompanies", async ()
 export const getLimitedCompanies = createAsyncThunk("user/getLimitedCompanies", async () => {
     try {
         const response = await axios.get(
-            `http://localhost:5000/api/admin/getLimitedCompanies`
-            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/admin/getLimitedCompanies`
+            `http://${process.env.REACT_APP_API_URL}/api/admin/getLimitedCompanies`
+            // `http://${process.env.REACT_APP_API_URL}/api/admin/getLimitedCompanies`
         );
         return response.data;
     } catch (error) {
@@ -246,8 +261,8 @@ export const getAllCars = createAsyncThunk(
     async () => {
         try {
             const response = await axios.get(
-                `http://localhost:5000/api/car/allCars`
-                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/car/allCars`
+                `http://${process.env.REACT_APP_API_URL}/api/car/allCars`
+                // `http://${process.env.REACT_APP_API_URL}/api/car/allCars`
             )
             console.log(response.data);
             return response.data
@@ -262,7 +277,7 @@ export const getLimitedCars = createAsyncThunk(
         try {
             const response = await axios.get(
                 `http://127.0.0.1:5000/api/admin/getLimitedCars`
-                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/admin/getLimitedCars`
+                // `http://${process.env.REACT_APP_API_URL}/api/admin/getLimitedCars`
             )
             return response.data
         } catch (er) {
@@ -273,8 +288,8 @@ export const getLimitedCars = createAsyncThunk(
 export const fetchReviews = createAsyncThunk("admin/fetchReviews", async () => {
     try {
         const response = await axios.get(
-            `http://localhost:5000/api/review/BringData`
-            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/review/BringData`
+            `http://${process.env.REACT_APP_API_URL}/api/review/BringData`
+            // `http://${process.env.REACT_APP_API_URL}/api/review/BringData`
         )
         return response.data;
     } catch (err) {
@@ -288,8 +303,8 @@ export const getData = createAsyncThunk("user/getADminData", async (tk) => {
         console.log(tk);
         // const token = JSON.stringify(localStorage.getItem("Token"))
         const response = await axios.post(
-            `http://localhost:5000/api/admin/useToken`,
-            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/admin/useToken`,
+            `http://${process.env.REACT_APP_API_URL}/api/admin/useToken`,
+            // `http://${process.env.REACT_APP_API_URL}/api/admin/useToken`,
             { token: tk }
         )
         console.log(response.data);
@@ -298,13 +313,13 @@ export const getData = createAsyncThunk("user/getADminData", async (tk) => {
     } catch (err) {
         console.error(err);
     }
-});
+});console.log(process.env.REACT_APP_API_URL);
 export const Login = createAsyncThunk("admin/Login", async ({ email, password }, thunkAPI) => {
     try {
         const data = { email, password };
         const response = await axios.post(
-            `http://localhost:5000/api/admin/emailLogin`
-            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/admin/emailLogin`,
+            `http://${process.env.REACT_APP_API_URL}/api/admin/emailLogin`
+            // `http://${process.env.REACT_APP_API_URL}/api/admin/emailLogin`,
             , data);
         console.log(response.data);
         await thunkAPI.dispatch(getData(response.data));
@@ -318,12 +333,12 @@ export const Sort = createAsyncThunk("user/Sort", async (dataType) => {
         let task = {}
         !dataType.includes("desc") ?
             task = await axios.get(
-                `http://localhost:5000/api/users/sort/${dataType}`
-                // `http://${process.env.NEXT_PUBLIC_API_URL}/api/users/sort/${dataType}`
+                `http://${process.env.REACT_APP_API_URL}/api/users/sort/${dataType}`
+                // `http://${process.env.REACT_APP_API_URL}/api/users/sort/${dataType}`
             ) :
             task = await axios.get(
-                `http://localhost:5000/api/users/invSort/${dataType}`
-                // `http://l${process.env.NEXT_PUBLIC_API_URL}/api/users/invSort/${dataType}`
+                `http://${process.env.REACT_APP_API_URL}/api/users/invSort/${dataType}`
+                // `http://l${process.env.REACT_APP_API_URL}/api/users/invSort/${dataType}`
             )
         return task.data
     } catch (er) {
@@ -333,8 +348,8 @@ export const Sort = createAsyncThunk("user/Sort", async (dataType) => {
 export const getUserById = createAsyncThunk("user/getById", async (id) => {
     try {
         const task = await axios.get(
-            `http://localhost:5000/api/users/getById/${id}`
-            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/users/getById/${id}`
+            `http://${process.env.REACT_APP_API_URL}/api/users/getById/${id}`
+            // `http://${process.env.REACT_APP_API_URL}/api/users/getById/${id}`
         )
         return task.data
     } catch (er) {
@@ -347,8 +362,8 @@ export const getBookedDates = createAsyncThunk("admin/getBookedDates", async (id
     try {
         console.log("getBookedDates", id);
         const response = await axios.get(
-            `http://localhost:5000/api/bookedPeriods/getDate/${id}`
-            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/bookedPeriods/getDate/${id}`
+            `http://${process.env.REACT_APP_API_URL}/api/bookedPeriods/getDate/${id}`
+            // `http://${process.env.REACT_APP_API_URL}/api/bookedPeriods/getDate/${id}`
         )
 
         return response.data
@@ -362,8 +377,8 @@ export const addBookedDate = createAsyncThunk("admin/addBookedDates", async (dat
         // Transform the dates array to contain ISO string representations
         console.log(data);
         const re = await axios.post(
-            `http://localhost:5000/api/bookedPeriods/addDate`, data
-            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/bookedPeriods/addDate`, transformedData
+            `http://${process.env.REACT_APP_API_URL}/api/bookedPeriods/addDate`, data
+            // `http://${process.env.REACT_APP_API_URL}/api/bookedPeriods/addDate`, transformedData
         );
         console.log(re, "redux periods");
         return re.data;
@@ -377,7 +392,7 @@ export const CreateBooking = createAsyncThunk(
         console.log(params);
         try {
             const response = await axios.post(
-                `http://localhost:5000/api/booking/CreateBookingAdmin`,
+                `http://${process.env.REACT_APP_API_URL}/api/booking/CreateBookingAdmin`,
                 params
             );
 
@@ -388,17 +403,17 @@ export const CreateBooking = createAsyncThunk(
         }
     }
 );
-export const handleBooking=createAsyncThunk(
+export const handleBooking = createAsyncThunk(
     "admin/updateBooking",
-    async(val)=>{
+    async (val) => {
         console.log(val)
         try {
-            const response=await axios.put(
-                'http://localhost:5000/api/booking/updatebooking',
+            const response = await axios.put(
+                'http://${process.env.REACT_APP_API_URL}/api/booking/updatebooking',
                 val
             )
         } catch (error) {
-            
+
         }
     }
 )
@@ -407,8 +422,8 @@ export const getAllBooking = createAsyncThunk(
     async () => {
         try {
             const response = await axios.get(
-                `http://localhost:5000/api/booking/getAllBooking`,
-                // `http://${process.env.NEXT_PUBLIC_API_URL}/api//booking/getAllBooking`,
+                `http://${process.env.REACT_APP_API_URL}/api/booking/getAllBooking`,
+                // `http://${process.env.REACT_APP_API_URL}/api//booking/getAllBooking`,
             )
             console.log(response.data);
             return response.data
@@ -421,8 +436,8 @@ export const cancelRent = createAsyncThunk("admin/cancelRent", async ({ userId, 
     try {
         console.log(userId, carId);
         axios.post(
-            `http://localhost:5000/api/bookedPeriods/removeRent`, { userId, carId }
-            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/bookedPeriods/removeRent`,{userId,carId}
+            `http://${process.env.REACT_APP_API_URL}/api/bookedPeriods/removeRent`, { userId, carId }
+            // `http://${process.env.REACT_APP_API_URL}/api/bookedPeriods/removeRent`,{userId,carId}
         )
     } catch (er) {
         console.log(JSON.stringify(er));
@@ -432,8 +447,8 @@ export const updateCar = createAsyncThunk("admin/updateCar", async ({ carId, dat
     try {
         console.log(carId, data);
         const response = axios.put(
-            `http://localhost:5000/api/car/updateCar/${carId}`,
-            // `http://${process.env.NEXT_PUBLIC_API_URL}/api/car/updateCar/${carId}`,
+            `http://${process.env.REACT_APP_API_URL}/api/car/updateCar/${carId}`,
+            // `http://${process.env.REACT_APP_API_URL}/api/car/updateCar/${carId}`,
             data
         )
         console.log(response.data);
@@ -451,8 +466,8 @@ export const adminSlicer = createSlice({
         triggerRefresh: (state) => {
             state.refreshed = !state.refreshed;
         },
-        toggleAdminLoading:(state)=>{
-            state.admin.loading=!state.admin.loading
+        toggleAdminLoading: (state) => {
+            state.admin.loading = !state.admin.loading
         },
         setAdminData: (state, action) => {
             state.admin = action.payload
@@ -744,5 +759,5 @@ export const Companies = (state) => state.Admin.companies;
 export const Media = (state) => state.Admin.Media;
 export const CarBookedPeriods = (state) => state.Admin.carBookedPeriods;
 export const selectForeignUser = (state) => state.Admin.foreignUser;
-export const { filterUsers,toggleAdminLoading, triggerRefresh, setAdminData, logout, setLoggedIn, setReqForSwal } = adminSlicer.actions;
+export const { filterUsers, toggleAdminLoading, triggerRefresh, setAdminData, logout, setLoggedIn, setReqForSwal } = adminSlicer.actions;
 export default adminSlicer.reducer;

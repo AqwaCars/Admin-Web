@@ -6,21 +6,21 @@ import { getBookedDates, handleBooking } from "../../Redux/adminSlice";
 import { CarBookedPeriods } from "../../Redux/adminSlice";
 import Swal from "sweetalert2";
 
-const ReqRow = ({setDate, request, setCar,openModal }) => {
+const ReqRow = ({setDate, request,setDefaultCar, setCar,openModal }) => {
   const dispatch = useDispatch();
   const carBookedPeriods = useSelector(CarBookedPeriods)
   const handleRequest=async(status)=>{
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
-      icon: `${status==="accept"?"question":status==="reject"?"warning":null}`,
+      icon: `${status==="accept"?"question":status==="reject"?"warning":status==="cancel"?"warning":null}`,
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: `Confirm ${status==="accept"?"acceptation":status==="reject"?"rejection":null}`,
+      confirmButtonText: `Confirm ${status==="accept"?"acceptation":status==="reject"?"rejection":status==="cancel"?"cancelation":null}`,
     }).then((result) => {
       if (result.isConfirmed) {
-        const val=status==="accept"?"accepted":status==="reject"?"rejected":null
+        const val=status==="accept"?"accepted":status==="reject"?"rejected":status==="cancel"?"canceled":null
         Swal.fire({
           title: "Update",
           text: `Your booking request status is now ${val}.`,          
@@ -33,8 +33,9 @@ const ReqRow = ({setDate, request, setCar,openModal }) => {
   console.log(request);
   return (
     
-      !request?.acceptation?
+  !request?.acceptation?
     <tr res="true" hover="true" onClick={async()=>{
+      setDefaultCar(request)
       setCar(request)
       await dispatch(getBookedDates(request.id))
       openModal();
@@ -67,13 +68,15 @@ const ReqRow = ({setDate, request, setCar,openModal }) => {
       </tr>
       :
       // <>
-      <tr>
+      <tr  style={{
+        borderBottom:".1rem lightgrey solid"
+      }}>
       <td>{request?.id}</td>
-      {/* <td>{request?.from}</td> */}
-      {/* <td>{request?.to}</td> */}
+      <td>{request?.UserId}</td>
       <td>{request?.startDate}</td>
       <td>{request?.endDate}</td>
       <td>{request?.time}</td>
+      <td>{request?.amount}</td>
       <td>{request?.acceptation}</td>
       <td>{request?.name}</td>
       <td>{request?.Email}</td>
@@ -81,10 +84,9 @@ const ReqRow = ({setDate, request, setCar,openModal }) => {
       <td>{request?.address}</td>
       <td>{request?.postalCode}</td>
       <td>{request?.city}</td>
-      {/* <td>{request?.flightNumber}</td> */}
       
      
-       <td  res="true" hover="true" >
+      {request.acceptation==="pending"? <td  res="true" hover="true" >
         <div style={{ display: "flex", gap: "1rem" }}>
           <button
             type="button"
@@ -103,7 +105,7 @@ const ReqRow = ({setDate, request, setCar,openModal }) => {
           </button>
           <button
             type="button"
-            className="btn btn-secondary"
+            className="btn btn-primary"
             onClick={() => {
              handleRequest("reject")
             }}
@@ -116,8 +118,23 @@ const ReqRow = ({setDate, request, setCar,openModal }) => {
           >
             Decline
           </button>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => {
+             handleRequest("cancel")
+            }}
+            style={{
+              padding: "0.5rem 2.5rem",
+              borderRadius: "0.3125rem",
+              background: "#7ABC50",
+              color: "#fff",
+            }}
+          >
+            Cancel
+          </button>
         </div>
-      </td> 
+      </td>:null }
       {/* </> */}
       {/* <td>
         <Button

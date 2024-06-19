@@ -1,8 +1,9 @@
 
-import { agencyReviews, getAgencyReviews, getAllUsers, selectAdmin } from "../Redux/adminSlice";
+import { agencyReviews, getAgencyReviews, getAllUsers, selectAdmin, updateUser } from "../Redux/adminSlice";
 import { selectAllUsers } from "../Redux/adminSlice";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Rating } from 'react-simple-star-rating'
 // import { Card, CardHeader, CardBody, Row, Col } from "reactstrap";
 import Select from 'react-select';
 import Swal from 'sweetalert2'
@@ -16,16 +17,59 @@ import Modal from 'react-modal';
 import { agencyCars } from "../Redux/adminSlice";
 import { getAgencyCars } from "../Redux/adminSlice";
 import { useNavigate } from "react-router-dom";
-import { Row, Col, Card, CardHeader, CardBody, Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
+import { Row, Col, Card, CardHeader, CardBody, Dropdown, DropdownMenu, DropdownItem, DropdownToggle, Button } from 'reactstrap';
 import UserInfo from "components/Maps/UserInfo";
+import { DNA } from "react-loader-spinner";
 // import AgencyInfo from "components/Maps/AgencyInfo";
 
 function UserManagements() {
+  const [userDetails, setUserDetails] = useState({})
+  const handleUserChange = (id, value) => {
+    console.log(`Field: ${id}, Value: ${value}`);
+    setUserDetails(prevDetails => {
+      const newDetails = {
+        ...prevDetails,
+        [id]: value
+      };
+      console.log('New state:', newDetails);
+      return newDetails;
+    });
+  };
   const Admin = useSelector(selectAdmin)
   const [selectedOption, setSelectedOptions] = useState({ value: 'all', label: 'Select Filter ...' });
   const AgencyCars = useSelector(agencyCars)
   const AgencyReviews = useSelector(agencyReviews)
   console.log(AgencyReviews);
+  const handleSubmit = async (id) => {
+    // console.log(carDetails);
+    if (Object.values(userDetails).every(value => value)) {
+      try {
+        setCloudWait(true)
+        const response = await dispatch(updateUser({ userDetails, id }))
+        console.log(response.payload);
+        //!Would fix this function because it always happens even if the response is fullfilled
+        // if (response.payload === undefined) {
+        //   toast.error("An Error Has Occured")
+        //   setCloudWait(false)
+        // }
+        //  else {
+        const response2 = await dispatch(getAllUsers())
+        console.log(response2.payload);
+        setCloudWait(false)
+        setUserDetails({})
+        // setShownCarImage(null)
+        // setSelectedFile(null)
+        closeSecondModal()
+        // setCloudWait(false)
+        // }
+      } catch (err) {
+        console.error("Cloudinary Upload Error:", err);
+      }
+    } else {
+      // notify('user');
+      console.log("Car details are missing.");
+    }
+  };
   const [selectedSortOption, setSelectedSortOptions] = useState({ value: "Select Sort...", label: "Select Sort ..." });
   const options = [
     { value: 'all', label: 'All Users' },
@@ -71,7 +115,7 @@ function UserManagements() {
   const handleBlur = () => {
     setMenuIsOpen(false);
   };
-  const [modalData, setModalData] = useState()
+  const [modalData, setModalData] = useState({})
   const handleDetailClick = (user) => {
     console.log(user);
     dispatch(getAgencyCars(user.id))
@@ -182,7 +226,14 @@ function UserManagements() {
   function closeModal() {
     setIsOpen(false);
   }
+  function openSecondModal() {
+    setIsOpen2(true);
+  }
+  function closeSecondModal() {
+    setIsOpen2(false);
+  }
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [modalIsOpen2, setIsOpen2] = useState(false);
   const handleBlock = (id) => {
     try {
       const user = allUsers.find((user) => user.id === id);
@@ -225,41 +276,8 @@ function UserManagements() {
       filtered[0] && dispatch(filterUsers(filtered));
     }
   }
-  const [UserReview, setUserReview] = useState(0)
+  const [cloudwait, setCloudWait] = useState(false)
 
-  const ratingTextMap = {
-    1: 'Extremely Dissatisfied',
-    2: 'Dissatisfied',
-    3: 'Neutral',
-    4: 'Satisfied',
-    5: 'Extremely Satisfied'
-  };
-  const ratingsMap = [
-    { rating: 0, filename: "../assets/img/Rating/zero.png" },
-    { rating: 0.5, filename: "../assets/img/Rating/half.png" },
-    { rating: 1, filename: "../assets/img/Rating/one" },
-    { rating: 1.5, filename: "../assets/img/RatingoneAndHalf/" },
-    { rating: 2, filename: "../assets/img/Rating/two" },
-    { rating: 2.5, filename: "../assets/img/Rating/2AndHalf" },
-    { rating: 3, filename: "../assets/img/Rating/three" },
-    { rating: 3.5, filename: "../assets/img/Rating/threeAndHalf" },
-    { rating: 4, filename: "../assets/img/Rating/four" },
-    { rating: 4.5, filename: "../assets/img/Rating/fourAndHalf" },
-    { rating: 5, filename: "../assets/img/Rating/five" }
-  ];
-  function getTextForRating(rating) {
-    // Round the rating to the nearest integer
-    const roundedRating = Math.round(rating);
-
-    // Find the closest matching key in the map
-    const key = Object.keys(ratingTextMap)
-      .sort((a, b) => Math.abs(a - roundedRating) - Math.abs(b - roundedRating))
-      .shift();
-
-    // Return the corresponding text
-    return ratingTextMap[key] || 'Invalid rating';
-  }
-  const ratingText = getTextForRating(UserReview.ratingCar);
   const loading = useSelector((state) => state.Admin.loading);
   const [refresh, setRefresh] = useState(false);
   const dispatch = useDispatch()
@@ -391,7 +409,7 @@ function UserManagements() {
                       <Row>
                         {allUsers?.map((user, i) =>
                           user.type === "user" ? (
-                            <UserInfo user={user} i={i} openModal={openModal} handleDetailClick={handleDetailClick} />) : null
+                            <UserInfo openSecondModal={openSecondModal} user={user} i={i} openModal={openModal} handleDetailClick={handleDetailClick} />) : null
                         )}
                       </Row>
                       <div style={{
@@ -412,7 +430,7 @@ function UserManagements() {
                       <div className="usersContainer">
                         {allUsers?.map((user, i) =>
                           user.type === "company" ? (
-                            <UserInfo user={user} i={i} openModal={openModal} handleDetailClick={handleDetailClick} />
+                            <UserInfo openSecondModal={openSecondModal} user={user} i={i} openModal={openModal} handleDetailClick={handleDetailClick} />
                           ) : null
 
                         )}
@@ -428,7 +446,7 @@ function UserManagements() {
                         <Row>
                           {allUsers?.map((user, i) =>
                             user.type === "user" ? (
-                              <UserInfo user={user} i={i} openModal={openModal} handleDetailClick={handleDetailClick} />
+                              <UserInfo openSecondModal={openSecondModal} user={user} i={i} openModal={openModal} handleDetailClick={handleDetailClick} />
                             ) : null
                           )}
                         </Row>
@@ -445,7 +463,7 @@ function UserManagements() {
                         <Row>
                           {allUsers?.map((user, i) =>
                             user.type === "company" ? (
-                              <UserInfo user={user} i={i} openModal={openModal} handleDetailClick={handleDetailClick} />
+                              <UserInfo openSecondModal={openSecondModal} user={user} i={i} openModal={openModal} handleDetailClick={handleDetailClick} />
                             ) : null
 
                           )}
@@ -461,7 +479,7 @@ function UserManagements() {
                         <Row>
                           {allUsers?.map((user, i) =>
                             user.isBlocked ? (
-                              <UserInfo user={user} i={i} openModal={openModal} handleDetailClick={handleDetailClick} />
+                              <UserInfo openSecondModal={openSecondModal} user={user} i={i} openModal={openModal} handleDetailClick={handleDetailClick} />
                             ) : null
                           )}
                         </Row>
@@ -477,7 +495,7 @@ function UserManagements() {
                         <Row>
                           {allUsers?.map((user, i) =>
                             !user.isBlocked ? (
-                              <UserInfo user={user} i={i} openModal={openModal} handleDetailClick={handleDetailClick} />
+                              <UserInfo user={user} openSecondModal={openSecondModal} i={i} openModal={openModal} handleDetailClick={handleDetailClick} />
                             ) : null
                           )}
                         </Row>
@@ -494,7 +512,7 @@ function UserManagements() {
                         <Row>
                           {allUsers?.map((user, i) =>
                             user.isArchived ? (
-                              <UserInfo user={user} i={i} openModal={openModal} handleDetailClick={handleDetailClick} />
+                              <UserInfo user={user} i={i} openSecondModal={openSecondModal} openModal={openModal} handleDetailClick={handleDetailClick} />
                             ) : null
                           )}
                         </Row>
@@ -547,27 +565,38 @@ function UserManagements() {
               <div style={{
                 fontSize: "1.5rem",
                 textDecorationLine: "underline",
-                paddingLeft: "1rem"
+
               }}><span style={{
                 textDecorationLine: "none"
               }}>Company Title : </span>{modalData?.userName}</div>
-              <div style={{
+              <div className="hoverImage" style={{
+                height: "11rem",
+                cursor: "pointer",
+                marginTop: ".6rem",
+                padding: "1rem",
                 display: "flex",
                 flexDirection: "row",
-                paddingTop: "1rem"
+                paddingTop: "1rem",
+                borderBottom: " #30416b solid 0.1rem",
+                borderLeft: " #30416b solid 0.1rem",
+                borderRight: " #30416b solid 0.1rem",
+                marginRight: "1.5rem",
+                borderRadius: "1rem",
               }}>
                 {/* <div className="company_img"> */}
                 <div style={{
-                  alignItems: "center",
-                  backgroundColor: "transparent"
+                  // alignItems: "center",
+                  // padding:"0rem"
+                  // padding:".2rem"
+                  // backgroundColor: "transparent"
                 }} className="car_img">
                   <img style={{
-                    width: "8rem", /* Take up the full width of the container */
-                    height: "8rem", /* Take up the full height of the container */
-                    objectFit: "contain", /* Scale the image to cover the container while maintaining its aspect ratio */
-                    borderRadius: "1rem",
-                    height: "90%",
-                    width: "80%", /* Take up the full width of the container */
+                    width: "auto",
+                    height: "auto",
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    objectFit: "cover",
+                    borderRadius: "10%",
                   }} src={modalData?.selfie} />
                   {/* </div> */}
                 </div>
@@ -699,58 +728,72 @@ function UserManagements() {
                   // </div>)
                   <div className="review_div">
                     <div style={{
-                      width:"100%",
-                      display:"flex",
-                      justifyContent:"center",
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
                       // backgroundColor:"red",
-                      height:"3rem"
+                      height: "3rem"
                     }}>
-                    <img style={{
-                      objectFit:"cover",
-                      // backgroundColor:"yellow",
-                      height:"100%"
-                    }} src={require("../assets/img/Rating/heartRating.png")}/>
+                      <img style={{
+                        objectFit: "cover",
+                        // backgroundColor:"yellow",
+                        height: "100%"
+                      }} src={require("../assets/img/Rating/heartRating.png")} />
                     </div>
                     <div style={{
-                      color:"#242E39",
-                      fontSize:"23.75px",
-                      fontWeight:"bold"
+                      color: "#242E39",
+                      fontSize: "20.75px",
+                      fontWeight: "bold"
                     }}>{review.Booking.User.userName} Review</div>
                     <div>Satisfied</div>
-                    <div 
-                     className="hoverImage"
-                    style={{
-                      backgroundColor:"#F7F8FA",
-                      paddingTop:"13.2px",
-                      paddingBottom:"13.2px",
-                      borderRadius:"7.92px",
-                      height:"53.39px",
-                      // width:"232px",
-                      paddingRight:"16px",
-                      paddingLeft:"16px",
-                      display:"flex",
-                      flexDirection:"row",
-                      justifyItems:"center",
-                      marginTop:"1rem",
-                      marginBottom:"1rem",
-                      
-                    }}>
-                      <img  style={{
+                    <div
+                      className="hoverImage"
+                      style={{
+                        backgroundColor: "#F7F8FA",
+                        paddingTop: "13.2px",
+                        paddingBottom: "13.2px",
+                        borderRadius: "1rem",
+                        height: "53.39px",
+                        // width:"232px",
+                        paddingRight: "16px",
+                        paddingLeft: "16px",
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginTop: ".3rem",
+                        marginBottom: ".3rem",
+                        boxShadow: "0px 2.64px 5.28px rgba(52, 68, 81, 0.2)"
+                      }}>
+                      {/* <img  style={{
                       objectFit:"contain",
                       // backgroundColor:"yellow",
                       height:"auto",
                       width:"auto"
-                    }} src={require("../assets/img/Rating/five.png")}/>
+                    }} src={require("../assets/img/Rating/five.png")}/> */}
+                      {console.log(review)}
+                      <Rating
+                        initialValue={review.ratingAgency}
+                        readonly={true}
+                        style={{
+                          // height:"3rem",
+                          // width:"auto"s
+                        }}
+                      // onClick={handleRating}
+                      // onPointerEnter={onPointerEnter}
+                      // onPointerLeave={onPointerLeave}
+                      // onPointerMove={onPointerMove}
+                      /* Available Props */
+                      />
                       <div style={{
-                        fontSize:"1.2rem",
-                        paddingLeft:"1rem",
-                        fontWeight:"400",
+                        fontSize: "1.2rem",
+                        paddingLeft: "1rem",
+                        fontWeight: "400",
                         // backgroundColor:"red",
-                        display:"flex",
-                        alignItems:"center",
-                        paddingTop:".2rem"
+                        display: "flex",
+                        alignItems: "center",
+                        paddingTop: ".2rem"
                         // height:"3rem"
-                      }}>4.5/5</div>
+                      }}>{review.ratingAgency}/5</div>
                     </div>
                   </div>
                 )
@@ -822,6 +865,142 @@ function UserManagements() {
               </div>))}
             </div>
           </div>
+        </div>
+      </Modal >
+      <Modal
+        isOpen={modalIsOpen2}
+        // onAfterOpen={afterOpenModal}
+        onRequestClose={closeSecondModal}
+        // className={modalIsOpen ? "fadeIn" : ""}
+        style={{
+          overlay: {
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            zIndex: "1000",
+          },
+          content: {
+            overflow: "visible",
+            top: '50%',
+            padding: "0",
+            left: '50%',
+            right: 'auto',
+            borderWidth: ".2rem",
+            borderRadius: "2rem 1rem",
+            borderStyle: "solid",
+            borderColor: "#b78846",
+            bottom: 'auto',
+            padding: "2rem",
+            width: "50rem",
+            height: "23rem",
+            transform: 'translate(-50%, -50%)',
+            animation: modalIsOpen ? 'fadeIn 0.5s ease-out' : 'none',
+          },
+        }}
+      >
+
+        <div style={{
+          borderRadius: "2rem 1rem",
+        }} className="whiteboard-container">
+          <div style={{
+            fontSize: "1.2rem",
+            paddingBottom: "0.5rem"
+          }}>Change The User's Details here :</div>
+          <div className='first-select-container'>
+            <div style={{
+              fontSize: ".9rem"
+            }}>Change The Name of The User :</div>
+            <div className="input-container-long">
+              {console.log(modalData)}
+              <input
+                className="select-box" placeholder={modalData?.userName + ".."}
+                // options={Object.keys(data)?.map(key => ({ label: key, value: key }))}
+                onChange={(e) => handleUserChange("userName", e.target.value)}
+                menuportaltarget={document.body}
+                styles={{
+                  menuPortal: base => ({ ...base, zIndex: 9999 })
+                }}
+              />
+            </div>
+            <br></br>
+            <div style={{
+              fontSize: ".9rem"
+            }}>Change The Email of The User :</div>
+            <div className="input-container-long">
+              <input
+                className="select-box"
+                placeholder={modalData?.email + ".."}
+                // options={Object.keys(data)?.map(key => ({ label: key, value: key }))}
+                onChange={(e) => handleUserChange("email", e.target.value)}
+                menuportaltarget={document.body}
+                styles={{
+                  menuPortal: base => ({ ...base, zIndex: 9999 })
+                }}
+              />
+            </div>
+          </div>
+          <Button onClick={() => {
+            Swal.fire({
+              title: "Are you sure?",
+              // html: user.isBlocked ? `You will ban <strong>${user.userName}</strong> ?` : `You will unBlock <strong>${user.userName}</strong> ?`,
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonText: "Yes!",
+              cancelButtonText: "No, cancel!"
+            }).then((result) => {
+              if (result.isConfirmed && Object.keys(userDetails).length>0) {
+                // handleBlock(user.id)
+                handleSubmit(modalData?.id)
+                Swal.fire({
+                  title: "Data is now Changed",
+                  text: "Thank you for your Job Admin.",
+                  icon: "success"
+                });
+              } else if (
+                result.dismiss === Swal.DismissReason.cancel
+              ) {
+                Swal.fire({
+                  title: "Cancelled",
+                  text: "User data has remained the same.",
+                  icon: "error"
+                });
+              }else if(Object.keys(userDetails).length===0){
+                Swal.fire({
+                  title: "Check again",
+                  text: "Type Something in the inputs to change it's value",
+                  icon: "warning"
+                });
+              }
+            })
+            // }
+          }} style={{
+            marginTop: "2rem",
+            width: "40rem",
+            height: "3rem",
+            // color: "grey",
+            // fontSize: "1rem",
+            // paddingTop: "1rem",
+            // cursor: "pointer"
+          }}>{
+              cloudwait ?
+                <div style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  // backgroundColor: "red"
+                }}>
+                  <DNA
+                    visible={true}
+                    height="4.5rem"
+                    width="4.5rem"
+                    ariaLabel="dna-loading"
+                    wrapperStyle={{ paddingBottom: '1.5rem' }} // Adjust this value as needed
+                  // wrapperClass="dna-wrapper"
+                  /></div> :
+                "Press Here to Submit the form"
+            } </Button>
         </div>
       </Modal >
     </>
