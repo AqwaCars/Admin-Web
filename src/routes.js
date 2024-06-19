@@ -10,6 +10,7 @@ import AddNewEntities from "views/AddNewEntities";
 import Requests from "views/Requests";
 import Cars from "views/Cars";
 import UserManagements from "views/UserManagements";
+// import Rtl from "views/Rtl";
 
 var routes = [
   {

@@ -11,7 +11,6 @@ import { Row, Col, Card, CardHeader, CardTitle, CardBody, ButtonGroup, Button, T
 import { chartExample1, chartExample2, chartExample3, chartExample4 } from '../variables/charts';
 
 import {
-  useDispatch,
   useSelector
   //  useDispatch
 } from "react-redux";
